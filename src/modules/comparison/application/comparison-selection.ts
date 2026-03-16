@@ -24,7 +24,9 @@ function normalizeDirectionIds(rawValues: string[]): string[] {
   return [...new Set(rawValues.map((value) => value.trim()).filter(Boolean))];
 }
 
-function resolveSelectionState(directionIds: string[]): ComparisonSelectionState {
+function resolveSelectionState(
+  directionIds: string[],
+): ComparisonSelectionState {
   if (directionIds.length === 0) {
     return "empty";
   }
@@ -86,7 +88,9 @@ export function buildComparisonHref(
 
   logWithLevel(
     "comparison-selection",
-    normalizedDirectionIds.length > maximumComparisonDirectionCount ? "warn" : "debug",
+    normalizedDirectionIds.length > maximumComparisonDirectionCount
+      ? "warn"
+      : "debug",
     "Built comparison href from direction selection.",
     {
       directionIds: normalizedDirectionIds,

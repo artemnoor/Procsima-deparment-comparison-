@@ -40,9 +40,13 @@ export function DirectionCard(props: DirectionCardProps) {
       <div className="catalogCardHeader">
         <div>
           <div className="catalogMeta">
-            <span className="chip">{direction.context.code ?? "Code pending"}</span>
+            <span className="chip">
+              {direction.context.code ?? "Code pending"}
+            </span>
             {direction.context.department ? (
-              <span className="chip chipMuted">{direction.context.department}</span>
+              <span className="chip chipMuted">
+                {direction.context.department}
+              </span>
             ) : null}
           </div>
           <h3 className="cardTitle">{direction.title}</h3>
@@ -81,7 +85,10 @@ export function DirectionCard(props: DirectionCardProps) {
       </dl>
 
       <div className="catalogCardActions catalogCardActionsSplit">
-        <Link className="secondaryActionLink" href={`/directions/${direction.slug}`}>
+        <Link
+          className="secondaryActionLink"
+          href={`/directions/${direction.slug}`}
+        >
           Open direction page
         </Link>
         {isSelected ? (

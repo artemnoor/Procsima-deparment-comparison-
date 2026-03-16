@@ -90,7 +90,9 @@ export async function getComparisonPageData(
     };
   }
 
-  const directions = await repository.findDirectionsByIds(selection.directionIds);
+  const directions = await repository.findDirectionsByIds(
+    selection.directionIds,
+  );
 
   logWithLevel(
     "comparison-page-data",

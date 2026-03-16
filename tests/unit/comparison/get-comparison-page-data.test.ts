@@ -57,7 +57,8 @@ describe("getComparisonPageData", () => {
     const repository: DirectionComparisonRepository = {
       async findDirectionsByIds(directionIds) {
         const mockRepository = new MockDirectionComparisonRepository();
-        const resolvedDirections = await mockRepository.findDirectionsByIds(directionIds);
+        const resolvedDirections =
+          await mockRepository.findDirectionsByIds(directionIds);
 
         return resolvedDirections.slice(0, 1);
       },

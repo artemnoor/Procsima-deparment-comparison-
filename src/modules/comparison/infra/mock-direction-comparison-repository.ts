@@ -7,10 +7,10 @@ import {
 
 import type { DirectionComparisonRepository } from "../domain/direction-comparison-repository";
 
-export class MockDirectionComparisonRepository
-  implements DirectionComparisonRepository
-{
-  async findDirectionsByIds(directionIds: string[]): Promise<DirectionDetail[]> {
+export class MockDirectionComparisonRepository implements DirectionComparisonRepository {
+  async findDirectionsByIds(
+    directionIds: string[],
+  ): Promise<DirectionDetail[]> {
     logWithLevel(
       "mock-direction-comparison-repository",
       "info",

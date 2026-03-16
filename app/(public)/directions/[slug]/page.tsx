@@ -24,10 +24,15 @@ export default async function DirectionDetailPage(props: {
   const { slug } = await props.params;
   const searchParams = await props.searchParams;
 
-  logWithLevel("public-direction-detail-page", "info", "Rendering direction detail page.", {
-    route: `/directions/${slug}`,
-    slug,
-  });
+  logWithLevel(
+    "public-direction-detail-page",
+    "info",
+    "Rendering direction detail page.",
+    {
+      route: `/directions/${slug}`,
+      slug,
+    },
+  );
 
   const repository = createDirectionDetailsRepository();
   const comparisonRepository = createDirectionComparisonRepository();
@@ -36,17 +41,24 @@ export default async function DirectionDetailPage(props: {
   const selection = readComparisonSelection(searchParams);
 
   if (!direction) {
-    logWithLevel("public-direction-detail-page", "warn", "Direction detail was not found.", {
-      route: `/directions/${slug}`,
-      slug,
-    });
+    logWithLevel(
+      "public-direction-detail-page",
+      "warn",
+      "Direction detail was not found.",
+      {
+        route: `/directions/${slug}`,
+        slug,
+      },
+    );
 
     return (
       <main>
         <div className="stack">
           <section className="card">
             <div className="sectionEyebrow">Direction not found</div>
-            <h2 className="sectionTitle">This direction is not available in the active source</h2>
+            <h2 className="sectionTitle">
+              This direction is not available in the active source
+            </h2>
             <p className="muted">
               The requested slug does not exist in the current applicant-facing
               dataset.
@@ -97,12 +109,16 @@ export default async function DirectionDetailPage(props: {
       selectedDirection.title,
     ]),
   );
-  const selectedDirections = selection.directionIds.map((selectedDirectionId) => ({
-    id: selectedDirectionId,
-    title:
-      selectedDirectionTitles.get(selectedDirectionId) ??
-      (selectedDirectionId === direction.id ? direction.title : selectedDirectionId),
-  }));
+  const selectedDirections = selection.directionIds.map(
+    (selectedDirectionId) => ({
+      id: selectedDirectionId,
+      title:
+        selectedDirectionTitles.get(selectedDirectionId) ??
+        (selectedDirectionId === direction.id
+          ? direction.title
+          : selectedDirectionId),
+    }),
+  );
 
   return (
     <main>
@@ -117,7 +133,9 @@ export default async function DirectionDetailPage(props: {
         ) : null}
 
         <section className="card detailHero">
-          <div className="sectionEyebrow">{direction.context.code ?? "Program"}</div>
+          <div className="sectionEyebrow">
+            {direction.context.code ?? "Program"}
+          </div>
           <div className="detailHeroHeader">
             <div>
               <h2 className="sectionTitle">{direction.title}</h2>
@@ -125,7 +143,10 @@ export default async function DirectionDetailPage(props: {
             </div>
             <div className="detailActionGroup">
               {isSelected ? (
-                <Link className="secondaryActionLink" href={selectionActionHref}>
+                <Link
+                  className="secondaryActionLink"
+                  href={selectionActionHref}
+                >
                   Remove from compare
                 </Link>
               ) : selectionIsFull ? (
@@ -184,7 +205,8 @@ export default async function DirectionDetailPage(props: {
           <article className="card">
             <h3 className="cardTitle">What you learn</h3>
             <p className="muted">
-              {direction.whatYouLearn ?? "Detailed academic description will be added later."}
+              {direction.whatYouLearn ??
+                "Detailed academic description will be added later."}
             </p>
             <h4 className="subsectionTitle">Target fit</h4>
             <p className="muted">
@@ -224,7 +246,9 @@ export default async function DirectionDetailPage(props: {
                       <span className="chip">{subject.subjectBlock}</span>
                     ) : null}
                     {subject.department ? (
-                      <span className="chip chipMuted">{subject.department}</span>
+                      <span className="chip chipMuted">
+                        {subject.department}
+                      </span>
                     ) : null}
                   </div>
                   <h4 className="subsectionTitle">{subject.title}</h4>
@@ -247,12 +271,18 @@ export default async function DirectionDetailPage(props: {
             </div>
             <div className="detailActionGroup detailActionGroupTight">
               {direction.programDescriptionUrl ? (
-                <Link className="secondaryActionLink" href={direction.programDescriptionUrl}>
+                <Link
+                  className="secondaryActionLink"
+                  href={direction.programDescriptionUrl}
+                >
                   Program description
                 </Link>
               ) : null}
               {direction.curriculumUrl ? (
-                <Link className="secondaryActionLink" href={direction.curriculumUrl}>
+                <Link
+                  className="secondaryActionLink"
+                  href={direction.curriculumUrl}
+                >
                   Curriculum
                 </Link>
               ) : null}

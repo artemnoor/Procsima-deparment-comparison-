@@ -81,7 +81,7 @@ export default async function ComparePage(props: {
         },
       }),
     );
- 
+
     await publishEvent(
       publisher,
       createDomainEvent({
@@ -140,9 +140,13 @@ export default async function ComparePage(props: {
           {comparisonPageData.directions.map((direction) => (
             <article className="catalogCard" key={direction.id}>
               <div className="catalogMeta">
-                <span className="chip">{direction.context.code ?? "Code pending"}</span>
+                <span className="chip">
+                  {direction.context.code ?? "Code pending"}
+                </span>
                 {direction.context.department ? (
-                  <span className="chip chipMuted">{direction.context.department}</span>
+                  <span className="chip chipMuted">
+                    {direction.context.department}
+                  </span>
                 ) : null}
               </div>
               <h3 className="cardTitle">{direction.title}</h3>
@@ -150,11 +154,15 @@ export default async function ComparePage(props: {
               <dl className="catalogFacts">
                 <div>
                   <dt>Qualification</dt>
-                  <dd>{direction.context.qualification ?? "To be confirmed"}</dd>
+                  <dd>
+                    {direction.context.qualification ?? "To be confirmed"}
+                  </dd>
                 </div>
                 <div>
                   <dt>Duration</dt>
-                  <dd>{direction.context.studyDuration ?? "To be confirmed"}</dd>
+                  <dd>
+                    {direction.context.studyDuration ?? "To be confirmed"}
+                  </dd>
                 </div>
                 <div>
                   <dt>Tuition</dt>
@@ -178,7 +186,8 @@ export default async function ComparePage(props: {
                   <div className="subjectCard" key={subject.title}>
                     <h4 className="subsectionTitle">{subject.title}</h4>
                     <p className="muted">
-                      {subject.subjectBlock ?? "General block"} • {subject.hours} hours
+                      {subject.subjectBlock ?? "General block"} •{" "}
+                      {subject.hours} hours
                     </p>
                   </div>
                 ))}
@@ -213,7 +222,10 @@ export default async function ComparePage(props: {
                     );
 
                     return (
-                      <div className="compareMatrixValueCard" key={value.directionId}>
+                      <div
+                        className="compareMatrixValueCard"
+                        key={value.directionId}
+                      >
                         <span className="compareMatrixLabel">
                           {matchedDirection?.title ?? value.directionId}
                         </span>

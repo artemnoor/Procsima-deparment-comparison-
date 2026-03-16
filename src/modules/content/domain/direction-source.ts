@@ -23,7 +23,11 @@ function shouldLog(level: LogLevelName): boolean {
   return logLevels[level] >= activeLevel;
 }
 
-function logDirectionSource(level: LogLevelName, message: string, context: object) {
+function logDirectionSource(
+  level: LogLevelName,
+  message: string,
+  context: object,
+) {
   if (!shouldLog(level)) {
     return;
   }
@@ -62,7 +66,10 @@ export type NormalizedDirectionSourceRecord = {
   profile: DirectionSourceProfile;
 };
 
-type NormalizedDirectionSourceBase = Omit<NormalizedDirectionSourceRecord, "profile">;
+type NormalizedDirectionSourceBase = Omit<
+  NormalizedDirectionSourceRecord,
+  "profile"
+>;
 
 function createDirectionId(code: string): string {
   return `direction-${code.replaceAll(".", "-")}`;
@@ -113,7 +120,9 @@ export function normalizeRawDirectionSourceRecord(
     ...new Set(
       subjects
         .map((subject) => subject.subjectBlock)
-        .filter((subjectBlock): subjectBlock is string => Boolean(subjectBlock)),
+        .filter((subjectBlock): subjectBlock is string =>
+          Boolean(subjectBlock),
+        ),
     ),
   ];
   const normalizedRecord: NormalizedDirectionSourceBase = {

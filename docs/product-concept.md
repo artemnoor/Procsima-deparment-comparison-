@@ -380,8 +380,7 @@
 1. помочь абитуриенту выбрать осознанно;
 2. дать приёмной комиссии инструмент анализа и управления спросом.
 
-Именно сочетание этих двух задач делает продукт не просто справочником, а полноценной системой поддержки выбора и принятия решений.
----
+## Именно сочетание этих двух задач делает продукт не просто справочником, а полноценной системой поддержки выбора и принятия решений.
 
 ## MVP implementation note
 
@@ -408,6 +407,7 @@ The first UI iteration is expected to focus on:
 - comparison of the most decision-useful fields
 
 Real database integration for this richer structure will be connected later through repository and adapter replacement, not through a rewrite of the public pages.
+
 ## MVP implementation note
 
 The current `feature/nps-comparison` branch implements the first applicant-facing

@@ -13,19 +13,35 @@ test.describe("nps comparison smoke", () => {
       page.locator('a[href="/directions/program-09-02-07"]'),
     ).toBeVisible();
 
-    await page.locator('a[href="/directions?ids=direction-09-02-07&source=catalog"]').click();
-    await expect(page.getByRole("heading", { name: "Selected directions: 1" })).toBeVisible();
-    await expect(page.getByRole("link", { name: "Open comparison" })).toHaveCount(0);
+    await page
+      .locator('a[href="/directions?ids=direction-09-02-07&source=catalog"]')
+      .click();
+    await expect(
+      page.getByRole("heading", { name: "Selected directions: 1" }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: "Open comparison" }),
+    ).toHaveCount(0);
 
-    await page.locator('a[href="/directions?ids=direction-09-02-07%2Cdirection-10-02-05&source=catalog"]').click();
-    await expect(page.getByRole("heading", { name: "Selected directions: 2" })).toBeVisible();
+    await page
+      .locator(
+        'a[href="/directions?ids=direction-09-02-07%2Cdirection-10-02-05&source=catalog"]',
+      )
+      .click();
+    await expect(
+      page.getByRole("heading", { name: "Selected directions: 2" }),
+    ).toBeVisible();
     await page.getByRole("link", { name: "Open comparison" }).click();
-    await page.waitForURL("**/compare?ids=direction-09-02-07%2Cdirection-10-02-05&source=catalog");
+    await page.waitForURL(
+      "**/compare?ids=direction-09-02-07%2Cdirection-10-02-05&source=catalog",
+    );
 
     await expect(
       page.getByRole("heading", { name: "Compare selected directions" }),
     ).toBeVisible();
-    await expect(page.getByRole("heading", { name: "Shared criteria" })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Shared criteria" }),
+    ).toBeVisible();
     await expect(
       page.getByRole("heading", { name: "How the selected directions differ" }),
     ).toBeVisible();
@@ -36,7 +52,9 @@ test.describe("nps comparison smoke", () => {
     await page.locator('a[href="/directions/program-09-02-07"]').click();
     await page.waitForURL("**/directions/program-09-02-07");
 
-    await expect(page.getByRole("heading", { name: "Program snapshot" })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Program snapshot" }),
+    ).toBeVisible();
     await expect(
       page.getByRole("link", { name: "Add to compare" }),
     ).toHaveAttribute(
@@ -50,8 +68,12 @@ test.describe("nps comparison smoke", () => {
   }) => {
     await page.goto("/directions");
 
-    await page.locator('a[href="/directions?ids=direction-09-02-01&source=catalog"]').click();
-    await expect(page.getByRole("heading", { name: "Selected directions: 1" })).toBeVisible();
+    await page
+      .locator('a[href="/directions?ids=direction-09-02-01&source=catalog"]')
+      .click();
+    await expect(
+      page.getByRole("heading", { name: "Selected directions: 1" }),
+    ).toBeVisible();
     await page.goto("/compare?ids=direction-09-02-01&source=catalog");
 
     await expect(

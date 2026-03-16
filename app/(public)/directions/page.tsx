@@ -12,9 +12,14 @@ export default async function DirectionsPage(props: {
   searchParams: Promise<{ ids?: string | string[]; source?: string }>;
 }) {
   const searchParams = await props.searchParams;
-  logWithLevel("public-directions-page", "info", "Rendering directions catalog page.", {
-    route: "/directions",
-  });
+  logWithLevel(
+    "public-directions-page",
+    "info",
+    "Rendering directions catalog page.",
+    {
+      route: "/directions",
+    },
+  );
 
   const repository = createDirectionCatalogRepository();
   const publisher = new PrismaEventPublisher(prisma);
@@ -37,9 +42,14 @@ export default async function DirectionsPage(props: {
   );
 
   if (directions.length === 0) {
-    logWithLevel("public-directions-page", "warn", "Directions catalog is empty.", {
-      route: "/directions",
-    });
+    logWithLevel(
+      "public-directions-page",
+      "warn",
+      "Directions catalog is empty.",
+      {
+        route: "/directions",
+      },
+    );
   }
 
   return (

@@ -56,12 +56,12 @@ function mapDirectionDetail(input: {
   };
 }
 
-export class PrismaDirectionComparisonRepository
-  implements DirectionComparisonRepository
-{
+export class PrismaDirectionComparisonRepository implements DirectionComparisonRepository {
   constructor(private readonly prisma: PrismaClient) {}
 
-  async findDirectionsByIds(directionIds: string[]): Promise<DirectionDetail[]> {
+  async findDirectionsByIds(
+    directionIds: string[],
+  ): Promise<DirectionDetail[]> {
     logWithLevel(
       "prisma-direction-comparison-repository",
       "info",
@@ -81,7 +81,9 @@ export class PrismaDirectionComparisonRepository
     });
 
     const directionsById = new Map(
-      directions.map(mapDirectionDetail).map((direction) => [direction.id, direction] as const),
+      directions
+        .map(mapDirectionDetail)
+        .map((direction) => [direction.id, direction] as const),
     );
     const mappedDirections = directionIds.flatMap((directionId) => {
       const direction = directionsById.get(directionId);
