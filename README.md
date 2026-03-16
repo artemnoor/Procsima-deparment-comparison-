@@ -48,7 +48,7 @@ Current baseline includes:
 
 The current branch is intentionally `mock first`.
 
-Source switching is centralized in [public-direction-data.ts](/C:/Users/artem/admission/nps-choice-platform/src/app/public-direction-data.ts):
+Source switching is centralized in [public-direction-data.ts](src/app/public-direction-data.ts):
 
 - `createDirectionCatalogRepository()`
 - `createDirectionDetailsRepository()`
