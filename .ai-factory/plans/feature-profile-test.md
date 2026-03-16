@@ -96,141 +96,141 @@ Excluded:
 ### Phase 1: Branch contracts and TDD-ready recommendation domain
 
 - [x] Task 1: Define recommendation module contracts for question definitions, parsed answers, recommendation profile, and recommendation result.
-  Files:
+      Files:
   - `src/modules/recommendation/domain/*`
   - `src/modules/recommendation/index.ts`
-  Logging requirements:
+    Logging requirements:
   - Log validation failures for malformed answers.
   - Log which question types are active in the MVP flow.
-  Deliverables:
+    Deliverables:
   - explicit domain types for questions, answers, and results
   - deterministic recommendation output contract
 
 - [x] Task 2: Add first failing unit tests for answer parsing, scoring, and recommendation ordering before implementation.
-  Files:
+      Files:
   - `tests/unit/recommendation/*`
-  Logging requirements:
+    Logging requirements:
   - Log edge cases that are intentionally rejected or deferred.
-  Deliverables:
+    Deliverables:
   - failing tests for business logic
-  Depends on:
+    Depends on:
   - Task 1
 
 - [x] Task 3: Introduce a recommendation repository boundary that reads candidate directions through existing public data seams.
-  Files:
+      Files:
   - `src/modules/recommendation/domain/*`
   - `src/modules/recommendation/infra/*`
   - `src/app/public-direction-data.ts`
-  Logging requirements:
+    Logging requirements:
   - Log which source provider is active for recommendation candidates.
   - Log candidate counts resolved for ranking.
-  Deliverables:
+    Deliverables:
   - repository seam for mock-backed recommendation candidates
-  Depends on:
+    Depends on:
   - Task 1
 
 - [x] Task 4: Implement explainable recommendation scoring that converts profile-test answers into ranked directions and result explanations.
-  Files:
+      Files:
   - `src/modules/recommendation/application/*`
   - `src/modules/recommendation/domain/*`
-  Logging requirements:
+    Logging requirements:
   - Log scoring inputs, top matches, and explanation anchors without logging sensitive data.
-  Deliverables:
+    Deliverables:
   - recommendation generation flow
   - stable explanation strategy for each recommended direction
-  Depends on:
+    Depends on:
   - Task 2
   - Task 3
 
 ### Phase 2: Applicant flow and UI
 
 - [x] Task 5: Implement the public `/profile-test` page with a real questionnaire and intentional empty/incomplete/invalid states.
-  Files:
+      Files:
   - `app/(public)/profile-test/page.tsx`
   - `src/shared/ui/*` or `src/modules/recommendation/*`
   - `app/globals.css`
-  Logging requirements:
+    Logging requirements:
   - Log page load, questionnaire state, and invalid submission reasons.
-  Deliverables:
+    Deliverables:
   - applicant-facing questionnaire UI
   - at least two answer types in the rendered flow
-  Depends on:
+    Depends on:
   - Task 1
   - Task 4
 
 - [x] Task 6: Render recommendation results with explicit explanation, recommendation confidence signal, and route actions.
-  Files:
+      Files:
   - `app/(public)/profile-test/page.tsx`
   - `src/modules/recommendation/application/*`
   - supporting UI files
-  Logging requirements:
+    Logging requirements:
   - Log generated recommendation ids and rendered result state.
-  Deliverables:
+    Deliverables:
   - recommendation result cards
   - explanation blocks
   - recommendation-to-compare CTA
-  Depends on:
+    Depends on:
   - Task 4
   - Task 5
 
 - [x] Task 7: Wire recommendation results into the existing comparison flow using the current compare selection conventions.
-  Files:
+      Files:
   - `src/modules/comparison/application/comparison-selection.ts`
   - `src/modules/recommendation/application/*`
   - `app/(public)/profile-test/page.tsx`
-  Logging requirements:
+    Logging requirements:
   - Log the compare handoff ids and source marker.
-  Deliverables:
+    Deliverables:
   - compare link using `source=recommendation-flow`
-  Depends on:
+    Depends on:
   - Task 6
 
 - [x] Task 8: Emit recommendation analytics events for successful result generation and compare handoff intent.
-  Files:
+      Files:
   - `src/shared/kernel/events.ts`
   - `app/(public)/profile-test/page.tsx`
   - `src/modules/events/*`
-  Logging requirements:
+    Logging requirements:
   - Log recommendation event creation intent and publish result.
-  Deliverables:
+    Deliverables:
   - recommendation-generated event path
-  Depends on:
+    Depends on:
   - Task 6
   - Task 7
 
 ### Phase 3: Verification, tests, and docs
 
 - [x] Task 9: Add or update unit tests for parsing, scoring, ranking, and explanation generation.
-  Files:
+      Files:
   - `tests/unit/recommendation/*`
-  Deliverables:
+    Deliverables:
   - passing unit coverage for core business logic
-  Depends on:
+    Depends on:
   - Task 4
 
 - [x] Task 10: Add integration tests for repository-backed recommendation candidate resolution and application flow.
-  Files:
+      Files:
   - `tests/integration/recommendation/*`
-  Deliverables:
+    Deliverables:
   - passing integration coverage for recommendation flow
-  Depends on:
+    Depends on:
   - Task 4
 
 - [x] Task 11: Extend smoke or e2e coverage for `profile-test -> recommendations -> compare`.
-  Files:
+      Files:
   - `tests/e2e/*`
-  Deliverables:
+    Deliverables:
   - smoke/e2e scenario covering the critical path
-  Depends on:
+    Depends on:
   - Task 7
 
 - [x] Task 12: Update docs to reflect the prof-test flow, recommendation logic constraints, and current scope.
-  Files:
+      Files:
   - `README.md`
   - `docs/product-concept.md`
-  Deliverables:
+    Deliverables:
   - feature documentation aligned with implementation
-  Depends on:
+    Depends on:
   - Task 9
   - Task 10
   - Task 11

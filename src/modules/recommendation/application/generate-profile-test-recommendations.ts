@@ -136,7 +136,9 @@ export function generateProfileTestRecommendations(
     }),
   );
   const recommendedDirectionIds = matches.map((match) => match.directionId);
-  const summary = profile.preferredProgramFocuses.includes("software-development")
+  const summary = profile.preferredProgramFocuses.includes(
+    "software-development",
+  )
     ? "Your answers point most strongly toward software-oriented directions with structured problem solving."
     : profile.preferredProgramFocuses.includes("information-security")
       ? "Your answers point toward security-focused directions with protection and risk analysis."

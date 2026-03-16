@@ -19,7 +19,9 @@ export function parseProfileTestSubmission(
   questions: ProfileTestQuestion[],
   submission: RawProfileTestSubmission,
 ): ParsedProfileTestSubmission {
-  const questionKinds = [...new Set(questions.map((question) => question.kind))];
+  const questionKinds = [
+    ...new Set(questions.map((question) => question.kind)),
+  ];
   const hasAnySubmittedValue = questions.some(
     (question) => normalizeSubmissionValue(submission[question.id]).length > 0,
   );

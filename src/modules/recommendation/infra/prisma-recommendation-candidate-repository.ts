@@ -5,9 +5,9 @@ import { logWithLevel } from "@/shared/utils/logging";
 import type { RecommendationCandidateRepository } from "../domain/recommendation-candidate-repository";
 import type { RecommendationCandidate } from "../domain/recommendation-candidate";
 
-function mapCandidate(input: Awaited<
-  ReturnType<PrismaClient["direction"]["findMany"]>
->[number]): RecommendationCandidate {
+function mapCandidate(
+  input: Awaited<ReturnType<PrismaClient["direction"]["findMany"]>>[number],
+): RecommendationCandidate {
   return {
     id: input.id,
     slug: input.slug,
@@ -29,9 +29,7 @@ function mapCandidate(input: Awaited<
   };
 }
 
-export class PrismaRecommendationCandidateRepository
-  implements RecommendationCandidateRepository
-{
+export class PrismaRecommendationCandidateRepository implements RecommendationCandidateRepository {
   constructor(private readonly prisma: PrismaClient) {}
 
   async listCandidates(): Promise<RecommendationCandidate[]> {
@@ -45,7 +43,9 @@ export class PrismaRecommendationCandidateRepository
       },
     );
 
-    const candidates = (await this.prisma.direction.findMany()).map(mapCandidate);
+    const candidates = (await this.prisma.direction.findMany()).map(
+      mapCandidate,
+    );
 
     logWithLevel(
       "prisma-recommendation-candidate-repository",

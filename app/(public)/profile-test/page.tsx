@@ -53,7 +53,10 @@ function renderStateMessage(state: "empty" | "incomplete" | "invalid") {
   }
 }
 
-function renderQuestion(question: ProfileTestQuestion, selectedValues: string[]) {
+function renderQuestion(
+  question: ProfileTestQuestion,
+  selectedValues: string[],
+) {
   const isMultiSelect = question.kind === "multi-select";
 
   return (
@@ -62,7 +65,8 @@ function renderQuestion(question: ProfileTestQuestion, selectedValues: string[])
       <p className="muted profileQuestionDescription">{question.description}</p>
       {isMultiSelect ? (
         <p className="sectionEyebrow profileQuestionMeta">
-          Select {`${(question as MultiSelectProfileTestQuestion).minSelections} to ${(question as MultiSelectProfileTestQuestion).maxSelections}`}
+          Select{" "}
+          {`${(question as MultiSelectProfileTestQuestion).minSelections} to ${(question as MultiSelectProfileTestQuestion).maxSelections}`}
         </p>
       ) : null}
       <div className="profileOptionGrid">
@@ -118,14 +122,20 @@ export default async function ProfileTestPage(props: {
     }),
   );
 
-  logWithLevel("public-profile-test-page", "info", "Rendering profile test page.", {
-    route: "/profile-test",
-    submissionState: parsedSubmission.state,
-    activeQuestionIds,
-  });
+  logWithLevel(
+    "public-profile-test-page",
+    "info",
+    "Rendering profile test page.",
+    {
+      route: "/profile-test",
+      submissionState: parsedSubmission.state,
+      activeQuestionIds,
+    },
+  );
 
   const recommendationRepository = createRecommendationCandidateRepository();
-  const recommendationCandidates = await recommendationRepository.listCandidates();
+  const recommendationCandidates =
+    await recommendationRepository.listCandidates();
   const recommendationResult = generateProfileTestRecommendations(
     parsedSubmission,
     recommendationCandidates,
@@ -212,7 +222,10 @@ export default async function ProfileTestPage(props: {
 
         <form action="/profile-test" className="stack" method="get">
           {profileTestQuestions.map((question) =>
-            renderQuestion(question, readSelectedValues(searchParams, question.id)),
+            renderQuestion(
+              question,
+              readSelectedValues(searchParams, question.id),
+            ),
           )}
           <section className="card profileActionBar">
             <p className="muted">
@@ -253,7 +266,9 @@ export default async function ProfileTestPage(props: {
                 <article className="catalogCard" key={match.directionId}>
                   <div className="catalogCardHeader">
                     <div>
-                      <div className="sectionEyebrow">Recommended direction</div>
+                      <div className="sectionEyebrow">
+                        Recommended direction
+                      </div>
                       <h3 className="cardTitle">{match.title}</h3>
                     </div>
                     <span className="focusBadge">{match.confidence}</span>
@@ -274,7 +289,10 @@ export default async function ProfileTestPage(props: {
                     >
                       Open direction page
                     </Link>
-                    <Link className="actionLink" href={compareHref ?? "/compare"}>
+                    <Link
+                      className="actionLink"
+                      href={compareHref ?? "/compare"}
+                    >
                       Compare recommended set
                     </Link>
                   </div>

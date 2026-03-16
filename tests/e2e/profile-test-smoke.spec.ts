@@ -7,12 +7,12 @@ test.describe("profile test smoke", () => {
     await page.goto("/profile-test");
 
     await expect(
-      page.getByRole("heading", { name: "Answer a short guided questionnaire" }),
+      page.getByRole("heading", {
+        name: "Answer a short guided questionnaire",
+      }),
     ).toBeVisible();
 
-    await page
-      .getByLabel("Build applications and digital services")
-      .check();
+    await page.getByLabel("Build applications and digital services").check();
     await page.getByLabel("Write code and debug features").check();
     await page.getByLabel("Work with databases and structured logic").check();
     await page.getByLabel("Launch applications people use").check();
