@@ -380,4 +380,52 @@
 1. помочь абитуриенту выбрать осознанно;
 2. дать приёмной комиссии инструмент анализа и управления спросом.
 
-Именно сочетание этих двух задач делает продукт не просто справочником, а полноценной системой поддержки выбора и принятия решений.
+## Именно сочетание этих двух задач делает продукт не просто справочником, а полноценной системой поддержки выбора и принятия решений.
+
+## MVP implementation note
+
+The current `feature/nps-comparison` iteration uses mock data first.
+
+The mock source already follows the richer academic example shape that includes:
+
+- program code
+- qualification
+- department
+- study duration
+- budget and paid seats
+- tuition cost
+- passing score history
+- subjects with blocks, departments, and hours
+
+The first applicant-facing comparison flow does not need to expose every one of these fields immediately.
+
+The first UI iteration is expected to focus on:
+
+- catalog visibility
+- direction detail clarity
+- comparison entry
+- comparison of the most decision-useful fields
+
+Real database integration for this richer structure will be connected later through repository and adapter replacement, not through a rewrite of the public pages.
+
+## MVP implementation note
+
+The current `feature/nps-comparison` branch implements the first applicant-facing
+catalog, detail, and comparison flow on mock data derived from `hosts.txt`.
+
+What is intentionally real already:
+
+- the public routes
+- the repository boundaries
+- the comparison selection and validation logic
+- analytics event emission for key applicant actions
+- unit, integration, and smoke coverage for the main path
+
+What is intentionally deferred:
+
+- the final academic database model
+- real subject, department, and curriculum normalization rules
+- the final Prisma mapping for the richer dataset
+
+The follow-up database integration should replace repository adapters, not the
+public pages or comparison contracts.

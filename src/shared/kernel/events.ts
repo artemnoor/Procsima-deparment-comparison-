@@ -21,7 +21,11 @@ export type DirectionOpenedPayload = {
 
 export type CompareStartedPayload = {
   directionIds: string[];
-  source: "comparison-page" | "recommendation-flow";
+  source:
+    | "catalog"
+    | "direction-detail"
+    | "comparison-page"
+    | "recommendation-flow";
 };
 
 export type ComparisonRunPayload = {

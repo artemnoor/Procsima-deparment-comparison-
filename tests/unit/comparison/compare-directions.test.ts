@@ -26,6 +26,12 @@ describe("compareDirections", () => {
     expect(result.comparedFields).toEqual([
       "programFocus",
       "learningDifficulty",
+      "qualification",
+      "department",
+      "studyDuration",
+      "tuitionPerYearRub",
+      "passingScores",
+      "subjectBlocks",
       "careerPaths",
       "axisScores",
     ]);

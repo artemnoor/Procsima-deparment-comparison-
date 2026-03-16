@@ -1,15 +1,13 @@
 import { NextResponse } from "next/server";
 
 import { prisma } from "@/app/db";
-import {
-  listDirections,
-  PrismaDirectionCatalogRepository,
-} from "@/modules/catalog";
+import { createDirectionCatalogRepository } from "@/app/public-direction-data";
+import { listDirections } from "@/modules/catalog";
 import { publishEvent, PrismaEventPublisher } from "@/modules/events";
 import { createDomainEvent } from "@/shared/kernel/events";
 
 export async function GET() {
-  const repository = new PrismaDirectionCatalogRepository(prisma);
+  const repository = createDirectionCatalogRepository();
   const publisher = new PrismaEventPublisher(prisma);
 
   const directions = await listDirections(repository);

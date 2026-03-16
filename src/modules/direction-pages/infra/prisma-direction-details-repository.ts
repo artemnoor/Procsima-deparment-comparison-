@@ -42,11 +42,24 @@ export class PrismaDirectionDetailsRepository implements DirectionDetailsReposit
       shortDescription: direction.shortDescription,
       programFocus: direction.programFocus,
       learningDifficulty: direction.learningDifficulty,
+      context: {
+        code: null,
+        qualification: null,
+        department: null,
+        studyDuration: null,
+        budgetSeats: null,
+        paidSeats: null,
+        tuitionPerYearRub: null,
+      },
       whatYouLearn: direction.whatYouLearn,
       careerPaths: direction.careerPaths,
       targetFit: direction.targetFit,
       keyDifferences: direction.keyDifferences,
       axisScores: mapAxisScores(direction),
+      passingScores: [],
+      subjects: [],
+      programDescriptionUrl: null,
+      curriculumUrl: null,
     };
   }
 }
