@@ -14,6 +14,7 @@ const envSchema = z.object({
   ADMIN_DEV_USER_ID: z.string().min(1).default("dev-admin-user"),
   ADMIN_DEV_ROLE: z.string().min(1).default("admissions_admin"),
   ALLOW_DEV_AUTH: z.enum(["true", "false"]).default("true"),
+  NPS_DISABLE_EVENT_WRITE: z.enum(["true", "false"]).default("false"),
 });
 
 export const env = envSchema.parse({
@@ -23,4 +24,5 @@ export const env = envSchema.parse({
   ADMIN_DEV_USER_ID: process.env.ADMIN_DEV_USER_ID,
   ADMIN_DEV_ROLE: process.env.ADMIN_DEV_ROLE,
   ALLOW_DEV_AUTH: process.env.ALLOW_DEV_AUTH,
+  NPS_DISABLE_EVENT_WRITE: process.env.NPS_DISABLE_EVENT_WRITE,
 });

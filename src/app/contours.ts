@@ -15,6 +15,7 @@ export const publicContour: ContourDefinition = {
   links: [
     { href: "/", label: "Home" },
     { href: "/directions", label: "Directions" },
+    { href: "/profile-test", label: "Profile test" },
     { href: "/compare", label: "Compare" },
     { href: "/admin", label: "Admin contour" },
     { href: "/api/health", label: "Health" },
