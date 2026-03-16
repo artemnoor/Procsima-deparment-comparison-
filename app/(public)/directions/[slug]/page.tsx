@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { prisma } from "@/app/db";
+import { createEventPublisher } from "@/app/event-publisher";
 import {
   createDirectionComparisonRepository,
   createDirectionDetailsRepository,
@@ -11,7 +11,7 @@ import {
   readComparisonSelection,
 } from "@/modules/comparison";
 import { getDirectionDetails } from "@/modules/direction-pages";
-import { publishEvent, PrismaEventPublisher } from "@/modules/events";
+import { publishEvent } from "@/modules/events";
 import { createDomainEvent } from "@/shared/kernel/events";
 import { logWithLevel } from "@/shared/utils/logging";
 import { CompareSelectionPanel } from "@/shared/ui/compare-selection-panel";
@@ -36,7 +36,7 @@ export default async function DirectionDetailPage(props: {
 
   const repository = createDirectionDetailsRepository();
   const comparisonRepository = createDirectionComparisonRepository();
-  const publisher = new PrismaEventPublisher(prisma);
+  const publisher = createEventPublisher();
   const direction = await getDirectionDetails(repository, slug);
   const selection = readComparisonSelection(searchParams);
 

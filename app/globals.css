@@ -312,6 +312,24 @@ main {
   font-weight: 600;
 }
 
+.actionButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  cursor: pointer;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #111827;
+  color: #ffffff;
+  font: inherit;
+  font-weight: 600;
+}
+
+.actionButton:hover {
+  background: #1f2937;
+}
+
 .subsectionTitle {
   margin: 0 0 10px;
 }
@@ -339,6 +357,69 @@ main {
 }
 
 .compareGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.profileHero {
+  gap: 12px;
+}
+
+.profileQuestionCard {
+  display: grid;
+  gap: 14px;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.profileQuestionLegend {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.profileQuestionDescription {
+  margin: -4px 0 0;
+}
+
+.profileQuestionMeta {
+  margin: 0;
+}
+
+.profileOptionGrid {
+  display: grid;
+  gap: 12px;
+}
+
+.profileOptionCard {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  align-items: start;
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid #d1d5db;
+  background: #f9fafb;
+}
+
+.profileOptionCard input {
+  margin-top: 3px;
+}
+
+.profileOptionCard p {
+  margin: 6px 0 0;
+}
+
+.profileActionBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.profileRecommendationGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 16px;
@@ -426,5 +507,9 @@ main {
 
   .scoreHistoryRow {
     grid-template-columns: 1fr;
+  }
+
+  .profileActionBar {
+    align-items: flex-start;
   }
 }

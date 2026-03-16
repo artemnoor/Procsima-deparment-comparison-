@@ -10,6 +10,11 @@ import {
   type DirectionComparisonRepository,
 } from "@/modules/comparison";
 import {
+  MockRecommendationCandidateRepository,
+  PrismaRecommendationCandidateRepository,
+  type RecommendationCandidateRepository,
+} from "@/modules/recommendation";
+import {
   MockDirectionDetailsRepository,
   PrismaDirectionDetailsRepository,
   type DirectionDetailsRepository,
@@ -89,4 +94,23 @@ export function createDirectionComparisonRepository(): DirectionComparisonReposi
   // Comparison flow should switch sources at the repository boundary,
   // not inside route or component code.
   return new MockDirectionComparisonRepository();
+}
+
+export function createRecommendationCandidateRepository(): RecommendationCandidateRepository {
+  const source = getPublicDirectionDataSource();
+
+  logWithLevel(
+    "public-direction-data",
+    "info",
+    "Creating recommendation candidate repository for public contour.",
+    {
+      source,
+    },
+  );
+
+  if (source === "prisma") {
+    return new PrismaRecommendationCandidateRepository(prisma);
+  }
+
+  return new MockRecommendationCandidateRepository();
 }

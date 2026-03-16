@@ -6,7 +6,8 @@ export const maximumComparisonDirectionCount = 4;
 export type ComparisonEntrySource =
   | "catalog"
   | "direction-detail"
-  | "comparison-page";
+  | "comparison-page"
+  | "recommendation-flow";
 
 export type ComparisonSelectionState =
   | "empty"
@@ -55,7 +56,8 @@ export function readComparisonSelection(input: {
   const source =
     input.source === "catalog" ||
     input.source === "direction-detail" ||
-    input.source === "comparison-page"
+    input.source === "comparison-page" ||
+    input.source === "recommendation-flow"
       ? input.source
       : null;
   const state = resolveSelectionState(directionIds);

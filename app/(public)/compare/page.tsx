@@ -1,8 +1,8 @@
 import Link from "next/link";
 
-import { prisma } from "@/app/db";
+import { createEventPublisher } from "@/app/event-publisher";
 import { createDirectionComparisonRepository } from "@/app/public-direction-data";
-import { publishEvent, PrismaEventPublisher } from "@/modules/events";
+import { publishEvent } from "@/modules/events";
 import { getComparisonPageData } from "@/modules/comparison";
 import { createDomainEvent } from "@/shared/kernel/events";
 import { logWithLevel } from "@/shared/utils/logging";
@@ -45,7 +45,7 @@ export default async function ComparePage(props: {
 }) {
   const searchParams = await props.searchParams;
   const repository = createDirectionComparisonRepository();
-  const publisher = new PrismaEventPublisher(prisma);
+  const publisher = createEventPublisher();
   const comparisonPageData = await getComparisonPageData(repository, {
     ids: searchParams.ids,
     source: searchParams.source,

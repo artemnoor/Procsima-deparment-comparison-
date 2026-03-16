@@ -1,8 +1,8 @@
-import { prisma } from "@/app/db";
+import { createEventPublisher } from "@/app/event-publisher";
 import { readComparisonSelection } from "@/modules/comparison";
 import { createDirectionCatalogRepository } from "@/app/public-direction-data";
 import { listDirections } from "@/modules/catalog";
-import { publishEvent, PrismaEventPublisher } from "@/modules/events";
+import { publishEvent } from "@/modules/events";
 import { createDomainEvent } from "@/shared/kernel/events";
 import { logWithLevel } from "@/shared/utils/logging";
 import { CompareSelectionPanel } from "@/shared/ui/compare-selection-panel";
@@ -22,7 +22,7 @@ export default async function DirectionsPage(props: {
   );
 
   const repository = createDirectionCatalogRepository();
-  const publisher = new PrismaEventPublisher(prisma);
+  const publisher = createEventPublisher();
   const directions = await listDirections(repository);
   const selection = readComparisonSelection(searchParams);
   const selectedDirections = directions.filter((direction) =>

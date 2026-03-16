@@ -14,7 +14,7 @@ export default defineConfig({
     video: "retain-on-failure",
   },
   webServer: {
-    command: "corepack pnpm dev",
+    command: "pnpm dev",
     url: `http://127.0.0.1:${port}`,
     reuseExistingServer: true,
     timeout: 120000,
@@ -27,6 +27,7 @@ export default defineConfig({
       ADMIN_DEV_USER_ID: "dev-admin-user",
       ADMIN_DEV_ROLE: "admissions_admin",
       ALLOW_DEV_AUTH: "true",
+      NPS_DISABLE_EVENT_WRITE: "true",
     },
   },
   projects: [

@@ -1,3 +1,5 @@
+import type { DirectionAxis } from "./direction";
+
 export const eventTypes = [
   "page_opened",
   "direction_opened",
@@ -36,6 +38,8 @@ export type ComparisonRunPayload = {
 export type RecommendationGeneratedPayload = {
   directionIds: string[];
   explanation: string;
+  sourceRoute: "/profile-test";
+  dominantAxes: DirectionAxis[];
 };
 
 export type DomainEventPayloadMap = {

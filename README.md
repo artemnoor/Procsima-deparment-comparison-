@@ -44,6 +44,13 @@ Current baseline includes:
 - `/compare` - compare page with 2-4 direction selection states and a real differences view
 - event emission for catalog, direction detail, compare start, and comparison run
 
+`feature/profile-test` adds:
+
+- `/profile-test` - applicant questionnaire with single-choice and multi-select answers
+- deterministic explainable recommendation scoring based on module-owned contracts
+- direct compare handoff via `source=recommendation-flow`
+- recommendation result analytics through `recommendation_generated`
+
 ## Mock-to-real data seam
 
 The current branch is intentionally `mock first`.
@@ -103,6 +110,20 @@ Rule for `develop`:
 - code should not be merged into `develop` unless `pnpm check` is green
 - before declaring foundation work ready, `pnpm check:develop` should be green
 - for `feature/nps-comparison`, merge readiness also requires the mock-backed applicant flow smoke test to pass
+- for `feature/profile-test`, merge readiness also requires the profile-test smoke path to pass
+
+## Recommendation constraints
+
+- recommendation logic is explainable and deterministic
+- recommendation logic must not include editorial promotion
+- the profile test routes users into comparison instead of pretending to return one objectively correct direction
+- recommendation analytics should distinguish profile-test-driven compare journeys from catalog-driven ones
+
+## Local and test flags
+
+- `NPS_DISABLE_EVENT_WRITE=false` by default and keeps applicant analytics on the Prisma-backed event path
+- set `NPS_DISABLE_EVENT_WRITE=true` for local or test runs when you need public routes and smoke flows to work without a writable event database
+- Playwright smoke runs set this flag intentionally so e2e coverage validates the applicant flow instead of failing on local event persistence setup
 
 ## CI baseline
 
