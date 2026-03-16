@@ -1,6 +1,7 @@
 import type { PrismaClient } from "@prisma/client";
 
 import type { DirectionDetail } from "@/shared/kernel/direction";
+import { createPrismaFallbackLearningContent } from "@/modules/learning-content";
 import { logWithLevel } from "@/shared/utils/logging";
 
 import type { DirectionComparisonRepository } from "../domain/direction-comparison-repository";
@@ -22,6 +23,8 @@ function mapDirectionDetail(input: {
   analyticsScore: number | null;
   aiScore: number | null;
 }): DirectionDetail {
+  const learningContent = createPrismaFallbackLearningContent(input.id);
+
   return {
     id: input.id,
     slug: input.slug,
@@ -39,6 +42,7 @@ function mapDirectionDetail(input: {
       tuitionPerYearRub: null,
     },
     whatYouLearn: input.whatYouLearn,
+    learningContent,
     careerPaths: input.careerPaths,
     targetFit: input.targetFit,
     keyDifferences: input.keyDifferences,

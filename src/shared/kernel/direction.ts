@@ -12,6 +12,65 @@ export type DirectionAxis = (typeof directionAxes)[number];
 
 export type DirectionAxisScores = Record<DirectionAxis, number>;
 
+export const directionTechnologyCategories = [
+  "language",
+  "framework",
+  "tool",
+  "platform",
+  "method",
+] as const;
+
+export type DirectionTechnologyCategory =
+  (typeof directionTechnologyCategories)[number];
+
+export const practicalSkillLevels = [
+  "foundation",
+  "intermediate",
+  "advanced",
+] as const;
+
+export type PracticalSkillLevel = (typeof practicalSkillLevels)[number];
+
+export type DirectionLearningOutcome = {
+  title: string;
+  description: string;
+};
+
+export type DirectionTechnology = {
+  name: string;
+  category: DirectionTechnologyCategory;
+  context: string | null;
+};
+
+export type DirectionPracticalSkill = {
+  name: string;
+  level: PracticalSkillLevel;
+  context: string | null;
+};
+
+export type DirectionStudyFocus = {
+  title: string;
+  summary: string;
+  subjectBlocks: string[];
+  technologies: string[];
+  practicalSkills: string[];
+};
+
+export type DeferredLearningContentField = {
+  field: string;
+  reason: string;
+};
+
+export type DirectionLearningContent = {
+  summary: string | null;
+  outcomes: DirectionLearningOutcome[];
+  technologies: DirectionTechnology[];
+  practicalSkills: DirectionPracticalSkill[];
+  studyFocuses: DirectionStudyFocus[];
+  mvpVisibleFields: string[];
+  deferredFields: DeferredLearningContentField[];
+};
+
 export const passingScoreSchema = z.object({
   year: z.number().int().positive(),
   budget: z.number().nonnegative().nullable(),
@@ -110,6 +169,7 @@ export type DirectionSummary = {
 
 export type DirectionDetail = DirectionSummary & {
   whatYouLearn: string | null;
+  learningContent: DirectionLearningContent;
   careerPaths: string[];
   targetFit: string | null;
   keyDifferences: string[];

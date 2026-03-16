@@ -338,6 +338,57 @@ main {
   border-radius: 12px;
 }
 
+.learningContentBlock {
+  display: grid;
+  gap: 18px;
+}
+
+.learningContentBlockcompact {
+  gap: 14px;
+}
+
+.learningContentSection {
+  display: grid;
+  gap: 10px;
+}
+
+.learningOutcomeList,
+.learningSkillList,
+.studyFocusGrid,
+.compareLearningGrid {
+  display: grid;
+  gap: 12px;
+}
+
+.learningOutcomeList,
+.learningSkillList,
+.studyFocusGrid,
+.compareLearningGrid {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.learningOutcomeCard,
+.learningSkillCard,
+.studyFocusCard,
+.compareLearningCard {
+  padding: 14px;
+  background: #f9fafb;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+.learningOutcomeCard p,
+.learningSkillCard p,
+.studyFocusCard p {
+  margin: 8px 0 0;
+}
+
+.learningTagList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 .compareGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));

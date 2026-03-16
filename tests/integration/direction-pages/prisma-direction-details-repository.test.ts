@@ -30,5 +30,9 @@ describe("PrismaDirectionDetailsRepository", () => {
     expect(direction?.slug).toBe("software-engineering");
     expect(direction?.axisScores.programming).toBe(5);
     expect(direction?.careerPaths).toContain("Software Engineer");
+    expect(direction?.learningContent.summary).toBeNull();
+    expect(direction?.learningContent.deferredFields[0]?.field).toBe(
+      "structuredLearningContent",
+    );
   });
 });

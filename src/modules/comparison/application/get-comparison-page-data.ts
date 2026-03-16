@@ -1,5 +1,6 @@
 import type { DirectionDetail } from "@/shared/kernel/direction";
 import { logWithLevel } from "@/shared/utils/logging";
+import { findMissingMvpLearningContentFields } from "@/modules/learning-content";
 
 import { compareDirections } from "./compare-directions";
 import {
@@ -121,6 +122,35 @@ export async function getComparisonPageData(
       comparison: null,
       state: "missing-directions",
     };
+  }
+
+  const incompleteDirections = directions
+    .map((direction) => ({
+      directionId: direction.id,
+      missingLearningContentFields: findMissingMvpLearningContentFields(
+        direction.learningContent,
+      ),
+    }))
+    .filter((direction) => direction.missingLearningContentFields.length > 0);
+
+  if (incompleteDirections.length > 0) {
+    logWithLevel(
+      "comparison-page-data",
+      "warn",
+      "Comparison page includes directions with incomplete MVP learning-content fields.",
+      {
+        incompleteDirections,
+      },
+    );
+  } else {
+    logWithLevel(
+      "comparison-page-data",
+      "debug",
+      "All compared directions contain complete MVP learning-content fields.",
+      {
+        directionIds: directions.map((direction) => direction.id),
+      },
+    );
   }
 
   const comparison = compareDirections({

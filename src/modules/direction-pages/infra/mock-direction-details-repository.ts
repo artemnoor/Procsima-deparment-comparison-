@@ -1,9 +1,7 @@
 import type { DirectionDetail } from "@/shared/kernel/direction";
 import { logWithLevel } from "@/shared/utils/logging";
-import {
-  loadMockDirectionSourceRecords,
-  mapDirectionSourceToDetail,
-} from "@/modules/content";
+import { loadMockDirectionSourceRecords } from "@/modules/content";
+import { mapDirectionSourceToDetail } from "@/modules/learning-content";
 
 import type { DirectionDetailsRepository } from "../domain/direction-details-repository";
 

@@ -4,6 +4,8 @@ import type {
   DirectionAxisScores,
   DirectionDetail,
 } from "@/shared/kernel/direction";
+import { createPrismaFallbackLearningContent } from "@/modules/learning-content";
+import { logWithLevel } from "@/shared/utils/logging";
 
 import type { DirectionDetailsRepository } from "../domain/direction-details-repository";
 
@@ -27,15 +29,36 @@ export class PrismaDirectionDetailsRepository implements DirectionDetailsReposit
   constructor(private readonly prisma: PrismaClient) {}
 
   async findDirectionBySlug(slug: string): Promise<DirectionDetail | null> {
+    logWithLevel(
+      "prisma-direction-details-repository",
+      "info",
+      "Looking up direction detail in Prisma source.",
+      {
+        source: "prisma",
+        slug,
+      },
+    );
+
     const direction = await this.prisma.direction.findUnique({
       where: { slug },
     });
 
     if (!direction) {
+      logWithLevel(
+        "prisma-direction-details-repository",
+        "warn",
+        "Direction detail was not found in Prisma source.",
+        {
+          slug,
+        },
+      );
+
       return null;
     }
 
-    return {
+    const learningContent = createPrismaFallbackLearningContent(direction.id);
+
+    const directionDetail = {
       id: direction.id,
       slug: direction.slug,
       title: direction.title,
@@ -52,6 +75,7 @@ export class PrismaDirectionDetailsRepository implements DirectionDetailsReposit
         tuitionPerYearRub: null,
       },
       whatYouLearn: direction.whatYouLearn,
+      learningContent,
       careerPaths: direction.careerPaths,
       targetFit: direction.targetFit,
       keyDifferences: direction.keyDifferences,
@@ -61,5 +85,20 @@ export class PrismaDirectionDetailsRepository implements DirectionDetailsReposit
       programDescriptionUrl: null,
       curriculumUrl: null,
     };
+
+    logWithLevel(
+      "prisma-direction-details-repository",
+      "debug",
+      "Mapped Prisma direction detail with fallback learning content.",
+      {
+        slug,
+        directionId: directionDetail.id,
+        deferredFields: learningContent.deferredFields.map(
+          (field) => field.field,
+        ),
+      },
+    );
+
+    return directionDetail;
   }
 }

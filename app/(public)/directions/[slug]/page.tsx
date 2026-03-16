@@ -16,6 +16,7 @@ import { createDomainEvent } from "@/shared/kernel/events";
 import { logWithLevel } from "@/shared/utils/logging";
 import { CompareSelectionPanel } from "@/shared/ui/compare-selection-panel";
 import { FactGrid } from "@/shared/ui/fact-grid";
+import { LearningContentBlock } from "@/shared/ui/learning-content-block";
 
 export default async function DirectionDetailPage(props: {
   params: Promise<{ slug: string }>;
@@ -120,6 +121,20 @@ export default async function DirectionDetailPage(props: {
     }),
   );
 
+  logWithLevel(
+    "public-direction-detail-page",
+    "debug",
+    "Resolved structured learning-content sections for direction detail page.",
+    {
+      route: `/directions/${slug}`,
+      directionId: direction.id,
+      outcomes: direction.learningContent.outcomes.length,
+      technologies: direction.learningContent.technologies.length,
+      practicalSkills: direction.learningContent.practicalSkills.length,
+      studyFocuses: direction.learningContent.studyFocuses.length,
+    },
+  );
+
   return (
     <main>
       <div className="stack">
@@ -203,11 +218,7 @@ export default async function DirectionDetailPage(props: {
           </article>
 
           <article className="card">
-            <h3 className="cardTitle">What you learn</h3>
-            <p className="muted">
-              {direction.whatYouLearn ??
-                "Detailed academic description will be added later."}
-            </p>
+            <LearningContentBlock learningContent={direction.learningContent} />
             <h4 className="subsectionTitle">Target fit</h4>
             <p className="muted">
               {direction.targetFit ?? "Positioning is still being refined."}

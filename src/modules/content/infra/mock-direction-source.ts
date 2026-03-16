@@ -7,6 +7,50 @@ import {
   type NormalizedDirectionSourceRecord,
 } from "../domain/direction-source";
 
+function createLearningContent(input: {
+  summary: string;
+  outcomes: Array<{ title: string; description: string }>;
+  technologies: Array<{
+    name: string;
+    category: DirectionSourceProfile["learningContent"]["technologies"][number]["category"];
+    context: string | null;
+  }>;
+  practicalSkills: Array<{
+    name: string;
+    level: DirectionSourceProfile["learningContent"]["practicalSkills"][number]["level"];
+    context: string | null;
+  }>;
+  studyFocuses: Array<{
+    title: string;
+    summary: string;
+    subjectBlocks: string[];
+    technologies: string[];
+    practicalSkills: string[];
+  }>;
+  deferredFields?: DirectionSourceProfile["learningContent"]["deferredFields"];
+}): DirectionSourceProfile["learningContent"] {
+  return {
+    summary: input.summary,
+    outcomes: input.outcomes,
+    technologies: input.technologies,
+    practicalSkills: input.practicalSkills,
+    studyFocuses: input.studyFocuses,
+    mvpVisibleFields: [
+      "summary",
+      "outcomes",
+      "technologies",
+      "practicalSkills",
+      "studyFocuses",
+    ],
+    deferredFields: input.deferredFields ?? [
+      {
+        field: "semesterPlan",
+        reason: "Deferred until the real curriculum taxonomy is integrated.",
+      },
+    ],
+  };
+}
+
 const rawMockDirectionSourceRecords: RawDirectionSourceRecord[] = [
   {
     код: "09.02.01",
@@ -242,6 +286,85 @@ const mockDirectionProfiles: Record<string, DirectionSourceProfile> = {
     learningDifficulty: 4,
     whatYouLearn:
       "Architecture of computer systems, operating environments, maintenance, and network infrastructure.",
+    learningContent: createLearningContent({
+      summary:
+        "Students learn how computer hardware, operating environments, and network infrastructure work together in real support and maintenance workflows.",
+      outcomes: [
+        {
+          title: "Maintain computer hardware",
+          description:
+            "Diagnose workstation failures, replace components, and keep equipment ready for production use.",
+        },
+        {
+          title: "Configure operating environments",
+          description:
+            "Set up operating systems, drivers, and basic service tooling for labs and office environments.",
+        },
+        {
+          title: "Support local networks",
+          description:
+            "Assemble, test, and troubleshoot LAN infrastructure and end-user connectivity.",
+        },
+      ],
+      technologies: [
+        { name: "Windows", category: "platform", context: "desktop support" },
+        { name: "Linux", category: "platform", context: "system setup" },
+        {
+          name: "Cisco Packet Tracer",
+          category: "tool",
+          context: "network labs",
+        },
+        {
+          name: "Hardware diagnostics",
+          category: "method",
+          context: "device maintenance",
+        },
+      ],
+      practicalSkills: [
+        {
+          name: "PC assembly and diagnostics",
+          level: "advanced",
+          context: "service and maintenance labs",
+        },
+        {
+          name: "Operating system installation",
+          level: "intermediate",
+          context: "classroom infrastructure setup",
+        },
+        {
+          name: "Basic network configuration",
+          level: "intermediate",
+          context: "switch and endpoint connectivity",
+        },
+      ],
+      studyFocuses: [
+        {
+          title: "Hardware and device support",
+          summary:
+            "Hands-on work with system units, peripherals, and diagnostics.",
+          subjectBlocks: ["РђРїРїР°СЂР°С‚РЅРѕРµ РѕР±РµСЃРїРµС‡РµРЅРёРµ"],
+          technologies: ["Windows", "Hardware diagnostics"],
+          practicalSkills: ["PC assembly and diagnostics"],
+        },
+        {
+          title: "Network infrastructure",
+          summary: "Foundations of office and classroom network setup.",
+          subjectBlocks: [
+            "РЎРµС‚Рё",
+            "РЎРёСЃС‚РµРјРЅРѕРµ Р°РґРјРёРЅРёСЃС‚СЂРёСЂРѕРІР°РЅРёРµ",
+          ],
+          technologies: ["Linux", "Cisco Packet Tracer"],
+          practicalSkills: ["Basic network configuration"],
+        },
+      ],
+      deferredFields: [
+        {
+          field: "industryCertifications",
+          reason:
+            "Certification mapping is deferred until real program metadata is available.",
+        },
+      ],
+    }),
     careerPaths: [
       "Systems Technician",
       "Network Support Engineer",
@@ -266,6 +389,89 @@ const mockDirectionProfiles: Record<string, DirectionSourceProfile> = {
     learningDifficulty: 4,
     whatYouLearn:
       "Algorithms, software development, mobile applications, database work, and testing practices.",
+    learningContent: createLearningContent({
+      summary:
+        "Students build software products from algorithms to tested applications, with concrete exposure to programming, databases, and delivery practices.",
+      outcomes: [
+        {
+          title: "Write application code",
+          description:
+            "Implement algorithms, data structures, and user-facing application features in programming labs.",
+        },
+        {
+          title: "Work with data storage",
+          description:
+            "Design and query relational databases for information systems and app backends.",
+        },
+        {
+          title: "Test and improve software",
+          description:
+            "Validate modules, debug defects, and iterate on product quality.",
+        },
+      ],
+      technologies: [
+        {
+          name: "Python",
+          category: "language",
+          context: "intro programming and automation",
+        },
+        { name: "SQL", category: "language", context: "database labs" },
+        { name: "Git", category: "tool", context: "version control basics" },
+        {
+          name: "Android Studio",
+          category: "tool",
+          context: "mobile development practice",
+        },
+      ],
+      practicalSkills: [
+        {
+          name: "Backend logic implementation",
+          level: "advanced",
+          context: "application development projects",
+        },
+        {
+          name: "Database querying and modeling",
+          level: "intermediate",
+          context: "information systems modules",
+        },
+        {
+          name: "Test case design",
+          level: "intermediate",
+          context: "QA and validation practice",
+        },
+      ],
+      studyFocuses: [
+        {
+          title: "Core programming",
+          summary:
+            "Algorithmic thinking and software implementation with practice-heavy coding.",
+          subjectBlocks: ["РџСЂРѕРіСЂР°РјРјРёСЂРѕРІР°РЅРёРµ"],
+          technologies: ["Python", "Git"],
+          practicalSkills: ["Backend logic implementation"],
+        },
+        {
+          title: "Apps and data",
+          summary:
+            "Building mobile and information systems with persistent storage.",
+          subjectBlocks: [
+            "РњРѕР±РёР»СЊРЅР°СЏ СЂР°Р·СЂР°Р±РѕС‚РєР°",
+            "Р‘Р°Р·С‹ РґР°РЅРЅС‹С…",
+          ],
+          technologies: ["Android Studio", "SQL"],
+          practicalSkills: [
+            "Database querying and modeling",
+            "Test case design",
+          ],
+        },
+      ],
+      deferredFields: [
+        {
+          field: "frameworkProgression",
+          reason:
+            "Framework-by-semester detail is deferred until curriculum exports are available.",
+        },
+      ],
+    }),
     careerPaths: [
       "Software Developer",
       "Mobile Developer",
@@ -291,6 +497,95 @@ const mockDirectionProfiles: Record<string, DirectionSourceProfile> = {
     learningDifficulty: 4,
     whatYouLearn:
       "Administration of network operating systems, routing, switching, virtualization, and infrastructure resilience.",
+    learningContent: createLearningContent({
+      summary:
+        "Students administer servers, configure enterprise networks, and learn how resilient infrastructure is deployed and supported.",
+      outcomes: [
+        {
+          title: "Administer server environments",
+          description:
+            "Configure operating systems, services, and infrastructure roles for continuous operation.",
+        },
+        {
+          title: "Build routed networks",
+          description:
+            "Set up routing, switching, and network segmentation for business scenarios.",
+        },
+        {
+          title: "Operate virtual infrastructure",
+          description:
+            "Work with virtualization and cloud-oriented infrastructure patterns.",
+        },
+      ],
+      technologies: [
+        {
+          name: "Linux",
+          category: "platform",
+          context: "server administration",
+        },
+        {
+          name: "VMware",
+          category: "platform",
+          context: "virtualization labs",
+        },
+        {
+          name: "Cisco IOS",
+          category: "platform",
+          context: "routing and switching",
+        },
+        {
+          name: "Monitoring runbooks",
+          category: "method",
+          context: "infrastructure operations",
+        },
+      ],
+      practicalSkills: [
+        {
+          name: "Server configuration",
+          level: "advanced",
+          context: "infrastructure administration",
+        },
+        {
+          name: "Network routing and switching",
+          level: "advanced",
+          context: "enterprise network labs",
+        },
+        {
+          name: "Virtual machine operations",
+          level: "intermediate",
+          context: "cloud and virtualization practice",
+        },
+      ],
+      studyFocuses: [
+        {
+          title: "Systems administration",
+          summary: "Operating systems, services, and resilient server setups.",
+          subjectBlocks: [
+            "РЎРёСЃС‚РµРјРЅРѕРµ Р°РґРјРёРЅРёСЃС‚СЂРёСЂРѕРІР°РЅРёРµ",
+          ],
+          technologies: ["Linux", "Monitoring runbooks"],
+          practicalSkills: ["Server configuration"],
+        },
+        {
+          title: "Network operations",
+          summary:
+            "Enterprise-grade networking, switching, and virtualization.",
+          subjectBlocks: ["РЎРµС‚Рё", "РћР±Р»Р°С‡РЅС‹Рµ С‚РµС…РЅРѕР»РѕРіРёРё"],
+          technologies: ["Cisco IOS", "VMware"],
+          practicalSkills: [
+            "Network routing and switching",
+            "Virtual machine operations",
+          ],
+        },
+      ],
+      deferredFields: [
+        {
+          field: "vendorLabMatrix",
+          reason:
+            "Detailed vendor/lab mapping is deferred until real infrastructure metadata is available.",
+        },
+      ],
+    }),
     careerPaths: [
       "System Administrator",
       "Network Administrator",
@@ -315,6 +610,94 @@ const mockDirectionProfiles: Record<string, DirectionSourceProfile> = {
     learningDifficulty: 5,
     whatYouLearn:
       "Protection of automated systems, cryptography, network attack mitigation, and database security.",
+    learningContent: createLearningContent({
+      summary:
+        "Students learn how to protect automated systems, analyze threats, and apply practical security controls across networks and data stores.",
+      outcomes: [
+        {
+          title: "Understand security controls",
+          description:
+            "Apply cryptography, access control, and system hardening in protected environments.",
+        },
+        {
+          title: "Detect and analyze threats",
+          description:
+            "Study attack vectors, incident signals, and defensive responses for networked systems.",
+        },
+        {
+          title: "Protect information assets",
+          description:
+            "Secure databases and automated systems against common operational risks.",
+        },
+      ],
+      technologies: [
+        {
+          name: "SIEM basics",
+          category: "tool",
+          context: "security monitoring",
+        },
+        {
+          name: "Linux",
+          category: "platform",
+          context: "hardened environments",
+        },
+        { name: "SQL", category: "language", context: "database security" },
+        {
+          name: "Threat modeling",
+          category: "method",
+          context: "security analysis",
+        },
+      ],
+      practicalSkills: [
+        {
+          name: "Security incident analysis",
+          level: "intermediate",
+          context: "threat investigation labs",
+        },
+        {
+          name: "System hardening",
+          level: "advanced",
+          context: "protected infrastructure exercises",
+        },
+        {
+          name: "Database protection setup",
+          level: "intermediate",
+          context: "data security practice",
+        },
+      ],
+      studyFocuses: [
+        {
+          title: "Core information security",
+          summary:
+            "Controls, cryptography, and secure architecture for automated systems.",
+          subjectBlocks: [
+            "РРЅС„РѕСЂРјР°С†РёРѕРЅРЅР°СЏ Р±РµР·РѕРїР°СЃРЅРѕСЃС‚СЊ",
+          ],
+          technologies: ["Linux", "Threat modeling"],
+          practicalSkills: ["System hardening"],
+        },
+        {
+          title: "Cyber defense practice",
+          summary: "Threat response, attack analysis, and database protection.",
+          subjectBlocks: [
+            "РљРёР±РµСЂР±РµР·РѕРїР°СЃРЅРѕСЃС‚СЊ",
+            "Р‘Р°Р·С‹ РґР°РЅРЅС‹С…",
+          ],
+          technologies: ["SIEM basics", "SQL"],
+          practicalSkills: [
+            "Security incident analysis",
+            "Database protection setup",
+          ],
+        },
+      ],
+      deferredFields: [
+        {
+          field: "complianceStandards",
+          reason:
+            "Formal compliance mapping is deferred until official program metadata is integrated.",
+        },
+      ],
+    }),
     careerPaths: [
       "Information Security Specialist",
       "Security Analyst",
@@ -397,6 +780,7 @@ export function loadMockDirectionSourceRecords(): NormalizedDirectionSourceRecor
       "passingScores",
       "subjects",
       "profile",
+      "learningContent",
     ],
     deferredFields: ["real-db-id", "normalized-curriculum-taxonomy"],
   });

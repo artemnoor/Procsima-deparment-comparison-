@@ -1,7 +1,7 @@
 import {
   mapDirectionSourceToDetail,
   mapDirectionSourceToSummary,
-} from "@/modules/content";
+} from "@/modules/learning-content";
 import { loadMockDirectionSourceRecords } from "@/modules/content/infra/mock-direction-source";
 
 describe("mapDirectionSourceToReadModel", () => {
@@ -41,6 +41,10 @@ describe("mapDirectionSourceToReadModel", () => {
       budget: 4.57,
       paid: 3.96,
     });
+    expect(detail.learningContent.technologies).toHaveLength(4);
+    expect(detail.learningContent.deferredFields[0]?.field).toBe(
+      "complianceStandards",
+    );
     expect(detail.curriculumUrl).toBe(
       "https://example-college.ru/programs/10-02-05/curriculum",
     );

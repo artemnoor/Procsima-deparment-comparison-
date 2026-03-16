@@ -31,7 +31,10 @@ describe("getComparisonPageData", () => {
       "direction-09-02-01",
       "direction-09-02-07",
     ]);
-    expect(result.comparison?.comparedFields).toContain("subjectBlocks");
+    expect(result.comparison?.comparedFields).toContain("technologyHighlights");
+    expect(
+      result.directions[0]?.learningContent.outcomes.length,
+    ).toBeGreaterThan(0);
   });
 
   it("preserves the requested direction order in comparison output", async () => {

@@ -6,6 +6,7 @@ import { publishEvent, PrismaEventPublisher } from "@/modules/events";
 import { getComparisonPageData } from "@/modules/comparison";
 import { createDomainEvent } from "@/shared/kernel/events";
 import { logWithLevel } from "@/shared/utils/logging";
+import { LearningContentBlock } from "@/shared/ui/learning-content-block";
 
 function renderComparisonState(state: string) {
   switch (state) {
@@ -71,6 +72,22 @@ export default async function ComparePage(props: {
   });
 
   if (comparisonPageData.state === "ready" && comparisonPageData.comparison) {
+    logWithLevel(
+      "public-compare-page",
+      "debug",
+      "Resolved structured learning-content for comparison page.",
+      {
+        directionIds: comparisonPageData.comparison.directionIds,
+        learningContent: comparisonPageData.directions.map((direction) => ({
+          directionId: direction.id,
+          outcomes: direction.learningContent.outcomes.length,
+          technologies: direction.learningContent.technologies.length,
+          practicalSkills: direction.learningContent.practicalSkills.length,
+          studyFocuses: direction.learningContent.studyFocuses.length,
+        })),
+      },
+    );
+
     await publishEvent(
       publisher,
       createDomainEvent({
@@ -192,6 +209,10 @@ export default async function ComparePage(props: {
                   </div>
                 ))}
               </div>
+              <LearningContentBlock
+                learningContent={direction.learningContent}
+                variant="compact"
+              />
             </article>
           ))}
         </section>
@@ -204,6 +225,35 @@ export default async function ComparePage(props: {
               <span className="chip chipMuted" key={field}>
                 {field}
               </span>
+            ))}
+          </div>
+        </section>
+
+        <section className="card">
+          <div className="sectionEyebrow">Learning content comparison</div>
+          <h3 className="cardTitle">
+            What changes from one direction to another
+          </h3>
+          <div className="compareLearningGrid">
+            {comparisonPageData.directions.map((direction) => (
+              <article className="compareLearningCard" key={direction.id}>
+                <h4 className="subsectionTitle">{direction.title}</h4>
+                <div className="learningTagList">
+                  {direction.learningContent.technologies.map((technology) => (
+                    <span
+                      className="chip"
+                      key={`${direction.id}-${technology.name}`}
+                    >
+                      {technology.name}
+                    </span>
+                  ))}
+                </div>
+                <ul className="detailList">
+                  {direction.learningContent.practicalSkills.map((skill) => (
+                    <li key={`${direction.id}-${skill.name}`}>{skill.name}</li>
+                  ))}
+                </ul>
+              </article>
             ))}
           </div>
         </section>

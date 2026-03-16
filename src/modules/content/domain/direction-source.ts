@@ -1,5 +1,6 @@
 import type {
   DirectionAxisScores,
+  DirectionLearningContent,
   DirectionSubject,
   PassingScore,
   RawDirectionSourceRecord,
@@ -39,6 +40,7 @@ export type DirectionSourceProfile = {
   programFocus: string | null;
   learningDifficulty: number | null;
   whatYouLearn: string | null;
+  learningContent: DirectionLearningContent;
   careerPaths: string[];
   targetFit: string | null;
   keyDifferences: string[];
@@ -156,6 +158,7 @@ export function normalizeRawDirectionSourceRecord(
     slug: normalizedRecord.slug,
     subjects: normalizedRecord.subjects.length,
     subjectBlocks: normalizedRecord.subjectBlocks,
+    surfacedMvpFields: normalizedRecord.subjectBlocks.length,
   });
 
   return normalizedRecord;
@@ -165,6 +168,14 @@ export function attachDirectionProfile(
   normalizedRecord: NormalizedDirectionSourceBase,
   profile: DirectionSourceProfile,
 ): NormalizedDirectionSourceRecord {
+  logDirectionSource("debug", "Attaching direction source profile.", {
+    code: normalizedRecord.code,
+    mvpVisibleFields: profile.learningContent.mvpVisibleFields,
+    deferredFields: profile.learningContent.deferredFields.map(
+      (field) => field.field,
+    ),
+  });
+
   return {
     ...normalizedRecord,
     profile,

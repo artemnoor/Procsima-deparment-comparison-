@@ -429,3 +429,35 @@ What is intentionally deferred:
 
 The follow-up database integration should replace repository adapters, not the
 public pages or comparison contracts.
+
+## Learning Content MVP Note
+
+The current implementation moves "what you will learn" from a single prose field
+to a structured applicant-facing model.
+
+MVP-visible learning-content fields:
+
+- summary of what the student will learn
+- concrete learning outcomes
+- technology and tool highlights
+- practical skills acquired during study
+- study-focus groups that cluster subjects into applicant-readable blocks
+
+Deferred until later data integration:
+
+- semester-by-semester sequencing
+- certification and compliance mappings
+- vendor-specific lab coverage
+- full normalized curriculum taxonomy
+
+Architecture boundary:
+
+- `src/modules/content` keeps ownership of raw-source normalization
+- `src/modules/learning-content` owns shaping normalized data into applicant-facing read models
+- public pages and comparison consume those shaped read models without depending on raw source details
+
+Mock vs real-data boundary:
+
+- mock records already provide the full MVP learning-content structure
+- Prisma-backed reads intentionally use fallback placeholders for structured learning-content until the real database schema is expanded
+- future academic data integration must replace adapters, not rewrite applicant-facing page contracts
