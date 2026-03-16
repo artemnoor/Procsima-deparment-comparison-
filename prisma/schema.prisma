@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum RoleKey {
+  admissions_admin
+  admissions_analyst
+}
+
+enum EventType {
+  page_opened
+  direction_opened
+  compare_started
+  comparison_run
+  recommendation_generated
+}
+
+model Direction {
+  id                 String   @id @default(cuid())
+  slug               String   @unique
+  title              String
+  shortDescription   String
+  programFocus       String?
+  whatYouLearn       String?
+  careerPaths        String[]
+  targetFit          String?
+  keyDifferences     String[]
+  programmingScore   Int?
+  mathScore          Int?
+  engineeringScore   Int?
+  analyticsScore     Int?
+  aiScore            Int?
+  learningDifficulty Int?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model User {
+  id        String     @id
+  email     String?    @unique
+  name      String?
+  role      RoleKey
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  events     Event[]
+}
+
+model Event {
+  id         String    @id @default(cuid())
+  type       EventType
+  userId     String?
+  directionId String?
+  payload    Json
+  createdAt  DateTime  @default(now())
+  user       User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+}

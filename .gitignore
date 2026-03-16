@@ -1,0 +1,33 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Node / frontend
+node_modules/
+dist/
+build/
+.next/
+coverage/
+playwright-report/
+test-results/
+*.tsbuildinfo
+.local-postgres/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment
+.env
+.env.*
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/

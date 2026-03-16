@@ -1,0 +1,26 @@
+import type { DirectionDetail } from "@/shared/kernel/direction";
+
+export function buildDirectionDetail(
+  overrides: Partial<DirectionDetail> = {},
+): DirectionDetail {
+  return {
+    id: "direction-1",
+    slug: "software-engineering",
+    title: "Software Engineering",
+    shortDescription: "Build software systems.",
+    programFocus: "software",
+    learningDifficulty: 4,
+    whatYouLearn: "Programming and architecture.",
+    careerPaths: ["Software Engineer"],
+    targetFit: "Applicants interested in software development.",
+    keyDifferences: ["Higher programming focus"],
+    axisScores: {
+      programming: 5,
+      math: 3,
+      engineering: 4,
+      analytics: 2,
+      ai: 2,
+    },
+    ...overrides,
+  };
+}
