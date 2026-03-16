@@ -9,6 +9,10 @@ export const mvpComparisonFields = [
   "tuitionPerYearRub",
   "passingScores",
   "subjectBlocks",
+  "learningOutcomes",
+  "technologyHighlights",
+  "practicalSkills",
+  "studyFocuses",
   "careerPaths",
   "axisScores",
 ] as const;

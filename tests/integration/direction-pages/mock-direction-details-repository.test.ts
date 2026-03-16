@@ -12,5 +12,6 @@ describe("MockDirectionDetailsRepository", () => {
     expect(direction?.id).toBe("direction-09-02-07");
     expect(direction?.subjects).toHaveLength(4);
     expect(direction?.careerPaths).toContain("Software Developer");
+    expect(direction?.learningContent.technologies).toHaveLength(4);
   });
 });

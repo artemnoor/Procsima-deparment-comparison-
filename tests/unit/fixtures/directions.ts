@@ -20,6 +20,46 @@ export function buildDirectionDetail(
       tuitionPerYearRub: 156000,
     },
     whatYouLearn: "Programming and architecture.",
+    learningContent: {
+      summary: "Programming and architecture.",
+      outcomes: [
+        {
+          title: "Build software",
+          description: "Implement and maintain application features.",
+        },
+      ],
+      technologies: [
+        {
+          name: "TypeScript",
+          category: "language",
+          context: "application development",
+        },
+      ],
+      practicalSkills: [
+        {
+          name: "Application development",
+          level: "advanced",
+          context: "project work",
+        },
+      ],
+      studyFocuses: [
+        {
+          title: "Software engineering",
+          summary: "Programming and architecture fundamentals.",
+          subjectBlocks: ["Programming"],
+          technologies: ["TypeScript"],
+          practicalSkills: ["Application development"],
+        },
+      ],
+      mvpVisibleFields: [
+        "summary",
+        "outcomes",
+        "technologies",
+        "practicalSkills",
+        "studyFocuses",
+      ],
+      deferredFields: [],
+    },
     careerPaths: ["Software Engineer"],
     targetFit: "Applicants interested in software development.",
     keyDifferences: ["Higher programming focus"],

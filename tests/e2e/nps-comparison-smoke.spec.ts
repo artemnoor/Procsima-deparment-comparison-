@@ -43,6 +43,11 @@ test.describe("nps comparison smoke", () => {
       page.getByRole("heading", { name: "Shared criteria" }),
     ).toBeVisible();
     await expect(
+      page.getByRole("heading", {
+        name: "What changes from one direction to another",
+      }),
+    ).toBeVisible();
+    await expect(
       page.getByRole("heading", { name: "How the selected directions differ" }),
     ).toBeVisible();
     await expect(page.locator(".compareMatrixRow")).toHaveCount(5);
@@ -54,6 +59,12 @@ test.describe("nps comparison smoke", () => {
 
     await expect(
       page.getByRole("heading", { name: "Program snapshot" }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "What you will learn" }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Learning outcomes" }),
     ).toBeVisible();
     await expect(
       page.getByRole("link", { name: "Add to compare" }),

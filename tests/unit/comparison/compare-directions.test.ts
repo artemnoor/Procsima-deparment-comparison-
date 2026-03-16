@@ -32,6 +32,10 @@ describe("compareDirections", () => {
       "tuitionPerYearRub",
       "passingScores",
       "subjectBlocks",
+      "learningOutcomes",
+      "technologyHighlights",
+      "practicalSkills",
+      "studyFocuses",
       "careerPaths",
       "axisScores",
     ]);

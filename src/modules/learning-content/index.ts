@@ -1,3 +1,6 @@
-export const learningContentModule = {
-  name: "learning-content",
-} as const;
+export {
+  createPrismaFallbackLearningContent,
+  findMissingMvpLearningContentFields,
+  mapDirectionSourceToDetail,
+  mapDirectionSourceToSummary,
+} from "./application/map-learning-content-view-model";

@@ -9,19 +9,20 @@ Foundation baseline for a modular monolith that helps applicants compare NPS dir
 
 ## Current status
 
-Foundation is implemented and locally verified.
+Foundation and the first applicant comparison flow are implemented and locally verified.
 
-Active implementation note for `feature/nps-comparison`:
+Active implementation note for `feature/learning-content`:
 
-- applicant-facing catalog, direction detail, and comparison are being built on mock data first
-- the mock source is derived from the richer `hosts.txt` example shape
-- the first UI iteration may surface:
-  - code, qualification, department, study duration
-  - budget and paid seats
-  - tuition per year
-  - passing score trends
-  - key subject blocks and total subject-hour context
-- real database integration for this richer academic structure will be connected later through repository or adapter replacement, not through a UI rewrite
+- applicant-facing catalog, direction detail, and comparison now depend on a structured learning-content model
+- `src/modules/content` owns source normalization
+- `src/modules/learning-content` owns applicant-facing shaping of normalized direction content
+- mock records already surface:
+  - learning outcomes
+  - technology highlights
+  - practical skills
+  - study focus groups
+  - explicit deferred fields for data that is not part of MVP yet
+- Prisma-backed repositories intentionally fall back to partial/default learning-content until the real academic schema is expanded
 
 Current baseline includes:
 
@@ -37,11 +38,11 @@ Current baseline includes:
 
 ## Current applicant flow
 
-`feature/nps-comparison` now includes:
+The current applicant flow includes:
 
 - `/directions` - mock-backed catalog for 4 comparison-ready directions
-- `/directions/[slug]` - direction detail page with structured applicant-facing data
-- `/compare` - compare page with 2-4 direction selection states and a real differences view
+- `/directions/[slug]` - direction detail page with structured applicant-facing data and learning-content sections
+- `/compare` - compare page with 2-4 direction selection states, real differences view, and side-by-side learning-content highlights
 - event emission for catalog, direction detail, compare start, and comparison run
 
 ## Mock-to-real data seam
@@ -59,6 +60,23 @@ Current behavior:
 - default public source is `mock`
 - setting `NPS_PUBLIC_DIRECTION_SOURCE=prisma` switches applicant-facing reads to Prisma-backed repositories
 - routes and UI do not know whether data came from mock records or Prisma
+- structured learning-content contracts stay stable across both sources
+- when Prisma is active, applicant-facing pages receive fallback learning-content placeholders until real structured fields are persisted
+
+Current MVP-visible learning-content fields:
+
+- summary
+- learning outcomes
+- technology highlights
+- practical skills
+- study focus groups
+
+Currently deferred learning-content fields:
+
+- semester-by-semester curriculum progression
+- certification mapping
+- compliance or vendor-matrix metadata
+- full normalized curriculum taxonomy
 
 When the richer academic database model arrives later:
 
