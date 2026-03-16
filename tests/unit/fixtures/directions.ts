@@ -10,6 +10,15 @@ export function buildDirectionDetail(
     shortDescription: "Build software systems.",
     programFocus: "software",
     learningDifficulty: 4,
+    context: {
+      code: "09.02.07",
+      qualification: "Technician",
+      department: "Programming Department",
+      studyDuration: "3 years 10 months",
+      budgetSeats: 60,
+      paidSeats: 30,
+      tuitionPerYearRub: 156000,
+    },
     whatYouLearn: "Programming and architecture.",
     careerPaths: ["Software Engineer"],
     targetFit: "Applicants interested in software development.",
@@ -21,6 +30,10 @@ export function buildDirectionDetail(
       analytics: 2,
       ai: 2,
     },
+    passingScores: [],
+    subjects: [],
+    programDescriptionUrl: null,
+    curriculumUrl: null,
     ...overrides,
   };
 }

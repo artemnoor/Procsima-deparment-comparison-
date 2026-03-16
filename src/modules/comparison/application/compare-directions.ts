@@ -5,6 +5,7 @@ import type {
   ComparisonInput,
   ComparisonResult,
 } from "../domain/comparison";
+import { mvpComparisonFields } from "../domain/comparison";
 
 function buildDifferences(input: ComparisonInput): ComparisonDifference[] {
   return directionAxes.map((axis) => ({
@@ -19,12 +20,7 @@ function buildDifferences(input: ComparisonInput): ComparisonDifference[] {
 export function compareDirections(input: ComparisonInput): ComparisonResult {
   return {
     directionIds: input.directions.map((direction) => direction.id),
-    comparedFields: [
-      "programFocus",
-      "learningDifficulty",
-      "careerPaths",
-      "axisScores",
-    ],
+    comparedFields: [...mvpComparisonFields],
     differences: buildDifferences(input),
   };
 }

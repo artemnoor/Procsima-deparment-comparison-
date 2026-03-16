@@ -19,6 +19,15 @@ export class PrismaDirectionCatalogRepository implements DirectionCatalogReposit
       shortDescription: direction.shortDescription,
       programFocus: direction.programFocus,
       learningDifficulty: direction.learningDifficulty,
+      context: {
+        code: null,
+        qualification: null,
+        department: null,
+        studyDuration: null,
+        budgetSeats: null,
+        paidSeats: null,
+        tuitionPerYearRub: null,
+      },
     }));
   }
 }

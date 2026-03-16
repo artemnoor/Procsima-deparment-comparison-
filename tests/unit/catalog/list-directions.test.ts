@@ -12,6 +12,15 @@ describe("listDirections", () => {
           shortDescription: "Build software systems.",
           programFocus: "software",
           learningDifficulty: 4,
+          context: {
+            code: null,
+            qualification: null,
+            department: null,
+            studyDuration: null,
+            budgetSeats: null,
+            paidSeats: null,
+            tuitionPerYearRub: null,
+          },
         },
       ],
     };
@@ -24,6 +33,15 @@ describe("listDirections", () => {
         shortDescription: "Build software systems.",
         programFocus: "software",
         learningDifficulty: 4,
+        context: {
+          code: null,
+          qualification: null,
+          department: null,
+          studyDuration: null,
+          budgetSeats: null,
+          paidSeats: null,
+          tuitionPerYearRub: null,
+        },
       },
     ]);
   });

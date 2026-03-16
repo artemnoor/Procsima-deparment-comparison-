@@ -11,6 +11,18 @@ Foundation baseline for a modular monolith that helps applicants compare NPS dir
 
 Foundation is implemented and locally verified.
 
+Active implementation note for `feature/nps-comparison`:
+
+- applicant-facing catalog, direction detail, and comparison are being built on mock data first
+- the mock source is derived from the richer `hosts.txt` example shape
+- the first UI iteration may surface:
+  - code, qualification, department, study duration
+  - budget and paid seats
+  - tuition per year
+  - passing score trends
+  - key subject blocks and total subject-hour context
+- real database integration for this richer academic structure will be connected later through repository or adapter replacement, not through a UI rewrite
+
 Current baseline includes:
 
 - Next.js application shell
@@ -22,6 +34,37 @@ Current baseline includes:
 - internal auth skeleton for dashboard routes
 - unit, integration, and e2e coverage
 - local quality gates and CI workflow
+
+## Current applicant flow
+
+`feature/nps-comparison` now includes:
+
+- `/directions` - mock-backed catalog for 4 comparison-ready directions
+- `/directions/[slug]` - direction detail page with structured applicant-facing data
+- `/compare` - compare page with 2-4 direction selection states and a real differences view
+- event emission for catalog, direction detail, compare start, and comparison run
+
+## Mock-to-real data seam
+
+The current branch is intentionally `mock first`.
+
+Source switching is centralized in [public-direction-data.ts](/C:/Users/artem/admission/nps-choice-platform/src/app/public-direction-data.ts):
+
+- `createDirectionCatalogRepository()`
+- `createDirectionDetailsRepository()`
+- `createDirectionComparisonRepository()`
+
+Current behavior:
+
+- default public source is `mock`
+- setting `NPS_PUBLIC_DIRECTION_SOURCE=prisma` switches applicant-facing reads to Prisma-backed repositories
+- routes and UI do not know whether data came from mock records or Prisma
+
+When the richer academic database model arrives later:
+
+- replace or extend the current Prisma-backed repositories to map the real schema into the same read models
+- keep `loadMockDirectionSourceRecords()` only as a development fallback or remove it after parity is reached
+- do not rewrite `/directions`, `/directions/[slug]`, or `/compare` for the data migration
 
 ## Baseline stack
 
@@ -59,6 +102,7 @@ Rule for `develop`:
 
 - code should not be merged into `develop` unless `pnpm check` is green
 - before declaring foundation work ready, `pnpm check:develop` should be green
+- for `feature/nps-comparison`, merge readiness also requires the mock-backed applicant flow smoke test to pass
 
 ## CI baseline
 
