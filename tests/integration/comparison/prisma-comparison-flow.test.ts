@@ -23,7 +23,9 @@ describe("prisma comparison flow", () => {
   });
 
   it("resolves a ready comparison state with persisted rich direction payloads", async () => {
-    const repository = new PrismaDirectionComparisonRepository(integrationPrisma);
+    const repository = new PrismaDirectionComparisonRepository(
+      integrationPrisma,
+    );
 
     const result = await getComparisonPageData(repository, {
       ids: ["direction-09-02-07", "direction-10-02-05"],

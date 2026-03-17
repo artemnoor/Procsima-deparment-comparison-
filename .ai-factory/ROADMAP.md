@@ -15,11 +15,11 @@
 
 ## Completed
 
-| Milestone | Date |
-|-----------|------|
+| Milestone                              | Date       |
+| -------------------------------------- | ---------- |
 | Product Discovery And AI Context Setup | 2026-03-14 |
-| Foundation | 2026-03-16 |
-| Catalog And NPS Comparison | 2026-03-16 |
-| Learning Content | 2026-03-17 |
-| Prof-Test And Recommendations | 2026-03-17 |
-| Analytics Collection | 2026-03-17 |
+| Foundation                             | 2026-03-16 |
+| Catalog And NPS Comparison             | 2026-03-16 |
+| Learning Content                       | 2026-03-17 |
+| Prof-Test And Recommendations          | 2026-03-17 |
+| Analytics Collection                   | 2026-03-17 |

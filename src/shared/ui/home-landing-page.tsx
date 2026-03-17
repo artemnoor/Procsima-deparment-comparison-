@@ -153,7 +153,10 @@ export function HomeLandingPage() {
                 тебе.
               </p>
               <div className="homeActionRow">
-                <Link className="homeButton homeButtonPrimary" href="/directions">
+                <Link
+                  className="homeButton homeButtonPrimary"
+                  href="/directions"
+                >
                   Сравнить направления
                 </Link>
                 <Link
@@ -202,8 +205,8 @@ export function HomeLandingPage() {
               <p className="homeEyebrow">Твой путь к уверенному выбору</p>
               <h2 className="homeSectionTitle">Ключевые возможности</h2>
               <p className="homeSectionLead">
-                Мы собрали инструменты, которые делают процесс выбора направления
-                простым, наглядным и спокойным.
+                Мы собрали инструменты, которые делают процесс выбора
+                направления простым, наглядным и спокойным.
               </p>
             </div>
 
@@ -270,7 +273,10 @@ export function HomeLandingPage() {
                 мест, стоимость и визуальный баланс дисциплин.
               </p>
               <div className="homeActionRow is-centered">
-                <Link className="homeButton homeButtonPrimary" href="/directions">
+                <Link
+                  className="homeButton homeButtonPrimary"
+                  href="/directions"
+                >
                   Перейти в каталог
                 </Link>
               </div>
@@ -307,9 +313,23 @@ export function HomeLandingPage() {
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <defs>
-                    <linearGradient id="home-test-shell" x1="0" x2="1" y1="0" y2="1">
-                      <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
-                      <stop offset="100%" stopColor="#f8fafc" stopOpacity="0.85" />
+                    <linearGradient
+                      id="home-test-shell"
+                      x1="0"
+                      x2="1"
+                      y1="0"
+                      y2="1"
+                    >
+                      <stop
+                        offset="0%"
+                        stopColor="#ffffff"
+                        stopOpacity="0.95"
+                      />
+                      <stop
+                        offset="100%"
+                        stopColor="#f8fafc"
+                        stopOpacity="0.85"
+                      />
                     </linearGradient>
                     <linearGradient
                       id="home-test-accent"
@@ -442,7 +462,10 @@ export function HomeLandingPage() {
                     y="246"
                   />
 
-                  <g className="homeAnimatedCursor" transform="translate(160 206)">
+                  <g
+                    className="homeAnimatedCursor"
+                    transform="translate(160 206)"
+                  >
                     <circle
                       className="homeAnimatedRipple"
                       cx="-2"
@@ -480,10 +503,13 @@ export function HomeLandingPage() {
 
             <div className="homeCareerGrid">
               <article className="homeInfoCard">
-                <h3 className="homeCardTitle">Что ты увидишь в карьерном блоке</h3>
+                <h3 className="homeCardTitle">
+                  Что ты увидишь в карьерном блоке
+                </h3>
                 <p className="homeCardText">
                   Роли выпускника, типы задач, востребованные навыки, отрасли и
-                  примеры рабочих сценариев без перегруза и абстрактных обещаний.
+                  примеры рабочих сценариев без перегруза и абстрактных
+                  обещаний.
                 </p>
               </article>
               <article className="homeInfoCard">
@@ -543,7 +569,10 @@ export function HomeLandingPage() {
                 выбор до нескольких действительно подходящих вариантов.
               </p>
               <div className="homeActionRow is-centered">
-                <Link className="homeButton homeButtonPrimary" href="/directions">
+                <Link
+                  className="homeButton homeButtonPrimary"
+                  href="/directions"
+                >
                   Посмотреть каталог
                 </Link>
                 <Link

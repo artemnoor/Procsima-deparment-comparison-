@@ -235,8 +235,7 @@ const directions: DirectionSeed[] = [
         subjectBlock: "Системное администрирование",
         department: "Кафедра системного программирования",
         hours: 164,
-        referenceUrl:
-          "https://example-college.ru/subjects/os-and-environments",
+        referenceUrl: "https://example-college.ru/subjects/os-and-environments",
         sortOrder: 2,
       },
       {
@@ -395,8 +394,7 @@ const directions: DirectionSeed[] = [
         subjectBlock: "Мобильная разработка",
         department: "Кафедра программирования и информационных систем",
         hours: 196,
-        referenceUrl:
-          "https://example-college.ru/subjects/mobile-development",
+        referenceUrl: "https://example-college.ru/subjects/mobile-development",
         sortOrder: 2,
       },
       {
@@ -534,8 +532,7 @@ const directions: DirectionSeed[] = [
         subjectBlock: "Системное администрирование",
         department: "Кафедра сетевых технологий и администрирования",
         hours: 212,
-        referenceUrl:
-          "https://example-college.ru/subjects/network-os-admin",
+        referenceUrl: "https://example-college.ru/subjects/network-os-admin",
         sortOrder: 1,
       },
       {
@@ -543,8 +540,7 @@ const directions: DirectionSeed[] = [
         subjectBlock: "Сети",
         department: "Кафедра сетевых технологий и администрирования",
         hours: 224,
-        referenceUrl:
-          "https://example-college.ru/subjects/routing-switching",
+        referenceUrl: "https://example-college.ru/subjects/routing-switching",
         sortOrder: 2,
       },
       {
@@ -562,8 +558,7 @@ const directions: DirectionSeed[] = [
     id: "direction-10-02-05",
     code: "10.02.05",
     slug: "program-10-02-05",
-    title:
-      "Обеспечение информационной безопасности автоматизированных систем",
+    title: "Обеспечение информационной безопасности автоматизированных систем",
     shortDescription:
       "Программа готовит специалистов по защите информации, обнаружению уязвимостей, настройке средств защиты и контролю безопасности автоматизированных систем.",
     qualification: "Специалист по компьютерным системам",
@@ -684,8 +679,7 @@ const directions: DirectionSeed[] = [
         subjectBlock: "Информационная безопасность",
         department: "Кафедра информационной безопасности",
         hours: 228,
-        referenceUrl:
-          "https://example-college.ru/subjects/system-protection",
+        referenceUrl: "https://example-college.ru/subjects/system-protection",
         sortOrder: 2,
       },
       {

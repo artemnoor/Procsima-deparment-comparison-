@@ -69,7 +69,13 @@ export function HowPlatformFlow() {
             xmlns="http://www.w3.org/2000/svg"
           >
             <defs>
-              <linearGradient id="home-flow-shell" x1="58" x2="618" y1="48" y2="374">
+              <linearGradient
+                id="home-flow-shell"
+                x1="58"
+                x2="618"
+                y1="48"
+                y2="374"
+              >
                 <stop stopColor="white" stopOpacity="0.98" />
                 <stop offset="1" stopColor="#E8F0FE" stopOpacity="0.96" />
               </linearGradient>
@@ -83,7 +89,14 @@ export function HowPlatformFlow() {
               </linearGradient>
             </defs>
 
-            <rect fill="rgba(255,255,255,0.26)" height="380" rx="34" width="632" x="24" y="20" />
+            <rect
+              fill="rgba(255,255,255,0.26)"
+              height="380"
+              rx="34"
+              width="632"
+              x="24"
+              y="20"
+            />
             <rect
               fill="url(#home-flow-shell)"
               height="336"
@@ -94,14 +107,37 @@ export function HowPlatformFlow() {
               x="42"
               y="42"
             />
-            <rect fill="rgba(15,23,42,0.04)" height="52" rx="30" width="596" x="42" y="42" />
+            <rect
+              fill="rgba(15,23,42,0.04)"
+              height="52"
+              rx="30"
+              width="596"
+              x="42"
+              y="42"
+            />
             <circle cx="78" cy="68" fill="rgba(15,23,42,0.18)" r="6" />
             <circle cx="102" cy="68" fill="rgba(15,23,42,0.12)" r="6" />
             <circle cx="126" cy="68" fill="rgba(15,23,42,0.12)" r="6" />
-            <rect fill="rgba(37,99,235,0.08)" height="20" rx="10" width="170" x="158" y="58" />
-            <rect fill="rgba(15,23,42,0.06)" height="20" rx="10" width="126" x="460" y="58" />
+            <rect
+              fill="rgba(37,99,235,0.08)"
+              height="20"
+              rx="10"
+              width="170"
+              x="158"
+              y="58"
+            />
+            <rect
+              fill="rgba(15,23,42,0.06)"
+              height="20"
+              rx="10"
+              width="126"
+              x="460"
+              y="58"
+            />
 
-            <g className={`homeFlowPanel ${stageIndex === 0 ? "is-active" : ""}`}>
+            <g
+              className={`homeFlowPanel ${stageIndex === 0 ? "is-active" : ""}`}
+            >
               <text
                 fill="#0F172A"
                 fontSize="24"
@@ -122,7 +158,10 @@ export function HowPlatformFlow() {
                 С какими данными тебе интереснее работать?
               </text>
 
-              <g className="homeFlowInteractive" style={{ transformOrigin: "340px 200px" }}>
+              <g
+                className="homeFlowInteractive"
+                style={{ transformOrigin: "340px 200px" }}
+              >
                 <rect
                   className="homeFlowBgRect"
                   fill="rgba(15,23,42,0.05)"
@@ -133,7 +172,13 @@ export function HowPlatformFlow() {
                   y="180"
                 />
                 <circle cx="210" cy="200" fill="rgba(15,23,42,0.1)" r="8" />
-                <text fill="#0F172A" fontSize="14" fontWeight="600" x="236" y="205">
+                <text
+                  fill="#0F172A"
+                  fontSize="14"
+                  fontWeight="600"
+                  x="236"
+                  y="205"
+                >
                   Аналитика и графики
                 </text>
               </g>
@@ -157,7 +202,13 @@ export function HowPlatformFlow() {
                   fill={stageIndex === 0 ? "#2563EB" : "rgba(15,23,42,0.1)"}
                   r="8"
                 />
-                <text fill="#0F172A" fontSize="14" fontWeight="600" x="236" y="255">
+                <text
+                  fill="#0F172A"
+                  fontSize="14"
+                  fontWeight="600"
+                  x="236"
+                  y="255"
+                >
                   Программный код и архитектура
                 </text>
               </g>
@@ -188,7 +239,9 @@ export function HowPlatformFlow() {
               </g>
             </g>
 
-            <g className={`homeFlowPanel ${stageIndex === 1 ? "is-active" : ""}`}>
+            <g
+              className={`homeFlowPanel ${stageIndex === 1 ? "is-active" : ""}`}
+            >
               <text
                 fill="#0F172A"
                 fontSize="22"
@@ -236,8 +289,22 @@ export function HowPlatformFlow() {
                 >
                   284
                 </text>
-                <rect fill="rgba(15,23,42,0.1)" height="6" rx="3" width="200" x="106" y="228" />
-                <rect fill="#2563EB" height="6" rx="3" width="180" x="106" y="228" />
+                <rect
+                  fill="rgba(15,23,42,0.1)"
+                  height="6"
+                  rx="3"
+                  width="200"
+                  x="106"
+                  y="228"
+                />
+                <rect
+                  fill="#2563EB"
+                  height="6"
+                  rx="3"
+                  width="180"
+                  x="106"
+                  y="228"
+                />
                 <text fill="#526076" fontSize="12" x="106" y="260">
                   Бюджетных мест
                 </text>
@@ -251,11 +318,28 @@ export function HowPlatformFlow() {
                 >
                   60
                 </text>
-                <rect fill="rgba(15,23,42,0.1)" height="6" rx="3" width="200" x="106" y="268" />
-                <rect fill="#60A5FA" height="6" rx="3" width="120" x="106" y="268" />
+                <rect
+                  fill="rgba(15,23,42,0.1)"
+                  height="6"
+                  rx="3"
+                  width="200"
+                  x="106"
+                  y="268"
+                />
+                <rect
+                  fill="#60A5FA"
+                  height="6"
+                  rx="3"
+                  width="120"
+                  x="106"
+                  y="268"
+                />
               </g>
 
-              <g className="homeFlowInteractive" style={{ transformOrigin: "464px 230px" }}>
+              <g
+                className="homeFlowInteractive"
+                style={{ transformOrigin: "464px 230px" }}
+              >
                 <rect
                   className="homeFlowBgRect"
                   fill="rgba(15,23,42,0.04)"
@@ -288,8 +372,22 @@ export function HowPlatformFlow() {
                 >
                   260
                 </text>
-                <rect fill="rgba(15,23,42,0.1)" height="6" rx="3" width="200" x="364" y="228" />
-                <rect fill="#2563EB" height="6" rx="3" width="140" x="364" y="228" />
+                <rect
+                  fill="rgba(15,23,42,0.1)"
+                  height="6"
+                  rx="3"
+                  width="200"
+                  x="364"
+                  y="228"
+                />
+                <rect
+                  fill="#2563EB"
+                  height="6"
+                  rx="3"
+                  width="140"
+                  x="364"
+                  y="228"
+                />
                 <text fill="#526076" fontSize="12" x="364" y="260">
                   Бюджетных мест
                 </text>
@@ -303,12 +401,28 @@ export function HowPlatformFlow() {
                 >
                   120
                 </text>
-                <rect fill="rgba(15,23,42,0.1)" height="6" rx="3" width="200" x="364" y="268" />
-                <rect fill="#60A5FA" height="6" rx="3" width="180" x="364" y="268" />
+                <rect
+                  fill="rgba(15,23,42,0.1)"
+                  height="6"
+                  rx="3"
+                  width="200"
+                  x="364"
+                  y="268"
+                />
+                <rect
+                  fill="#60A5FA"
+                  height="6"
+                  rx="3"
+                  width="180"
+                  x="364"
+                  y="268"
+                />
               </g>
             </g>
 
-            <g className={`homeFlowPanel ${stageIndex === 2 ? "is-active" : ""}`}>
+            <g
+              className={`homeFlowPanel ${stageIndex === 2 ? "is-active" : ""}`}
+            >
               <text
                 fill="#0F172A"
                 fontSize="22"
@@ -342,7 +456,14 @@ export function HowPlatformFlow() {
                   x="120"
                   y="174"
                 />
-                <rect fill="#2563EB" height="28" rx="8" width="60" x="130" y="184" />
+                <rect
+                  fill="#2563EB"
+                  height="28"
+                  rx="8"
+                  width="60"
+                  x="130"
+                  y="184"
+                />
                 <text
                   fill="white"
                   fontSize="12"
@@ -353,12 +474,21 @@ export function HowPlatformFlow() {
                 >
                   92%
                 </text>
-                <text fill="#0F172A" fontSize="15" fontWeight="700" x="204" y="203">
+                <text
+                  fill="#0F172A"
+                  fontSize="15"
+                  fontWeight="700"
+                  x="204"
+                  y="203"
+                >
                   Программная инженерия
                 </text>
               </g>
 
-              <g className="homeFlowInteractive" style={{ transformOrigin: "340px 256px" }}>
+              <g
+                className="homeFlowInteractive"
+                style={{ transformOrigin: "340px 256px" }}
+              >
                 <rect
                   className="homeFlowBgRect"
                   fill="rgba(15,23,42,0.04)"
@@ -368,7 +498,14 @@ export function HowPlatformFlow() {
                   x="120"
                   y="232"
                 />
-                <rect fill="rgba(15,23,42,0.2)" height="28" rx="8" width="60" x="130" y="242" />
+                <rect
+                  fill="rgba(15,23,42,0.2)"
+                  height="28"
+                  rx="8"
+                  width="60"
+                  x="130"
+                  y="242"
+                />
                 <text
                   fill="white"
                   fontSize="12"
@@ -379,12 +516,21 @@ export function HowPlatformFlow() {
                 >
                   84%
                 </text>
-                <text fill="#0F172A" fontSize="15" fontWeight="700" x="204" y="261">
+                <text
+                  fill="#0F172A"
+                  fontSize="15"
+                  fontWeight="700"
+                  x="204"
+                  y="261"
+                >
                   Информационная безопасность
                 </text>
               </g>
 
-              <g className="homeFlowInteractive" style={{ transformOrigin: "340px 312px" }}>
+              <g
+                className="homeFlowInteractive"
+                style={{ transformOrigin: "340px 312px" }}
+              >
                 <rect
                   className="homeFlowBgRect"
                   fill="rgba(15,23,42,0.04)"
@@ -394,7 +540,14 @@ export function HowPlatformFlow() {
                   x="120"
                   y="290"
                 />
-                <rect fill="rgba(15,23,42,0.2)" height="28" rx="8" width="60" x="130" y="300" />
+                <rect
+                  fill="rgba(15,23,42,0.2)"
+                  height="28"
+                  rx="8"
+                  width="60"
+                  x="130"
+                  y="300"
+                />
                 <text
                   fill="white"
                   fontSize="12"
@@ -405,13 +558,21 @@ export function HowPlatformFlow() {
                 >
                   76%
                 </text>
-                <text fill="#0F172A" fontSize="15" fontWeight="700" x="204" y="319">
+                <text
+                  fill="#0F172A"
+                  fontSize="15"
+                  fontWeight="700"
+                  x="204"
+                  y="319"
+                >
                   Компьютерные науки
                 </text>
               </g>
             </g>
 
-            <g className={`homeFlowPanel ${stageIndex === 3 ? "is-active" : ""}`}>
+            <g
+              className={`homeFlowPanel ${stageIndex === 3 ? "is-active" : ""}`}
+            >
               <text
                 fill="#0F172A"
                 fontSize="22"
@@ -423,7 +584,10 @@ export function HowPlatformFlow() {
                 Твой идеальный выбор
               </text>
 
-              <g className="homeFlowInteractive" style={{ transformOrigin: "340px 220px" }}>
+              <g
+                className="homeFlowInteractive"
+                style={{ transformOrigin: "340px 220px" }}
+              >
                 <rect
                   className="homeFlowBgRect"
                   fill="url(#home-flow-card)"

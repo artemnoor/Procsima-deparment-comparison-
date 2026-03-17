@@ -81,7 +81,11 @@ export function Shell(props: ShellProps) {
 
           <div className="shellActions">
             {utilityLinks.map((link) => (
-              <Link className="shellActionLink" href={link.href} key={link.href}>
+              <Link
+                className="shellActionLink"
+                href={link.href}
+                key={link.href}
+              >
                 {link.label}
               </Link>
             ))}

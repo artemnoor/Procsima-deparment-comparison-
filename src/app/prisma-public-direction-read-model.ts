@@ -122,63 +122,57 @@ function normalizeLearningContent(
 
   return {
     summary: summary === null || isString(summary) ? summary : null,
-    outcomes: outcomes
-      .filter(isRecord)
-      .map((outcome) => ({
-        title: isString(outcome.title) ? outcome.title : "Untitled outcome",
-        description: isString(outcome.description)
-          ? outcome.description
-          : "Description pending.",
-      })),
-    technologies: technologies
-      .filter(isRecord)
-      .map((technology) => ({
-        name: isString(technology.name) ? technology.name : "Unknown",
-        category:
-          technology.category === "language" ||
-          technology.category === "framework" ||
-          technology.category === "tool" ||
-          technology.category === "platform" ||
-          technology.category === "method"
-            ? technology.category
-            : "tool",
-        context: technology.context === null || isString(technology.context)
+    outcomes: outcomes.filter(isRecord).map((outcome) => ({
+      title: isString(outcome.title) ? outcome.title : "Untitled outcome",
+      description: isString(outcome.description)
+        ? outcome.description
+        : "Description pending.",
+    })),
+    technologies: technologies.filter(isRecord).map((technology) => ({
+      name: isString(technology.name) ? technology.name : "Unknown",
+      category:
+        technology.category === "language" ||
+        technology.category === "framework" ||
+        technology.category === "tool" ||
+        technology.category === "platform" ||
+        technology.category === "method"
+          ? technology.category
+          : "tool",
+      context:
+        technology.context === null || isString(technology.context)
           ? technology.context
           : null,
-      })),
-    practicalSkills: practicalSkills
-      .filter(isRecord)
-      .map((skill) => ({
-        name: isString(skill.name) ? skill.name : "Unknown skill",
-        level:
-          skill.level === "foundation" ||
-          skill.level === "intermediate" ||
-          skill.level === "advanced"
-            ? skill.level
-            : "foundation",
-        context: skill.context === null || isString(skill.context)
+    })),
+    practicalSkills: practicalSkills.filter(isRecord).map((skill) => ({
+      name: isString(skill.name) ? skill.name : "Unknown skill",
+      level:
+        skill.level === "foundation" ||
+        skill.level === "intermediate" ||
+        skill.level === "advanced"
+          ? skill.level
+          : "foundation",
+      context:
+        skill.context === null || isString(skill.context)
           ? skill.context
           : null,
-      })),
-    studyFocuses: studyFocuses
-      .filter(isRecord)
-      .map((studyFocus) => ({
-        title: isString(studyFocus.title)
-          ? studyFocus.title
-          : "Untitled study focus",
-        summary: isString(studyFocus.summary)
-          ? studyFocus.summary
-          : "Summary pending.",
-        subjectBlocks: isStringArray(studyFocus.subjectBlocks)
-          ? studyFocus.subjectBlocks
-          : [],
-        technologies: isStringArray(studyFocus.technologies)
-          ? studyFocus.technologies
-          : [],
-        practicalSkills: isStringArray(studyFocus.practicalSkills)
-          ? studyFocus.practicalSkills
-          : [],
-      })),
+    })),
+    studyFocuses: studyFocuses.filter(isRecord).map((studyFocus) => ({
+      title: isString(studyFocus.title)
+        ? studyFocus.title
+        : "Untitled study focus",
+      summary: isString(studyFocus.summary)
+        ? studyFocus.summary
+        : "Summary pending.",
+      subjectBlocks: isStringArray(studyFocus.subjectBlocks)
+        ? studyFocus.subjectBlocks
+        : [],
+      technologies: isStringArray(studyFocus.technologies)
+        ? studyFocus.technologies
+        : [],
+      practicalSkills: isStringArray(studyFocus.practicalSkills)
+        ? studyFocus.practicalSkills
+        : [],
+    })),
     mvpVisibleFields: isStringArray(mvpVisibleFields)
       ? mvpVisibleFields
       : [
@@ -189,12 +183,10 @@ function normalizeLearningContent(
           "studyFocuses",
         ],
     deferredFields: Array.isArray(deferredFields)
-      ? deferredFields
-          .filter(isRecord)
-          .map((field) => ({
-            field: isString(field.field) ? field.field : "unknown",
-            reason: isString(field.reason) ? field.reason : "Deferred.",
-          }))
+      ? deferredFields.filter(isRecord).map((field) => ({
+          field: isString(field.field) ? field.field : "unknown",
+          reason: isString(field.reason) ? field.reason : "Deferred.",
+        }))
       : [],
   };
 }
@@ -239,8 +231,9 @@ function deriveSubjectBlocks(
     ...new Set(
       subjects
         .map((subject) => subject.subjectBlock)
-        .filter((subjectBlock): subjectBlock is string =>
-          typeof subjectBlock === "string" && subjectBlock.length > 0,
+        .filter(
+          (subjectBlock): subjectBlock is string =>
+            typeof subjectBlock === "string" && subjectBlock.length > 0,
         ),
     ),
   ];

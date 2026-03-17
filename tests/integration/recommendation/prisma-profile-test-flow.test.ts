@@ -41,10 +41,11 @@ describe("prisma profile test flow", () => {
 
     expect(candidates).toHaveLength(2);
     expect(candidates[0]?.subjectBlocks.length).toBeGreaterThan(0);
-    expect(candidates.find((candidate) => candidate.id === "direction-09-02-07"))
-      .toMatchObject({
-        subjectBlocks: expect.arrayContaining(["Программирование"]),
-      });
+    expect(
+      candidates.find((candidate) => candidate.id === "direction-09-02-07"),
+    ).toMatchObject({
+      subjectBlocks: expect.arrayContaining(["Программирование"]),
+    });
     expect(result.recommendedDirectionIds[0]).toBe("direction-09-02-07");
     expect(result.matches[0]?.confidence).toBe("high");
   });

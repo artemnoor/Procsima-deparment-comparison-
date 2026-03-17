@@ -295,7 +295,7 @@ Out of scope for this feature:
     - `/directions/[slug]`
     - `/compare`
     - `/profile-test`
-    work in Prisma mode without collapsing into placeholder data
+      work in Prisma mode without collapsing into placeholder data
 - Logging requirements:
   - no new runtime logs required
 - Dependency notes:
