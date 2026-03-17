@@ -6,8 +6,9 @@ import { defineConfig } from "vitest/config";
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 process.env.DATABASE_URL =
+  process.env.NPS_TEST_DATABASE_URL ??
   process.env.DATABASE_URL ??
-  "postgresql://postgres:postgres@localhost:5432/nps_choice_platform?schema=public";
+  "postgresql://postgres:postgres@localhost:5433/nps_choice_platform?schema=public";
 
 export default defineConfig({
   test: {

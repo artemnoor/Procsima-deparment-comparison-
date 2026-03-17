@@ -26,8 +26,13 @@ describe("PrismaDirectionCatalogRepository", () => {
 
     expect(directions).toHaveLength(2);
     expect(directions.map((direction) => direction.slug)).toEqual([
-      "data-analytics",
-      "software-engineering",
+      "program-09-02-07",
+      "program-10-02-05",
     ]);
+    expect(directions[0]?.context.department).toBe(
+      "Кафедра программирования и информационных систем",
+    );
+    expect(directions[0]?.context.code).toBe("09.02.07");
+    expect(directions[0]?.context.budgetSeats).toBe(60);
   });
 });

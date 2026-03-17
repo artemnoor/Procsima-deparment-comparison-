@@ -4,14 +4,18 @@ Foundation baseline for a modular monolith that helps applicants compare NPS dir
 
 ## Branch model
 
-- `main` - stable branch
-- `develop` - integration branch for foundation and subsequent feature work
+- `main` - stable release branch
+- `develop` - integration branch for ongoing product work
+- `feature/*` - branch from `develop`, implement one feature flow, merge back into `develop`
+- `release/*` - branch from `develop`, stabilize a release, merge into `main` and back into `develop`
+- `hotfix/*` - branch from `main`, fix urgent production issues, merge into `main` and back into `develop`
 
 ## Current status
 
-Foundation and the first applicant comparison flow are implemented and locally verified.
+Foundation, applicant comparison, structured learning-content, and profile-test recommendation flows are
+implemented and locally verified.
 
-Active implementation note for `feature/learning-content`:
+Current implementation notes:
 
 - applicant-facing catalog, direction detail, and comparison now depend on a structured learning-content model
 - `src/modules/content` owns source normalization
@@ -45,12 +49,19 @@ The current applicant flow includes:
 - `/compare` - compare page with 2-4 direction selection states, real differences view, and side-by-side learning-content highlights
 - event emission for catalog, direction detail, compare start, and comparison run
 
-`feature/profile-test` adds:
+Recommendation flow includes:
 
 - `/profile-test` - applicant questionnaire with single-choice and multi-select answers
 - deterministic explainable recommendation scoring based on module-owned contracts
 - direct compare handoff via `source=recommendation-flow`
 - recommendation result analytics through `recommendation_generated`
+
+## AI Factory context
+
+- active project AI context lives in `.ai-factory/` inside this repository
+- active branch plans belong in `.ai-factory/plans/`
+- completed branch plans are archived in `docs/process/archive/ai-plans/`
+- longer process guides and workflow notes live in `docs/process/`
 
 ## Mock-to-real data seam
 
@@ -120,6 +131,7 @@ When the richer academic database model arrives later:
 - `pnpm test` - unit tests
 - `pnpm test:integration` - integration tests
 - `pnpm test:e2e` - smoke/e2e tests
+- `pnpm test:e2e:prisma` - Prisma-backed public smoke tests
 - `pnpm check` - required local gate before merge into `develop`
 - `pnpm check:develop` - full local gate including e2e
 
@@ -140,8 +152,12 @@ Rule for `develop`:
 ## Local and test flags
 
 - `NPS_DISABLE_EVENT_WRITE=false` by default and keeps applicant analytics on the Prisma-backed event path
+- local Docker Postgres is published on `localhost:5433` to avoid collisions with host-level PostgreSQL services that already occupy `5432`
 - set `NPS_DISABLE_EVENT_WRITE=true` for local or test runs when you need public routes and smoke flows to work without a writable event database
 - Playwright smoke runs set this flag intentionally so e2e coverage validates the applicant flow instead of failing on local event persistence setup
+- `NPS_TEST_DATABASE_URL` can override `DATABASE_URL` for integration and test-local Prisma runs
+- `NPS_E2E_DATABASE_URL` can override `DATABASE_URL` specifically for Playwright-backed Prisma smoke runs
+- integration tests refuse to run against a database URL that does not contain `nps_choice_platform`, to reduce the risk of destructive resets on unrelated local databases
 
 ## CI baseline
 

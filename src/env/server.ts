@@ -5,7 +5,7 @@ const envSchema = z.object({
     .string()
     .min(1)
     .default(
-      "postgresql://postgres:postgres@localhost:5432/nps_choice_platform?schema=public",
+      "postgresql://postgres:postgres@localhost:5433/nps_choice_platform?schema=public",
     ),
   NODE_ENV: z
     .enum(["development", "test", "production"])

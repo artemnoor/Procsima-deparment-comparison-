@@ -1,64 +1,10 @@
 import type { PrismaClient } from "@prisma/client";
 
+import { mapPrismaDirectionToDetail } from "@/app/prisma-public-direction-read-model";
 import type { DirectionDetail } from "@/shared/kernel/direction";
-import { createPrismaFallbackLearningContent } from "@/modules/learning-content";
 import { logWithLevel } from "@/shared/utils/logging";
 
 import type { DirectionComparisonRepository } from "../domain/direction-comparison-repository";
-
-function mapDirectionDetail(input: {
-  id: string;
-  slug: string;
-  title: string;
-  shortDescription: string;
-  programFocus: string | null;
-  learningDifficulty: number | null;
-  whatYouLearn: string | null;
-  careerPaths: string[];
-  targetFit: string | null;
-  keyDifferences: string[];
-  programmingScore: number | null;
-  mathScore: number | null;
-  engineeringScore: number | null;
-  analyticsScore: number | null;
-  aiScore: number | null;
-}): DirectionDetail {
-  const learningContent = createPrismaFallbackLearningContent(input.id);
-
-  return {
-    id: input.id,
-    slug: input.slug,
-    title: input.title,
-    shortDescription: input.shortDescription,
-    programFocus: input.programFocus,
-    learningDifficulty: input.learningDifficulty,
-    context: {
-      code: null,
-      qualification: null,
-      department: null,
-      studyDuration: null,
-      budgetSeats: null,
-      paidSeats: null,
-      tuitionPerYearRub: null,
-    },
-    whatYouLearn: input.whatYouLearn,
-    learningContent,
-    careerPaths: input.careerPaths,
-    targetFit: input.targetFit,
-    keyDifferences: input.keyDifferences,
-    axisScores: {
-      programming: input.programmingScore ?? 0,
-      math: input.mathScore ?? 0,
-      engineering: input.engineeringScore ?? 0,
-      analytics: input.analyticsScore ?? 0,
-      ai: input.aiScore ?? 0,
-    },
-    passingScores: [],
-    subjects: [],
-    programDescriptionUrl: null,
-    curriculumUrl: null,
-  };
-}
 
 export class PrismaDirectionComparisonRepository implements DirectionComparisonRepository {
   constructor(private readonly prisma: PrismaClient) {}
@@ -82,11 +28,15 @@ export class PrismaDirectionComparisonRepository implements DirectionComparisonR
           in: directionIds,
         },
       },
+      include: {
+        passingScores: true,
+        subjects: true,
+      },
     });
 
     const directionsById = new Map(
       directions
-        .map(mapDirectionDetail)
+        .map(mapPrismaDirectionToDetail)
         .map((direction) => [direction.id, direction] as const),
     );
     const mappedDirections = directionIds.flatMap((directionId) => {
@@ -102,6 +52,10 @@ export class PrismaDirectionComparisonRepository implements DirectionComparisonR
       {
         requestedCount: directionIds.length,
         resolvedCount: mappedDirections.length,
+        subjectCounts: mappedDirections.map((direction) => ({
+          directionId: direction.id,
+          subjectCount: direction.subjects.length,
+        })),
       },
     );
 

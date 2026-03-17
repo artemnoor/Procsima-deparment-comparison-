@@ -21,41 +21,79 @@ enum EventType {
 }
 
 model Direction {
-  id                 String   @id @default(cuid())
-  slug               String   @unique
-  title              String
-  shortDescription   String
-  programFocus       String?
-  whatYouLearn       String?
-  careerPaths        String[]
-  targetFit          String?
-  keyDifferences     String[]
-  programmingScore   Int?
-  mathScore          Int?
-  engineeringScore   Int?
-  analyticsScore     Int?
-  aiScore            Int?
-  learningDifficulty Int?
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  id                    String                  @id @default(cuid())
+  code                  String?                 @unique
+  slug                  String                  @unique
+  title                 String
+  shortDescription      String
+  qualification         String?
+  department            String?
+  studyDuration         String?
+  budgetSeats           Int?
+  paidSeats             Int?
+  tuitionPerYearRub     Int?
+  programFocus          String?
+  whatYouLearn          String?
+  programDescriptionUrl String?
+  curriculumUrl         String?
+  learningContent       Json?
+  careerPaths           String[]
+  targetFit             String?
+  keyDifferences        String[]
+  programmingScore      Int?
+  mathScore             Int?
+  engineeringScore      Int?
+  analyticsScore        Int?
+  aiScore               Int?
+  learningDifficulty    Int?
+  passingScores         DirectionPassingScore[]
+  subjects              DirectionSubject[]
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt
+}
+
+model DirectionPassingScore {
+  id          String    @id @default(cuid())
+  directionId String
+  year        Int
+  budget      Decimal?  @db.Decimal(4, 2)
+  paid        Decimal?  @db.Decimal(4, 2)
+  direction   Direction @relation(fields: [directionId], references: [id], onDelete: Cascade)
+
+  @@unique([directionId, year])
+  @@index([directionId])
+}
+
+model DirectionSubject {
+  id           String    @id @default(cuid())
+  directionId  String
+  title        String
+  subjectBlock String?
+  department   String?
+  hours        Int
+  referenceUrl String?
+  sortOrder    Int?
+  direction    Direction @relation(fields: [directionId], references: [id], onDelete: Cascade)
+
+  @@index([directionId])
 }
 
 model User {
-  id        String     @id
-  email     String?    @unique
+  id        String   @id
+  email     String?  @unique
   name      String?
   role      RoleKey
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  events     Event[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  events    Event[]
 }
 
 model Event {
-  id         String    @id @default(cuid())
-  type       EventType
-  userId     String?
+  id          String    @id @default(cuid())
+  type        EventType
+  userId      String?
   directionId String?
-  payload    Json
-  createdAt  DateTime  @default(now())
-  user       User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  payload     Json
+  createdAt   DateTime  @default(now())
+  user        User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
 }

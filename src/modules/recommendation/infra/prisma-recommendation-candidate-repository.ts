@@ -1,33 +1,10 @@
 import type { PrismaClient } from "@prisma/client";
 
+import { mapPrismaDirectionToRecommendationCandidate } from "@/app/prisma-public-direction-read-model";
 import { logWithLevel } from "@/shared/utils/logging";
 
 import type { RecommendationCandidateRepository } from "../domain/recommendation-candidate-repository";
 import type { RecommendationCandidate } from "../domain/recommendation-candidate";
-
-function mapCandidate(
-  input: Awaited<ReturnType<PrismaClient["direction"]["findMany"]>>[number],
-): RecommendationCandidate {
-  return {
-    id: input.id,
-    slug: input.slug,
-    title: input.title,
-    shortDescription: input.shortDescription,
-    programFocus: input.programFocus,
-    learningDifficulty: input.learningDifficulty,
-    axisScores: {
-      programming: input.programmingScore ?? 0,
-      math: input.mathScore ?? 0,
-      engineering: input.engineeringScore ?? 0,
-      analytics: input.analyticsScore ?? 0,
-      ai: input.aiScore ?? 0,
-    },
-    subjectBlocks: [],
-    targetFit: input.targetFit,
-    keyDifferences: input.keyDifferences,
-    whatYouLearn: input.whatYouLearn,
-  };
-}
 
 export class PrismaRecommendationCandidateRepository implements RecommendationCandidateRepository {
   constructor(private readonly prisma: PrismaClient) {}
@@ -43,9 +20,14 @@ export class PrismaRecommendationCandidateRepository implements RecommendationCa
       },
     );
 
-    const candidates = (await this.prisma.direction.findMany()).map(
-      mapCandidate,
-    );
+    const candidates = (
+      await this.prisma.direction.findMany({
+        include: {
+          passingScores: true,
+          subjects: true,
+        },
+      })
+    ).map(mapPrismaDirectionToRecommendationCandidate);
 
     logWithLevel(
       "prisma-recommendation-candidate-repository",
@@ -54,6 +36,10 @@ export class PrismaRecommendationCandidateRepository implements RecommendationCa
       {
         source: "prisma",
         candidateCount: candidates.length,
+        subjectBlockCoverage: candidates.map((candidate) => ({
+          directionId: candidate.id,
+          subjectBlocks: candidate.subjectBlocks,
+        })),
       },
     );
 
