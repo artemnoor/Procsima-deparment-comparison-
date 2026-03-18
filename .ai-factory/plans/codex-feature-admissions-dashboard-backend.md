@@ -53,7 +53,7 @@ Out of scope for this branch:
 
 ### Phase 1: Define the dashboard contract
 
-1. [ ] Define the first admissions dashboard response contract in `src/modules/admin` or a dedicated dashboard module.
+1. [x] Define the first admissions dashboard response contract in `src/modules/admin` or a dedicated dashboard module.
        Files:
    - `src/modules/admin/**`
    - `src/shared/kernel/**` if a shared DTO type is justified
@@ -62,7 +62,7 @@ Out of scope for this branch:
      Logging:
    - add DEBUG logs for filter parsing and INFO logs for successful dashboard payload generation
 
-2. [ ] Decide and document which metrics are part of v1 dashboard backend.
+2. [x] Decide and document which metrics are part of v1 dashboard backend.
        Files:
    - `.ai-factory/plans/codex-feature-admissions-dashboard-backend.md`
    - optional code comments near the DTO/service if needed
@@ -80,7 +80,7 @@ Out of scope for this branch:
 
 ### Phase 2: Build the analytics read model
 
-3. [ ] Implement a Prisma-backed dashboard repository/query layer that aggregates event data.
+3. [x] Implement a Prisma-backed dashboard repository/query layer that aggregates event data.
        Files:
    - `src/modules/admin/infra/**` or `src/modules/analytics/infra/**`
    - `src/app/db.ts` only if wiring requires it
@@ -91,7 +91,7 @@ Out of scope for this branch:
      Dependencies:
    - blocked by Task 1
 
-4. [ ] Add application-level orchestration for dashboard filters and defaults.
+4. [x] Add application-level orchestration for dashboard filters and defaults.
        Files:
    - `src/modules/admin/application/**` or `src/modules/analytics/application/**`
      Deliverable:
@@ -108,7 +108,7 @@ Out of scope for this branch:
 
 ### Phase 3: Expose the protected admin API
 
-5. [ ] Replace the placeholder admin dashboard API response with real analytics data.
+5. [x] Replace the placeholder admin dashboard API response with real analytics data.
        Files:
    - `app/api/admin/dashboard/route.ts`
    - module wiring files under `src/app/**` if needed
@@ -120,7 +120,7 @@ Out of scope for this branch:
      Dependencies:
    - blocked by Task 4
 
-6. [ ] Update the admin dashboard page just enough to consume and display the new backend contract.
+6. [x] Update the admin dashboard page just enough to consume and display the new backend contract.
        Files:
    - `app/admin/dashboard/page.tsx`
      Deliverable:
@@ -132,7 +132,7 @@ Out of scope for this branch:
 
 ### Phase 4: Verify and document
 
-7. [ ] Add integration coverage for dashboard backend aggregation and auth-protected access.
+7. [x] Add integration coverage for dashboard backend aggregation and auth-protected access.
        Files:
    - `tests/integration/**`
    - `tests/e2e/**` only if a small admin smoke assertion is warranted
@@ -146,7 +146,7 @@ Out of scope for this branch:
      Dependencies:
    - blocked by Task 5
 
-8. [ ] Update docs for the new admin analytics backend behavior.
+8. [x] Update docs for the new admin analytics backend behavior.
        Files:
    - `README.md`
    - `docs/current-system-reference.md`
