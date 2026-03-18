@@ -82,6 +82,9 @@ export function DirectionPromotionsPanel(props: DirectionPromotionsPanelProps) {
   const [statusFilter, setStatusFilter] = useState<
     PromotionStatus | "all" | "active-only"
   >("all");
+  const [sortMode, setSortMode] = useState<
+    "priority-asc" | "priority-desc" | "title-asc"
+  >("priority-asc");
   const [createDraft, setCreateDraft] = useState<CreatePromotionDraft>({
     directionId: props.directionOptions[0]?.id ?? "",
     status: "draft",
@@ -101,17 +104,65 @@ export function DirectionPromotionsPanel(props: DirectionPromotionsPanelProps) {
   const [feedback, setFeedback] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
+  const statusCounts = useMemo(
+    () => ({
+      total: promotions.length,
+      active: promotions.filter((promotion) => promotion.status === "active")
+        .length,
+      draft: promotions.filter((promotion) => promotion.status === "draft")
+        .length,
+      inactive: promotions.filter(
+        (promotion) => promotion.status === "inactive",
+      ).length,
+    }),
+    [promotions],
+  );
+
   const filteredPromotions = useMemo(() => {
-    if (statusFilter === "all") {
-      return promotions;
+    const basePromotions =
+      statusFilter === "all"
+        ? promotions
+        : statusFilter === "active-only"
+          ? promotions.filter((promotion) => promotion.isCurrentlyActive)
+          : promotions.filter((promotion) => promotion.status === statusFilter);
+
+    return [...basePromotions].sort((left, right) => {
+      if (sortMode === "priority-desc") {
+        return right.priority - left.priority;
+      }
+
+      if (sortMode === "title-asc") {
+        return left.directionTitle.localeCompare(right.directionTitle, "ru");
+      }
+
+      return left.priority - right.priority;
+    });
+  }, [promotions, sortMode, statusFilter]);
+
+  async function patchPromotion(
+    promotionId: string,
+    body: Record<string, string | number | null>,
+    successMessage: string,
+  ) {
+    const response = await fetch(`/api/admin/promotions/${promotionId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+    const payload = (await response.json()) as PromotionResponse;
+
+    if (!response.ok || payload.status !== "ok") {
+      setFeedback(
+        "reason" in payload ? payload.reason : "Could not update promotion.",
+      );
+      return;
     }
 
-    if (statusFilter === "active-only") {
-      return promotions.filter((promotion) => promotion.isCurrentlyActive);
-    }
-
-    return promotions.filter((promotion) => promotion.status === statusFilter);
-  }, [promotions, statusFilter]);
+    await refreshPromotions(statusFilter);
+    setFeedback(successMessage);
+  }
 
   async function refreshPromotions(filter: typeof statusFilter) {
     const searchParams = new URLSearchParams();
@@ -224,6 +275,24 @@ export function DirectionPromotionsPanel(props: DirectionPromotionsPanelProps) {
     });
   }
 
+  function handleQuickStatusChange(
+    promotionId: string,
+    status: PromotionStatus,
+    successMessage: string,
+  ) {
+    setFeedback(null);
+
+    startTransition(async () => {
+      await patchPromotion(
+        promotionId,
+        {
+          status,
+        },
+        successMessage,
+      );
+    });
+  }
+
   return (
     <div className="stack">
       <section className="card">
@@ -234,6 +303,12 @@ export function DirectionPromotionsPanel(props: DirectionPromotionsPanelProps) {
           this screen to manage priority, status, and active windows without
           changing deterministic profile-test ranking.
         </p>
+        <div className="promotionBadgeRow">
+          <span className="chipMuted">All: {statusCounts.total}</span>
+          <span className="chipMuted">Active: {statusCounts.active}</span>
+          <span className="chipMuted">Draft: {statusCounts.draft}</span>
+          <span className="chipMuted">Inactive: {statusCounts.inactive}</span>
+        </div>
         <div className="toolbarRow">
           <label className="formField">
             <span className="fieldLabel">Filter</span>
@@ -253,10 +328,32 @@ export function DirectionPromotionsPanel(props: DirectionPromotionsPanelProps) {
               <option value="inactive">Inactive</option>
             </select>
           </label>
+          <label className="formField">
+            <span className="fieldLabel">Sort</span>
+            <select
+              className="input"
+              onChange={(event) =>
+                setSortMode(
+                  event.target.value as
+                    | "priority-asc"
+                    | "priority-desc"
+                    | "title-asc",
+                )
+              }
+              value={sortMode}
+            >
+              <option value="priority-asc">Priority: highest first</option>
+              <option value="priority-desc">Priority: lowest first</option>
+              <option value="title-asc">Title: A-Z</option>
+            </select>
+          </label>
           <Link className="shellActionLink" href="/api/admin/promotions">
             Open API JSON
           </Link>
         </div>
+        <p className="muted">
+          Lower priority number means stronger editorial emphasis.
+        </p>
         {feedback ? <p className="feedbackNote">{feedback}</p> : null}
       </section>
 
@@ -386,6 +483,7 @@ export function DirectionPromotionsPanel(props: DirectionPromotionsPanelProps) {
                   <div>
                     <h3 className="cardTitle">{promotion.directionTitle}</h3>
                     <p className="muted">Slug: {promotion.directionSlug}</p>
+                    <p className="muted">Priority: {promotion.priority}</p>
                   </div>
                   <div className="promotionBadgeRow">
                     <span className="chipMuted">
@@ -395,6 +493,51 @@ export function DirectionPromotionsPanel(props: DirectionPromotionsPanelProps) {
                       Active now: {promotion.isCurrentlyActive ? "yes" : "no"}
                     </span>
                   </div>
+                </div>
+
+                <div className="quickActionRow">
+                  <button
+                    className="secondaryButton"
+                    disabled={isPending || promotion.status === "active"}
+                    onClick={() =>
+                      handleQuickStatusChange(
+                        promotion.id,
+                        "active",
+                        "Promotion activated.",
+                      )
+                    }
+                    type="button"
+                  >
+                    Activate now
+                  </button>
+                  <button
+                    className="secondaryButton"
+                    disabled={isPending || promotion.status === "draft"}
+                    onClick={() =>
+                      handleQuickStatusChange(
+                        promotion.id,
+                        "draft",
+                        "Promotion moved to draft.",
+                      )
+                    }
+                    type="button"
+                  >
+                    Move to draft
+                  </button>
+                  <button
+                    className="secondaryButton"
+                    disabled={isPending || promotion.status === "inactive"}
+                    onClick={() =>
+                      handleQuickStatusChange(
+                        promotion.id,
+                        "inactive",
+                        "Promotion deactivated.",
+                      )
+                    }
+                    type="button"
+                  >
+                    Deactivate
+                  </button>
                 </div>
 
                 <form
