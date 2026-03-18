@@ -4,10 +4,13 @@ test.describe("foundation smoke", () => {
   test("starts the app and serves the public shell", async ({ page }) => {
     await page.goto("/");
 
-    await expect(
-      page.getByRole("heading", { name: "NPS Choice Platform" }),
-    ).toBeVisible();
+    await expect(page.getByText("NPS Choice Platform")).toBeVisible();
     await expect(page.getByText("Public contour for applicants")).toBeVisible();
+    await expect(
+      page.getByRole("heading", {
+        name: "Выбери направление осознанно, а не вслепую",
+      }),
+    ).toBeVisible();
     await expect(page.getByRole("link", { name: "Directions" })).toBeVisible();
     await expect(page.getByRole("link", { name: "Compare" })).toBeVisible();
   });
@@ -33,8 +36,9 @@ test.describe("foundation smoke", () => {
   }) => {
     await page.goto("/admin/dashboard");
 
+    await expect(page.getByText("NPS Choice Platform Admin")).toBeVisible();
     await expect(
-      page.getByRole("heading", { name: "NPS Choice Platform Admin" }),
+      page.getByRole("heading", { name: "Dashboard placeholder" }),
     ).toBeVisible();
     await expect(
       page.getByText(

@@ -1,29 +1,10 @@
 import type { PrismaClient } from "@prisma/client";
 
-import type {
-  DirectionAxisScores,
-  DirectionDetail,
-} from "@/shared/kernel/direction";
-import { createPrismaFallbackLearningContent } from "@/modules/learning-content";
+import { mapPrismaDirectionToDetail } from "@/app/prisma-public-direction-read-model";
+import type { DirectionDetail } from "@/shared/kernel/direction";
 import { logWithLevel } from "@/shared/utils/logging";
 
 import type { DirectionDetailsRepository } from "../domain/direction-details-repository";
-
-function mapAxisScores(input: {
-  programmingScore: number | null;
-  mathScore: number | null;
-  engineeringScore: number | null;
-  analyticsScore: number | null;
-  aiScore: number | null;
-}): DirectionAxisScores {
-  return {
-    programming: input.programmingScore ?? 0,
-    math: input.mathScore ?? 0,
-    engineering: input.engineeringScore ?? 0,
-    analytics: input.analyticsScore ?? 0,
-    ai: input.aiScore ?? 0,
-  };
-}
 
 export class PrismaDirectionDetailsRepository implements DirectionDetailsRepository {
   constructor(private readonly prisma: PrismaClient) {}
@@ -41,6 +22,10 @@ export class PrismaDirectionDetailsRepository implements DirectionDetailsReposit
 
     const direction = await this.prisma.direction.findUnique({
       where: { slug },
+      include: {
+        passingScores: true,
+        subjects: true,
+      },
     });
 
     if (!direction) {
@@ -56,44 +41,18 @@ export class PrismaDirectionDetailsRepository implements DirectionDetailsReposit
       return null;
     }
 
-    const learningContent = createPrismaFallbackLearningContent(direction.id);
-
-    const directionDetail = {
-      id: direction.id,
-      slug: direction.slug,
-      title: direction.title,
-      shortDescription: direction.shortDescription,
-      programFocus: direction.programFocus,
-      learningDifficulty: direction.learningDifficulty,
-      context: {
-        code: null,
-        qualification: null,
-        department: null,
-        studyDuration: null,
-        budgetSeats: null,
-        paidSeats: null,
-        tuitionPerYearRub: null,
-      },
-      whatYouLearn: direction.whatYouLearn,
-      learningContent,
-      careerPaths: direction.careerPaths,
-      targetFit: direction.targetFit,
-      keyDifferences: direction.keyDifferences,
-      axisScores: mapAxisScores(direction),
-      passingScores: [],
-      subjects: [],
-      programDescriptionUrl: null,
-      curriculumUrl: null,
-    };
+    const directionDetail = mapPrismaDirectionToDetail(direction);
 
     logWithLevel(
       "prisma-direction-details-repository",
       "debug",
-      "Mapped Prisma direction detail with fallback learning content.",
+      "Mapped Prisma direction detail from persisted applicant data.",
       {
         slug,
         directionId: directionDetail.id,
-        deferredFields: learningContent.deferredFields.map(
+        subjectCount: directionDetail.subjects.length,
+        passingScoreCount: directionDetail.passingScores.length,
+        deferredFields: directionDetail.learningContent.deferredFields.map(
           (field) => field.field,
         ),
       },

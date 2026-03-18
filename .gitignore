@@ -12,6 +12,7 @@ build/
 coverage/
 playwright-report/
 test-results/
+.playwright-browsers/
 *.tsbuildinfo
 .local-postgres/
 
@@ -25,6 +26,16 @@ pnpm-debug.log*
 # Environment
 .env
 .env.*
+
+# AI / agent local state
+.codex/
+.ai-factory/PLAN.md
+.ai-factory/FIX_PLAN.md
+.ai-factory/SECURITY.md
+.ai-factory/evolution/
+.ai-factory/evolutions/
+.ai-factory/extensions/
+.ai-factory/skill-context/
 
 # Python
 __pycache__/

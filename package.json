@@ -17,6 +17,7 @@
     "test:watch": "vitest",
     "test:integration": "vitest run --config vitest.integration.config.mjs",
     "test:e2e": "playwright test",
+    "test:e2e:prisma": "playwright test --config playwright.prisma.config.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "db:generate": "prisma generate",
