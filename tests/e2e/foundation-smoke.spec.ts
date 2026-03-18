@@ -66,7 +66,9 @@ test.describe("foundation smoke", () => {
       page.getByRole("button", { name: "Save promotion" }),
     ).toBeVisible();
     await expect(
-      page.getByText("Lower priority number means stronger editorial emphasis."),
+      page.getByText(
+        "Lower priority number means stronger editorial emphasis.",
+      ),
     ).toBeVisible();
   });
 });
