@@ -24,6 +24,7 @@ const config = [
       "node_modules/**",
       "next-env.d.ts",
       "playwright-report/**",
+      ".playwright-browsers/**",
       "test-results/**",
       "public/**",
     ],
