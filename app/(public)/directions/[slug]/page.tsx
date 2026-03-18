@@ -154,7 +154,9 @@ export default async function DirectionDetailPage(props: {
           <div className="detailHeroHeader">
             <div>
               <h2 className="sectionTitle">{direction.title}</h2>
-              <p className="detailLead">{direction.shortDescription}</p>
+              <p className="detailLead">
+                {direction.heroDescription ?? direction.shortDescription}
+              </p>
             </div>
             <div className="detailActionGroup">
               {isSelected ? (
@@ -190,6 +192,14 @@ export default async function DirectionDetailPage(props: {
                 {
                   label: "Department",
                   value: direction.context.department ?? "To be confirmed",
+                },
+                {
+                  label: "Education level",
+                  value: direction.context.educationLevel ?? "To be confirmed",
+                },
+                {
+                  label: "Study form",
+                  value: direction.context.studyForm ?? "To be confirmed",
                 },
                 {
                   label: "Duration",
@@ -237,14 +247,46 @@ export default async function DirectionDetailPage(props: {
           </article>
 
           <article className="card">
-            <h3 className="cardTitle">Career paths</h3>
-            <ul className="detailList">
-              {direction.careerPaths.map((careerPath) => (
-                <li key={careerPath}>{careerPath}</li>
-              ))}
-            </ul>
+            <h3 className="cardTitle">Career outcomes</h3>
+            {direction.careerRoles.length > 0 ? (
+              <ul className="detailList">
+                {direction.careerRoles.map((careerRole) => (
+                  <li key={careerRole.slug}>
+                    <strong>{careerRole.title}</strong>
+                    {careerRole.comment ? ` — ${careerRole.comment}` : ""}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <ul className="detailList">
+                {direction.careerPaths.map((careerPath) => (
+                  <li key={careerPath}>{careerPath}</li>
+                ))}
+              </ul>
+            )}
           </article>
         </section>
+
+        {direction.sections.length > 0 ? (
+          <section className="detailGrid">
+            {direction.sections.map((section) => (
+              <article className="card" key={section.sectionKey}>
+                <h3 className="cardTitle">{section.title}</h3>
+                {section.body ? <p className="muted">{section.body}</p> : null}
+                {section.items.length > 0 ? (
+                  <ul className="detailList">
+                    {section.items.map((item) => (
+                      <li key={`${section.sectionKey}-${item.title}`}>
+                        <strong>{item.title}</strong>
+                        {item.description ? ` — ${item.description}` : ""}
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+              </article>
+            ))}
+          </section>
+        ) : null}
 
         <section className="detailGrid">
           <article className="card">
@@ -270,18 +312,42 @@ export default async function DirectionDetailPage(props: {
           </article>
 
           <article className="card">
-            <h3 className="cardTitle">Passing score trend</h3>
+            <h3 className="cardTitle">Admissions by year</h3>
             <div className="scoreHistory">
-              {direction.passingScores.map((score) => (
-                <div className="scoreHistoryRow" key={score.year}>
-                  <span>{score.year}</span>
-                  <span>Budget: {score.budget ?? "—"}</span>
-                  <span>Paid: {score.paid ?? "—"}</span>
-                </div>
-              ))}
+              {direction.admissionStats.length > 0
+                ? direction.admissionStats.map((stat) => (
+                    <div className="scoreHistoryRow" key={stat.year}>
+                      <span>{stat.year}</span>
+                      <span>
+                        Seats: {stat.budgetPlaces ?? "—"} /{" "}
+                        {stat.paidPlaces ?? "—"}
+                      </span>
+                      <span>
+                        Passing: {stat.passingScoreBudget ?? "—"} /{" "}
+                        {stat.passingScorePaid ?? "—"}
+                      </span>
+                    </div>
+                  ))
+                : direction.passingScores.map((score) => (
+                    <div className="scoreHistoryRow" key={score.year}>
+                      <span>{score.year}</span>
+                      <span>Budget: {score.budget ?? "—"}</span>
+                      <span>Paid: {score.paid ?? "—"}</span>
+                    </div>
+                  ))}
             </div>
             <div className="detailActionGroup detailActionGroupTight">
-              {direction.programDescriptionUrl ? (
+              {direction.documents.map((document) => (
+                <Link
+                  className="secondaryActionLink"
+                  href={document.url}
+                  key={`${document.type}-${document.url}`}
+                >
+                  {document.title}
+                </Link>
+              ))}
+              {direction.documents.length === 0 &&
+              direction.programDescriptionUrl ? (
                 <Link
                   className="secondaryActionLink"
                   href={direction.programDescriptionUrl}

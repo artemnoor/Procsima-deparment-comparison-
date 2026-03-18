@@ -64,6 +64,13 @@ export function DirectionCard(props: DirectionCardProps) {
           <dd>{direction.context.qualification ?? "To be confirmed"}</dd>
         </div>
         <div>
+          <dt>Level / form</dt>
+          <dd>
+            {direction.context.educationLevel ?? "Level pending"} /{" "}
+            {direction.context.studyForm ?? "Form pending"}
+          </dd>
+        </div>
+        <div>
           <dt>Duration</dt>
           <dd>{direction.context.studyDuration ?? "To be confirmed"}</dd>
         </div>

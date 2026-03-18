@@ -21,10 +21,19 @@ export const integrationPrisma = new PrismaClient({
 export async function resetIntegrationDatabase(): Promise<void> {
   await integrationPrisma.event.deleteMany();
   await integrationPrisma.user.deleteMany();
+  await integrationPrisma.directionCareerRole.deleteMany();
   await integrationPrisma.directionPromotion.deleteMany();
+  await integrationPrisma.directionSectionItem.deleteMany();
+  await integrationPrisma.directionSection.deleteMany();
+  await integrationPrisma.directionDocument.deleteMany();
+  await integrationPrisma.directionAdmissionStat.deleteMany();
   await integrationPrisma.directionPassingScore.deleteMany();
   await integrationPrisma.directionSubject.deleteMany();
   await integrationPrisma.direction.deleteMany();
+  await integrationPrisma.careerRole.deleteMany();
+  await integrationPrisma.subject.deleteMany();
+  await integrationPrisma.subjectBlock.deleteMany();
+  await integrationPrisma.department.deleteMany();
 }
 
 export async function seedIntegrationData(): Promise<void> {

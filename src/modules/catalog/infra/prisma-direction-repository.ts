@@ -20,7 +20,11 @@ export class PrismaDirectionCatalogRepository implements DirectionCatalogReposit
     );
 
     const directions = await this.prisma.direction.findMany({
-      orderBy: { title: "asc" },
+      where: {
+        isPublished: true,
+        status: "published",
+      },
+      orderBy: [{ sortOrder: "asc" }, { title: "asc" }],
     });
 
     const mappedDirections = directions.map(mapPrismaDirectionToSummary);

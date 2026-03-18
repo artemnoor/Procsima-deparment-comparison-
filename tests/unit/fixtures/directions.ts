@@ -14,11 +14,14 @@ export function buildDirectionDetail(
       code: "09.02.07",
       qualification: "Technician",
       department: "Programming Department",
+      educationLevel: "СПО",
+      studyForm: "Очная",
       studyDuration: "3 years 10 months",
       budgetSeats: 60,
       paidSeats: 30,
       tuitionPerYearRub: 156000,
     },
+    heroDescription: "Build software systems with a practical product focus.",
     whatYouLearn: "Programming and architecture.",
     learningContent: {
       summary: "Programming and architecture.",
@@ -61,6 +64,14 @@ export function buildDirectionDetail(
       deferredFields: [],
     },
     careerPaths: ["Software Engineer"],
+    careerRoles: [
+      {
+        title: "Software Engineer",
+        slug: "software-engineer",
+        description: null,
+        comment: null,
+      },
+    ],
     targetFit: "Applicants interested in software development.",
     keyDifferences: ["Higher programming focus"],
     axisScores: {
@@ -71,9 +82,12 @@ export function buildDirectionDetail(
       ai: 2,
     },
     passingScores: [],
+    admissionStats: [],
     subjects: [],
     programDescriptionUrl: null,
     curriculumUrl: null,
+    documents: [],
+    sections: [],
     ...overrides,
   };
 }
