@@ -28,6 +28,16 @@ describe("prisma profile test flow", () => {
     const repository = new PrismaRecommendationCandidateRepository(
       integrationPrisma,
     );
+    await integrationPrisma.directionPromotion.update({
+      where: {
+        directionId: "direction-09-02-07",
+      },
+      data: {
+        priority: 1,
+        note: "Promotion remains editorial and must not influence recommendation order.",
+      },
+    });
+
     const candidates = await repository.listCandidates();
     const parsedSubmission = parseProfileTestSubmission(profileTestQuestions, {
       motivation: "build-products",

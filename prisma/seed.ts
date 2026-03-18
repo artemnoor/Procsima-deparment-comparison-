@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 
-import { PrismaClient, RoleKey } from "@prisma/client";
+import { PrismaClient, PromotionStatus, RoleKey } from "@prisma/client";
 
 const envFile = path.resolve(process.cwd(), ".env");
 
@@ -98,6 +98,15 @@ type DirectionSeed = {
   learningDifficulty: number | null;
   passingScores: PassingScoreSeed[];
   subjects: SubjectSeed[];
+};
+
+type DirectionPromotionSeed = {
+  directionId: string;
+  status: PromotionStatus;
+  priority: number;
+  note: string;
+  startsAt: string | null;
+  endsAt: string | null;
 };
 
 const visibleLearningFields = [
@@ -694,6 +703,25 @@ const directions: DirectionSeed[] = [
   },
 ];
 
+const directionPromotions: DirectionPromotionSeed[] = [
+  {
+    directionId: "direction-09-02-07",
+    status: PromotionStatus.active,
+    priority: 10,
+    note: "Featured by admissions team as the strongest product-development entry point.",
+    startsAt: null,
+    endsAt: null,
+  },
+  {
+    directionId: "direction-10-02-05",
+    status: PromotionStatus.draft,
+    priority: 30,
+    note: "Prepared for cybersecurity campaign review but not yet active.",
+    startsAt: null,
+    endsAt: null,
+  },
+];
+
 const prisma = new PrismaClient();
 
 async function upsertDirection(direction: DirectionSeed) {
@@ -794,6 +822,29 @@ export async function main() {
     await upsertDirection(direction);
   }
 
+  for (const promotion of directionPromotions) {
+    await prisma.directionPromotion.upsert({
+      where: {
+        directionId: promotion.directionId,
+      },
+      update: {
+        status: promotion.status,
+        priority: promotion.priority,
+        note: promotion.note,
+        startsAt: promotion.startsAt ? new Date(promotion.startsAt) : null,
+        endsAt: promotion.endsAt ? new Date(promotion.endsAt) : null,
+      },
+      create: {
+        directionId: promotion.directionId,
+        status: promotion.status,
+        priority: promotion.priority,
+        note: promotion.note,
+        startsAt: promotion.startsAt ? new Date(promotion.startsAt) : null,
+        endsAt: promotion.endsAt ? new Date(promotion.endsAt) : null,
+      },
+    });
+  }
+
   await prisma.user.upsert({
     where: { id: "dev-admin-user" },
     update: {
@@ -810,6 +861,7 @@ export async function main() {
 
   console.info("Seeded applicant-facing Prisma directions.", {
     directionCount: directions.length,
+    promotionCount: directionPromotions.length,
     passingScoreCount: directions.reduce(
       (total, direction) => total + direction.passingScores.length,
       0,

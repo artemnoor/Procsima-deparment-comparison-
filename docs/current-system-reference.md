@@ -571,7 +571,9 @@ It renders:
   - comparison runs
   - recommendations generated
 - top directions by interaction volume
+- active editorial promotions with priority, note, and active window fields
 - link to `/api/admin/dashboard`
+- link to `/api/admin/promotions?activeOnly=true`
 
 ### What happens when access is denied
 
@@ -601,18 +603,72 @@ Current dashboard page uses:
 - local dev auth context
 - role enforcement
 - Prisma-backed analytics aggregation over persisted `Event` rows
+- Prisma-backed direction promotion read model over persisted `DirectionPromotion` rows
 - simple server-rendered summary cards and direction rankings
 
 It still does not use:
 
 - charts
 - advanced admissions operational widgets
-- promotion controls
+- full promotion editing UI
 
 ### Current state
 
 - protected
 - first real backend slice implemented
+
+## Promotions
+
+### Route
+
+- `/admin/promotions`
+
+### Main files
+
+- `app/admin/promotions/page.tsx`
+- `src/app/admin-direction-promotions-page-data.ts`
+- `src/modules/admin/ui/direction-promotions-panel.tsx`
+
+### What the user sees when access is allowed
+
+It renders:
+
+- heading `Direction promotions`
+- explanation that editorial promotion is separated from recommendation logic
+- filter selector for:
+  - all promotions
+  - currently active promotions
+  - `draft`
+  - `active`
+  - `inactive`
+- link to `/api/admin/promotions`
+- create-or-replace promotion form with:
+  - direction selector
+  - status
+  - priority
+  - editorial note
+  - start/end window
+- editable cards for existing promotions with update forms for the same fields
+
+### What happens when access is denied
+
+The user is redirected to `/admin/forbidden`.
+
+### Data source
+
+Current promotions page uses:
+
+- local dev auth context
+- role enforcement
+- Prisma-backed promotion list through `DirectionPromotion`
+- Prisma-backed direction options from `Direction`
+- client-side calls into protected admin APIs for create/update actions
+
+### Current state
+
+- protected
+- minimal working internal management UI implemented
+- enough to operate promotion state without touching recommendation logic directly
 
 ## Health
 
@@ -668,7 +724,7 @@ Emits:
 
 - `page_opened` with route `/directions` and source `api`
 
-## API: Admin auth and dashboard
+## API: Admin auth, dashboard, and promotions
 
 ### `/api/admin/dev-auth`
 
@@ -716,6 +772,57 @@ Current backend output includes:
   - direction opens
   - compare starts
   - comparison runs
+
+### `/api/admin/promotions`
+
+Purpose now:
+
+- list current direction promotions for the internal contour
+- create or upsert an editorial promotion per direction
+
+Returns on success:
+
+- `status: ok`
+- `scope: internal`
+- `userId`
+- `role`
+- `promotions` for `GET`
+- `promotion` for `POST`
+
+Promotion payload currently includes:
+
+- promotion id
+- direction id
+- direction title
+- direction slug
+- status
+- priority
+- editorial note
+- start/end window
+- `isCurrentlyActive`
+
+Returns on failure:
+
+- `status: forbidden` for auth failures
+- `status: invalid` for payload validation failures
+
+### `/api/admin/promotions/[promotionId]`
+
+Purpose now:
+
+- update promotion status, priority, note, or active window
+
+Returns on success:
+
+- `status: ok`
+- `scope: internal`
+- `promotion`
+
+Returns on failure:
+
+- `status: forbidden`
+- `status: invalid`
+- `status: not-found`
   - recommendation generated
 
 ## What is in the database

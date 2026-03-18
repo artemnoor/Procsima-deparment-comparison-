@@ -20,6 +20,12 @@ enum EventType {
   recommendation_generated
 }
 
+enum PromotionStatus {
+  draft
+  active
+  inactive
+}
+
 model Direction {
   id                    String                  @id @default(cuid())
   code                  String?                 @unique
@@ -47,9 +53,26 @@ model Direction {
   aiScore               Int?
   learningDifficulty    Int?
   passingScores         DirectionPassingScore[]
+  promotions            DirectionPromotion[]
   subjects              DirectionSubject[]
   createdAt             DateTime                @default(now())
   updatedAt             DateTime                @updatedAt
+}
+
+model DirectionPromotion {
+  id          String          @id @default(cuid())
+  directionId String          @unique
+  status      PromotionStatus @default(draft)
+  priority    Int             @default(100)
+  note        String
+  startsAt    DateTime?
+  endsAt      DateTime?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  direction   Direction       @relation(fields: [directionId], references: [id], onDelete: Cascade)
+
+  @@index([status, priority])
+  @@index([startsAt, endsAt])
 }
 
 model DirectionPassingScore {

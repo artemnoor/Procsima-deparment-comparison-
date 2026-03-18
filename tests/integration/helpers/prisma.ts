@@ -1,4 +1,4 @@
-import { PrismaClient, RoleKey } from "@prisma/client";
+import { PrismaClient, PromotionStatus, RoleKey } from "@prisma/client";
 
 const databaseUrl = process.env.DATABASE_URL;
 
@@ -21,6 +21,7 @@ export const integrationPrisma = new PrismaClient({
 export async function resetIntegrationDatabase(): Promise<void> {
   await integrationPrisma.event.deleteMany();
   await integrationPrisma.user.deleteMany();
+  await integrationPrisma.directionPromotion.deleteMany();
   await integrationPrisma.directionPassingScore.deleteMany();
   await integrationPrisma.directionSubject.deleteMany();
   await integrationPrisma.direction.deleteMany();
@@ -263,6 +264,15 @@ export async function seedIntegrationData(): Promise<void> {
       email: "admin@example.local",
       name: "Foundation Admin",
       role: RoleKey.admissions_admin,
+    },
+  });
+
+  await integrationPrisma.directionPromotion.create({
+    data: {
+      directionId: "direction-09-02-07",
+      status: PromotionStatus.active,
+      priority: 15,
+      note: "Admissions editors currently feature this direction for product-oriented applicants.",
     },
   });
 }
