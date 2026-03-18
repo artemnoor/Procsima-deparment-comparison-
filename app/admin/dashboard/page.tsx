@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { loadAdmissionsDashboard } from "@/app/admissions-dashboard-data";
+import { loadDirectionPromotions } from "@/app/direction-promotions-data";
 import {
   AuthorizationError,
   ensureAdminAccess,
@@ -29,7 +30,10 @@ export default async function AdminDashboardPage(props: {
     const context = getDevAuthContext();
     const auth = await ensureAdminAccess(context);
     const searchParams = await props.searchParams;
-    const dashboard = await loadAdmissionsDashboard(searchParams);
+    const [dashboard, promotions] = await Promise.all([
+      loadAdmissionsDashboard(searchParams),
+      loadDirectionPromotions({ activeOnly: "true" }),
+    ]);
 
     return (
       <main>
@@ -51,6 +55,11 @@ export default async function AdminDashboardPage(props: {
             <p>
               <Link href="/api/admin/dashboard">
                 Open protected admin API route
+              </Link>
+            </p>
+            <p>
+              <Link href="/api/admin/promotions?activeOnly=true">
+                Open direction promotion API route
               </Link>
             </p>
           </section>
@@ -98,6 +107,36 @@ export default async function AdminDashboardPage(props: {
                     <p className="muted">
                       Recommendations generated:{" "}
                       {direction.breakdown.recommendationsGenerated}
+                    </p>
+                  </article>
+                ))}
+              </div>
+            )}
+          </section>
+
+          <section className="card">
+            <h3 className="cardTitle">Active editorial promotions</h3>
+            <p className="muted">
+              Promotion is managed as a separate internal admin concern and is
+              intentionally isolated from deterministic recommendation logic.
+            </p>
+
+            {promotions.length === 0 ? (
+              <p className="muted">
+                No active direction promotions are configured right now.
+              </p>
+            ) : (
+              <div className="stack">
+                {promotions.map((promotion) => (
+                  <article className="card" key={promotion.id}>
+                    <h4 className="cardTitle">{promotion.directionTitle}</h4>
+                    <p className="muted">Slug: {promotion.directionSlug}</p>
+                    <p>Priority: {promotion.priority}</p>
+                    <p>Status: {promotion.status}</p>
+                    <p className="muted">Editorial note: {promotion.note}</p>
+                    <p className="muted">
+                      Window: {promotion.startsAt ?? "now"} -{" "}
+                      {promotion.endsAt ?? "open ended"}
                     </p>
                   </article>
                 ))}

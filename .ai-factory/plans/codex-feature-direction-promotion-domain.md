@@ -2,7 +2,7 @@
 
 - Branch: `codex/feature-direction-promotion-domain`
 - Created: `2026-03-18`
-- Status: `planned`
+- Status: `in_progress`
 
 ## Settings
 

@@ -6,6 +6,11 @@ export {
   getAdmissionsDashboard,
   normalizeAdmissionsDashboardFilters,
 } from "./application/get-admissions-dashboard";
+export {
+  getDirectionPromotions,
+  saveDirectionPromotion,
+  updateDirectionPromotion,
+} from "./application/manage-direction-promotions";
 export type {
   AdmissionsDashboardDirectionMetric,
   AdmissionsDashboardFilterSnapshot,
@@ -15,4 +20,14 @@ export type {
   AdmissionsDashboardSnapshot,
   AdmissionsDashboardSummary,
 } from "./domain/admissions-dashboard";
+export {
+  DirectionPromotionNotFoundError,
+  DirectionPromotionValidationError,
+} from "./domain/direction-promotion";
+export type {
+  DirectionPromotionListFilters,
+  DirectionPromotionRepository,
+  DirectionPromotionSummary,
+} from "./domain/direction-promotion";
 export { PrismaAdmissionsDashboardRepository } from "./infra/prisma-admissions-dashboard-repository";
+export { PrismaDirectionPromotionRepository } from "./infra/prisma-direction-promotion-repository";
