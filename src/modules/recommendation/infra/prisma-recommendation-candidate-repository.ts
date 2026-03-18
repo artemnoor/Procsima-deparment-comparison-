@@ -22,8 +22,24 @@ export class PrismaRecommendationCandidateRepository implements RecommendationCa
 
     const candidates = (
       await this.prisma.direction.findMany({
+        where: {
+          isPublished: true,
+          status: "published",
+        },
         include: {
           passingScores: true,
+          admissionStats: true,
+          documents: true,
+          sections: {
+            include: {
+              items: true,
+            },
+          },
+          careerRoleLinks: {
+            include: {
+              careerRole: true,
+            },
+          },
           subjects: true,
         },
       })

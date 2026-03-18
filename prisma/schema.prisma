@@ -26,14 +26,82 @@ enum PromotionStatus {
   inactive
 }
 
+enum ProgramStatus {
+  draft
+  published
+  archived
+}
+
+enum ProgramDocumentType {
+  curriculum
+  opop
+  regulation
+  brochure
+  other
+}
+
+model Department {
+  id           String             @id @default(cuid())
+  name         String             @unique
+  shortName    String?
+  slug         String             @unique
+  description  String?
+  contactEmail String?
+  contactPhone String?
+  websiteUrl   String?
+  isPublished  Boolean            @default(true)
+  programs     Direction[]
+  subjects     DirectionSubject[] @relation("SubjectTeachingDepartment")
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+}
+
+model SubjectBlock {
+  id          String             @id @default(cuid())
+  name        String             @unique
+  slug        String             @unique
+  description String?
+  sortOrder   Int                @default(100)
+  color       String?
+  subjects    DirectionSubject[]
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+}
+
+model Subject {
+  id              String             @id @default(cuid())
+  name            String             @unique
+  slug            String             @unique
+  description     String?
+  defaultInfoUrl  String?
+  programSubjects DirectionSubject[]
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+}
+
+model CareerRole {
+  id          String                @id @default(cuid())
+  title       String                @unique
+  slug        String                @unique
+  description String?
+  isPublished Boolean               @default(true)
+  programs    DirectionCareerRole[]
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
+}
+
 model Direction {
-  id                    String                  @id @default(cuid())
-  code                  String?                 @unique
-  slug                  String                  @unique
+  id                    String                   @id @default(cuid())
+  code                  String?                  @unique
+  slug                  String                   @unique
   title                 String
   shortDescription      String
+  heroDescription       String?
   qualification         String?
   department            String?
+  departmentId          String?
+  educationLevel        String?
+  studyForm             String?
   studyDuration         String?
   budgetSeats           Int?
   paidSeats             Int?
@@ -52,11 +120,26 @@ model Direction {
   analyticsScore        Int?
   aiScore               Int?
   learningDifficulty    Int?
+  isPublished           Boolean                  @default(true)
+  sortOrder             Int                      @default(100)
+  status                ProgramStatus            @default(published)
+  heroImageUrl          String?
+  seoTitle              String?
+  seoDescription        String?
+  seoKeywords           String[]
+  departmentRelation    Department?              @relation(fields: [departmentId], references: [id], onDelete: SetNull)
   passingScores         DirectionPassingScore[]
+  admissionStats        DirectionAdmissionStat[]
+  documents             DirectionDocument[]
   promotions            DirectionPromotion[]
+  sections              DirectionSection[]
+  careerRoleLinks       DirectionCareerRole[]
   subjects              DirectionSubject[]
-  createdAt             DateTime                @default(now())
-  updatedAt             DateTime                @updatedAt
+  createdAt             DateTime                 @default(now())
+  updatedAt             DateTime                 @updatedAt
+
+  @@index([isPublished, sortOrder])
+  @@index([departmentId])
 }
 
 model DirectionPromotion {
@@ -87,18 +170,98 @@ model DirectionPassingScore {
   @@index([directionId])
 }
 
+model DirectionAdmissionStat {
+  id                 String    @id @default(cuid())
+  directionId        String
+  year               Int
+  budgetPlaces       Int?
+  paidPlaces         Int?
+  tuitionPerYearRub  Int?
+  passingScoreBudget Decimal?  @db.Decimal(4, 2)
+  passingScorePaid   Decimal?  @db.Decimal(4, 2)
+  comment            String?
+  direction          Direction @relation(fields: [directionId], references: [id], onDelete: Cascade)
+
+  @@unique([directionId, year])
+  @@index([directionId, year])
+}
+
 model DirectionSubject {
-  id           String    @id @default(cuid())
-  directionId  String
-  title        String
-  subjectBlock String?
-  department   String?
-  hours        Int
-  referenceUrl String?
-  sortOrder    Int?
-  direction    Direction @relation(fields: [directionId], references: [id], onDelete: Cascade)
+  id                 String        @id @default(cuid())
+  directionId        String
+  subjectId          String?
+  blockId            String?
+  departmentId       String?
+  title              String
+  subjectBlock       String?
+  department         String?
+  hours              Int
+  referenceUrl       String?
+  sortOrder          Int?
+  direction          Direction     @relation(fields: [directionId], references: [id], onDelete: Cascade)
+  subject            Subject?      @relation(fields: [subjectId], references: [id], onDelete: SetNull)
+  block              SubjectBlock? @relation(fields: [blockId], references: [id], onDelete: SetNull)
+  departmentRelation Department?   @relation("SubjectTeachingDepartment", fields: [departmentId], references: [id], onDelete: SetNull)
 
   @@index([directionId])
+  @@index([subjectId])
+  @@index([blockId])
+  @@index([departmentId])
+}
+
+model DirectionDocument {
+  id           String              @id @default(cuid())
+  directionId  String
+  type         ProgramDocumentType
+  title        String
+  url          String
+  description  String?
+  versionLabel String?
+  publishedAt  DateTime?
+  isPrimary    Boolean             @default(false)
+  direction    Direction           @relation(fields: [directionId], references: [id], onDelete: Cascade)
+
+  @@index([directionId, type])
+}
+
+model DirectionSection {
+  id          String                 @id @default(cuid())
+  directionId String
+  sectionKey  String
+  title       String
+  body        String?
+  sortOrder   Int                    @default(100)
+  isPublished Boolean                @default(true)
+  direction   Direction              @relation(fields: [directionId], references: [id], onDelete: Cascade)
+  items       DirectionSectionItem[]
+
+  @@unique([directionId, sectionKey])
+  @@index([directionId, sortOrder])
+}
+
+model DirectionSectionItem {
+  id          String           @id @default(cuid())
+  sectionId   String
+  title       String
+  description String?
+  icon        String?
+  sortOrder   Int              @default(100)
+  section     DirectionSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+
+  @@index([sectionId, sortOrder])
+}
+
+model DirectionCareerRole {
+  id           String     @id @default(cuid())
+  directionId  String
+  careerRoleId String
+  sortOrder    Int        @default(100)
+  comment      String?
+  direction    Direction  @relation(fields: [directionId], references: [id], onDelete: Cascade)
+  careerRole   CareerRole @relation(fields: [careerRoleId], references: [id], onDelete: Cascade)
+
+  @@unique([directionId, careerRoleId])
+  @@index([directionId, sortOrder])
 }
 
 model User {

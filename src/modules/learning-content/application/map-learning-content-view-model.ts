@@ -41,6 +41,8 @@ export function mapDirectionSourceToSummary(
       code: sourceRecord.code,
       qualification: sourceRecord.qualification,
       department: sourceRecord.department,
+      educationLevel: "СПО",
+      studyForm: "Очная",
       studyDuration: sourceRecord.studyDuration,
       budgetSeats: sourceRecord.budgetSeats,
       paidSeats: sourceRecord.paidSeats,
@@ -67,16 +69,64 @@ export function mapDirectionSourceToDetail(
 
   return {
     ...mapDirectionSourceToSummary(sourceRecord),
+    heroDescription: sourceRecord.shortDescription,
     whatYouLearn: sourceRecord.profile.whatYouLearn,
     learningContent: sourceRecord.profile.learningContent,
     careerPaths: sourceRecord.profile.careerPaths,
+    careerRoles: sourceRecord.profile.careerPaths.map((careerPath) => ({
+      title: careerPath,
+      slug: careerPath
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, ""),
+      description: null,
+      comment: null,
+    })),
     targetFit: sourceRecord.profile.targetFit,
     keyDifferences: sourceRecord.profile.keyDifferences,
     axisScores: sourceRecord.profile.axisScores,
     passingScores: sourceRecord.passingScores,
+    admissionStats: sourceRecord.passingScores.map((score) => ({
+      year: score.year,
+      budgetPlaces: sourceRecord.budgetSeats,
+      paidPlaces: sourceRecord.paidSeats,
+      tuitionPerYearRub: sourceRecord.tuitionPerYearRub,
+      passingScoreBudget: score.budget,
+      passingScorePaid: score.paid,
+      comment: null,
+    })),
     subjects: sourceRecord.subjects,
     programDescriptionUrl: sourceRecord.programDescriptionUrl,
     curriculumUrl: sourceRecord.curriculumUrl,
+    documents: [
+      ...(sourceRecord.programDescriptionUrl
+        ? [
+            {
+              type: "brochure" as const,
+              title: "Program description",
+              url: sourceRecord.programDescriptionUrl,
+              description: null,
+              versionLabel: null,
+              publishedAt: null,
+              isPrimary: true,
+            },
+          ]
+        : []),
+      ...(sourceRecord.curriculumUrl
+        ? [
+            {
+              type: "curriculum" as const,
+              title: "Curriculum",
+              url: sourceRecord.curriculumUrl,
+              description: null,
+              versionLabel: null,
+              publishedAt: null,
+              isPrimary: false,
+            },
+          ]
+        : []),
+    ],
+    sections: [],
   };
 }
 

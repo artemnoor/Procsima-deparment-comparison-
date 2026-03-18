@@ -89,6 +89,48 @@ export const directionSubjectSchema = z.object({
 
 export type DirectionSubject = z.infer<typeof directionSubjectSchema>;
 
+export type DirectionAdmissionStat = {
+  year: number;
+  budgetPlaces: number | null;
+  paidPlaces: number | null;
+  tuitionPerYearRub: number | null;
+  passingScoreBudget: number | null;
+  passingScorePaid: number | null;
+  comment: string | null;
+};
+
+export type DirectionDocument = {
+  type: "curriculum" | "opop" | "regulation" | "brochure" | "other";
+  title: string;
+  url: string;
+  description: string | null;
+  versionLabel: string | null;
+  publishedAt: string | null;
+  isPrimary: boolean;
+};
+
+export type DirectionSectionItem = {
+  title: string;
+  description: string | null;
+  icon: string | null;
+  sortOrder: number;
+};
+
+export type DirectionSection = {
+  sectionKey: string;
+  title: string;
+  body: string | null;
+  sortOrder: number;
+  items: DirectionSectionItem[];
+};
+
+export type DirectionCareerRole = {
+  title: string;
+  slug: string;
+  description: string | null;
+  comment: string | null;
+};
+
 export const rawDirectionSourceSchema = z.object({
   "\u043a\u043e\u0434": z.string().min(1),
   "\u043d\u0430\u0438\u043c\u0435\u043d\u043e\u0432\u0430\u043d\u0438\u0435_\u0441\u043f\u0435\u0446\u0438\u0430\u043b\u044c\u043d\u043e\u0441\u0442\u0438":
@@ -151,6 +193,8 @@ export type DirectionCatalogContext = {
   code: string | null;
   qualification: string | null;
   department: string | null;
+  educationLevel: string | null;
+  studyForm: string | null;
   studyDuration: string | null;
   budgetSeats: number | null;
   paidSeats: number | null;
@@ -168,14 +212,19 @@ export type DirectionSummary = {
 };
 
 export type DirectionDetail = DirectionSummary & {
+  heroDescription: string | null;
   whatYouLearn: string | null;
   learningContent: DirectionLearningContent;
   careerPaths: string[];
+  careerRoles: DirectionCareerRole[];
   targetFit: string | null;
   keyDifferences: string[];
   axisScores: DirectionAxisScores;
   passingScores: PassingScore[];
+  admissionStats: DirectionAdmissionStat[];
   subjects: DirectionSubject[];
   programDescriptionUrl: string | null;
   curriculumUrl: string | null;
+  documents: DirectionDocument[];
+  sections: DirectionSection[];
 };

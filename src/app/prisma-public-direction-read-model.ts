@@ -2,9 +2,13 @@ import type { Prisma } from "@prisma/client";
 
 import type {
   DirectionAxisScores,
+  DirectionCareerRole,
   DirectionDetail,
+  DirectionDocument,
   DirectionLearningContent,
+  DirectionSection,
   DirectionSubject,
+  DirectionAdmissionStat,
   DirectionSummary,
   PassingScore,
 } from "@/shared/kernel/direction";
@@ -19,6 +23,8 @@ type PrismaDirectionSummaryRecord = {
   shortDescription: string;
   qualification: string | null;
   department: string | null;
+  educationLevel: string | null;
+  studyForm: string | null;
   studyDuration: string | null;
   budgetSeats: number | null;
   paidSeats: number | null;
@@ -28,6 +34,7 @@ type PrismaDirectionSummaryRecord = {
 };
 
 type PrismaDirectionDetailRecord = PrismaDirectionSummaryRecord & {
+  heroDescription: string | null;
   whatYouLearn: string | null;
   programDescriptionUrl: string | null;
   curriculumUrl: string | null;
@@ -45,6 +52,15 @@ type PrismaDirectionDetailRecord = PrismaDirectionSummaryRecord & {
     budget: Prisma.Decimal | null;
     paid: Prisma.Decimal | null;
   }>;
+  admissionStats: Array<{
+    year: number;
+    budgetPlaces: number | null;
+    paidPlaces: number | null;
+    tuitionPerYearRub: number | null;
+    passingScoreBudget: Prisma.Decimal | null;
+    passingScorePaid: Prisma.Decimal | null;
+    comment: string | null;
+  }>;
   subjects: Array<{
     title: string;
     subjectBlock: string | null;
@@ -53,6 +69,36 @@ type PrismaDirectionDetailRecord = PrismaDirectionSummaryRecord & {
     referenceUrl: string | null;
     sortOrder: number | null;
   }>;
+  documents: Array<{
+    type: "curriculum" | "opop" | "regulation" | "brochure" | "other";
+    title: string;
+    url: string;
+    description: string | null;
+    versionLabel: string | null;
+    publishedAt: Date | null;
+    isPrimary: boolean;
+  }>;
+  sections: Array<{
+    sectionKey: string;
+    title: string;
+    body: string | null;
+    sortOrder: number;
+    items: Array<{
+      title: string;
+      description: string | null;
+      icon: string | null;
+      sortOrder: number;
+    }>;
+  }>;
+  careerRoleLinks: Array<{
+    comment: string | null;
+    sortOrder: number;
+    careerRole: {
+      title: string;
+      slug: string;
+      description: string | null;
+    };
+  }>;
 };
 
 function mapDirectionContext(input: PrismaDirectionSummaryRecord) {
@@ -60,6 +106,8 @@ function mapDirectionContext(input: PrismaDirectionSummaryRecord) {
     code: input.code,
     qualification: input.qualification,
     department: input.department,
+    educationLevel: input.educationLevel,
+    studyForm: input.studyForm,
     studyDuration: input.studyDuration,
     budgetSeats: input.budgetSeats,
     paidSeats: input.paidSeats,
@@ -203,6 +251,22 @@ function mapPassingScores(
     }));
 }
 
+function mapAdmissionStats(
+  input: PrismaDirectionDetailRecord["admissionStats"],
+): DirectionAdmissionStat[] {
+  return [...input]
+    .sort((left, right) => left.year - right.year)
+    .map((stat) => ({
+      year: stat.year,
+      budgetPlaces: stat.budgetPlaces,
+      paidPlaces: stat.paidPlaces,
+      tuitionPerYearRub: stat.tuitionPerYearRub,
+      passingScoreBudget: stat.passingScoreBudget?.toNumber() ?? null,
+      passingScorePaid: stat.passingScorePaid?.toNumber() ?? null,
+      comment: stat.comment,
+    }));
+}
+
 function mapSubjects(
   input: PrismaDirectionDetailRecord["subjects"],
 ): DirectionSubject[] {
@@ -239,6 +303,65 @@ function deriveSubjectBlocks(
   ];
 }
 
+function mapDocuments(
+  input: PrismaDirectionDetailRecord["documents"],
+): DirectionDocument[] {
+  return [...input]
+    .sort((left, right) => {
+      if (left.isPrimary !== right.isPrimary) {
+        return left.isPrimary ? -1 : 1;
+      }
+
+      const leftTime = left.publishedAt?.getTime() ?? 0;
+      const rightTime = right.publishedAt?.getTime() ?? 0;
+
+      return rightTime - leftTime;
+    })
+    .map((document) => ({
+      type: document.type,
+      title: document.title,
+      url: document.url,
+      description: document.description,
+      versionLabel: document.versionLabel,
+      publishedAt: document.publishedAt?.toISOString() ?? null,
+      isPrimary: document.isPrimary,
+    }));
+}
+
+function mapSections(
+  input: PrismaDirectionDetailRecord["sections"],
+): DirectionSection[] {
+  return [...input]
+    .sort((left, right) => left.sortOrder - right.sortOrder)
+    .map((section) => ({
+      sectionKey: section.sectionKey,
+      title: section.title,
+      body: section.body,
+      sortOrder: section.sortOrder,
+      items: [...section.items]
+        .sort((left, right) => left.sortOrder - right.sortOrder)
+        .map((item) => ({
+          title: item.title,
+          description: item.description,
+          icon: item.icon,
+          sortOrder: item.sortOrder,
+        })),
+    }));
+}
+
+function mapCareerRoles(
+  input: PrismaDirectionDetailRecord["careerRoleLinks"],
+): DirectionCareerRole[] {
+  return [...input]
+    .sort((left, right) => left.sortOrder - right.sortOrder)
+    .map((link) => ({
+      title: link.careerRole.title,
+      slug: link.careerRole.slug,
+      description: link.careerRole.description,
+      comment: link.comment,
+    }));
+}
+
 export function mapPrismaDirectionToSummary(
   input: PrismaDirectionSummaryRecord,
 ): DirectionSummary {
@@ -258,16 +381,21 @@ export function mapPrismaDirectionToDetail(
 ): DirectionDetail {
   return {
     ...mapPrismaDirectionToSummary(input),
+    heroDescription: input.heroDescription,
     whatYouLearn: input.whatYouLearn,
     learningContent: normalizeLearningContent(input.id, input.learningContent),
     careerPaths: input.careerPaths,
+    careerRoles: mapCareerRoles(input.careerRoleLinks),
     targetFit: input.targetFit,
     keyDifferences: input.keyDifferences,
     axisScores: mapAxisScores(input),
     passingScores: mapPassingScores(input.passingScores),
+    admissionStats: mapAdmissionStats(input.admissionStats),
     subjects: mapSubjects(input.subjects),
     programDescriptionUrl: input.programDescriptionUrl,
     curriculumUrl: input.curriculumUrl,
+    documents: mapDocuments(input.documents),
+    sections: mapSections(input.sections),
   };
 }
 

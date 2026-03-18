@@ -30,6 +30,18 @@ export class PrismaDirectionComparisonRepository implements DirectionComparisonR
       },
       include: {
         passingScores: true,
+        admissionStats: true,
+        documents: true,
+        sections: {
+          include: {
+            items: true,
+          },
+        },
+        careerRoleLinks: {
+          include: {
+            careerRole: true,
+          },
+        },
         subjects: true,
       },
     });

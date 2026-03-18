@@ -141,8 +141,9 @@ export default async function ComparePage(props: {
             <div>
               <h2 className="sectionTitle">Compare selected directions</h2>
               <p className="detailLead">
-                Review program fit, cost, qualification, subject focus, and the
-                axis-based contrast across the active mock-backed dataset.
+                Review program fit, admissions context, study format, subject
+                focus, and the axis-based contrast across the active program
+                dataset.
               </p>
             </div>
             <div className="detailActionGroup">
@@ -173,6 +174,13 @@ export default async function ComparePage(props: {
                   <dt>Qualification</dt>
                   <dd>
                     {direction.context.qualification ?? "To be confirmed"}
+                  </dd>
+                </div>
+                <div>
+                  <dt>Level / form</dt>
+                  <dd>
+                    {direction.context.educationLevel ?? "To be confirmed"} /{" "}
+                    {direction.context.studyForm ?? "To be confirmed"}
                   </dd>
                 </div>
                 <div>
@@ -238,6 +246,12 @@ export default async function ComparePage(props: {
             {comparisonPageData.directions.map((direction) => (
               <article className="compareLearningCard" key={direction.id}>
                 <h4 className="subsectionTitle">{direction.title}</h4>
+                {direction.careerRoles.length > 0 ? (
+                  <p className="muted">
+                    Roles:{" "}
+                    {direction.careerRoles.map((role) => role.title).join(", ")}
+                  </p>
+                ) : null}
                 <div className="learningTagList">
                   {direction.learningContent.technologies.map((technology) => (
                     <span
@@ -286,6 +300,43 @@ export default async function ComparePage(props: {
                 </div>
               </div>
             ))}
+          </div>
+        </section>
+
+        <section className="card">
+          <div className="sectionEyebrow">Admissions and documents</div>
+          <h3 className="cardTitle">What is published for each direction</h3>
+          <div className="compareLearningGrid">
+            {comparisonPageData.directions.map((direction) => {
+              const latestStat = [...direction.admissionStats].sort(
+                (left, right) => right.year - left.year,
+              )[0];
+
+              return (
+                <article
+                  className="compareLearningCard"
+                  key={`${direction.id}-docs`}
+                >
+                  <h4 className="subsectionTitle">{direction.title}</h4>
+                  <p className="muted">
+                    {latestStat
+                      ? `${latestStat.year}: seats ${latestStat.budgetPlaces ?? "—"} / ${latestStat.paidPlaces ?? "—"}, passing ${latestStat.passingScoreBudget ?? "—"} / ${latestStat.passingScorePaid ?? "—"}`
+                      : "Admissions history is pending."}
+                  </p>
+                  <ul className="detailList">
+                    {direction.documents.length > 0 ? (
+                      direction.documents.map((document) => (
+                        <li key={`${direction.id}-${document.url}`}>
+                          <Link href={document.url}>{document.title}</Link>
+                        </li>
+                      ))
+                    ) : (
+                      <li>No documents published yet.</li>
+                    )}
+                  </ul>
+                </article>
+              );
+            })}
           </div>
         </section>
       </div>

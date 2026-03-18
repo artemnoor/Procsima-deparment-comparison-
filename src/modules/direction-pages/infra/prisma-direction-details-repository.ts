@@ -24,6 +24,18 @@ export class PrismaDirectionDetailsRepository implements DirectionDetailsReposit
       where: { slug },
       include: {
         passingScores: true,
+        admissionStats: true,
+        documents: true,
+        sections: {
+          include: {
+            items: true,
+          },
+        },
+        careerRoleLinks: {
+          include: {
+            careerRole: true,
+          },
+        },
         subjects: true,
       },
     });

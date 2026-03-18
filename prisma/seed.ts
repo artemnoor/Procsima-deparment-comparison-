@@ -1,7 +1,13 @@
 import fs from "node:fs";
 import path from "node:path";
 
-import { PrismaClient, PromotionStatus, RoleKey } from "@prisma/client";
+import {
+  PrismaClient,
+  ProgramDocumentType,
+  ProgramStatus,
+  PromotionStatus,
+  RoleKey,
+} from "@prisma/client";
 
 const envFile = path.resolve(process.cwd(), ".env");
 
@@ -76,8 +82,11 @@ type DirectionSeed = {
   slug: string;
   title: string;
   shortDescription: string;
+  heroDescription?: string | null;
   qualification: string | null;
   department: string | null;
+  educationLevel?: string | null;
+  studyForm?: string | null;
   studyDuration: string | null;
   budgetSeats: number | null;
   paidSeats: number | null;
@@ -116,6 +125,143 @@ const visibleLearningFields = [
   "practicalSkills",
   "studyFocuses",
 ];
+
+function slugify(value: string): string {
+  return value
+    .toLowerCase()
+    .replace(/ё/g, "e")
+    .replace(/[^a-zа-я0-9]+/gi, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function createHeroDescription(direction: DirectionSeed): string {
+  return (
+    direction.heroDescription ??
+    [direction.shortDescription, direction.whatYouLearn]
+      .filter(
+        (part): part is string => typeof part === "string" && part.length > 0,
+      )
+      .join(" ")
+  );
+}
+
+function createDirectionDocuments(direction: DirectionSeed) {
+  const documents: Array<{
+    type: ProgramDocumentType;
+    title: string;
+    url: string;
+    description: string | null;
+    versionLabel: string | null;
+    publishedAt: Date | null;
+    isPrimary: boolean;
+  }> = [];
+
+  if (direction.programDescriptionUrl) {
+    documents.push({
+      type: ProgramDocumentType.brochure,
+      title: "Описание образовательной программы",
+      url: direction.programDescriptionUrl,
+      description: "Краткое описание программы для абитуриентов.",
+      versionLabel: "current",
+      publishedAt: null,
+      isPrimary: true,
+    });
+  }
+
+  if (direction.curriculumUrl) {
+    documents.push({
+      type: ProgramDocumentType.curriculum,
+      title: "Учебный план",
+      url: direction.curriculumUrl,
+      description: "Актуальный учебный план направления.",
+      versionLabel: "current",
+      publishedAt: null,
+      isPrimary: documents.length === 0,
+    });
+  }
+
+  return documents;
+}
+
+function createDirectionSections(direction: DirectionSeed) {
+  return [
+    {
+      sectionKey: "who_is_it",
+      title: "Кто это?",
+      body: direction.targetFit,
+      sortOrder: 10,
+      isPublished: true,
+      items: [],
+    },
+    {
+      sectionKey: "what_you_learn_intro",
+      title: "Чему учат?",
+      body: direction.whatYouLearn,
+      sortOrder: 20,
+      isPublished: true,
+      items: direction.learningContent.studyFocuses.map((focus, index) => ({
+        title: focus.title,
+        description: focus.summary,
+        icon: null,
+        sortOrder: index + 1,
+      })),
+    },
+    {
+      sectionKey: "skills_intro",
+      title: "Какие навыки получает выпускник?",
+      body: "Ключевые практические навыки и результаты обучения.",
+      sortOrder: 30,
+      isPublished: true,
+      items: direction.learningContent.practicalSkills.map((skill, index) => ({
+        title: skill.name,
+        description: skill.context,
+        icon: null,
+        sortOrder: index + 1,
+      })),
+    },
+    {
+      sectionKey: "advantages",
+      title: "Преимущества программы",
+      body: null,
+      sortOrder: 40,
+      isPublished: true,
+      items: direction.keyDifferences.map((difference, index) => ({
+        title: difference,
+        description: null,
+        icon: null,
+        sortOrder: index + 1,
+      })),
+    },
+    {
+      sectionKey: "career_intro",
+      title: "Где можно работать?",
+      body: "Карьерные треки и роли, к которым ведёт программа.",
+      sortOrder: 50,
+      isPublished: true,
+      items: direction.careerPaths.map((careerPath, index) => ({
+        title: careerPath,
+        description: null,
+        icon: null,
+        sortOrder: index + 1,
+      })),
+    },
+  ];
+}
+
+function createAdmissionStats(direction: DirectionSeed) {
+  return direction.passingScores.map((score, index, array) => ({
+    year: score.year,
+    budgetPlaces: direction.budgetSeats,
+    paidPlaces: direction.paidSeats,
+    tuitionPerYearRub: direction.tuitionPerYearRub,
+    passingScoreBudget: score.budget,
+    passingScorePaid: score.paid,
+    comment:
+      index === array.length - 1
+        ? "Текущий ориентир для открытого applicant-facing сравнения."
+        : null,
+  }));
+}
 
 const directions: DirectionSeed[] = [
   {
@@ -725,6 +871,23 @@ const directionPromotions: DirectionPromotionSeed[] = [
 const prisma = new PrismaClient();
 
 async function upsertDirection(direction: DirectionSeed) {
+  const primaryDepartment = direction.department
+    ? await prisma.department.upsert({
+        where: { name: direction.department },
+        update: {
+          shortName: direction.department,
+          slug: slugify(direction.department),
+          isPublished: true,
+        },
+        create: {
+          name: direction.department,
+          shortName: direction.department,
+          slug: slugify(direction.department),
+          isPublished: true,
+        },
+      })
+    : null;
+
   const persistedDirection = await prisma.direction.upsert({
     where: { slug: direction.slug },
     update: {
@@ -733,8 +896,12 @@ async function upsertDirection(direction: DirectionSeed) {
       slug: direction.slug,
       title: direction.title,
       shortDescription: direction.shortDescription,
+      heroDescription: createHeroDescription(direction),
       qualification: direction.qualification,
       department: direction.department,
+      departmentId: primaryDepartment?.id ?? null,
+      educationLevel: direction.educationLevel ?? "СПО",
+      studyForm: direction.studyForm ?? "Очная",
       studyDuration: direction.studyDuration,
       budgetSeats: direction.budgetSeats,
       paidSeats: direction.paidSeats,
@@ -753,6 +920,16 @@ async function upsertDirection(direction: DirectionSeed) {
       analyticsScore: direction.analyticsScore,
       aiScore: direction.aiScore,
       learningDifficulty: direction.learningDifficulty,
+      isPublished: true,
+      sortOrder: directions.findIndex((entry) => entry.id === direction.id) + 1,
+      status: ProgramStatus.published,
+      seoTitle: `${direction.title} — НПС`,
+      seoDescription: direction.shortDescription,
+      seoKeywords: [
+        direction.code,
+        direction.title,
+        direction.programFocus ?? "",
+      ].filter((value) => value.length > 0),
     },
     create: {
       id: direction.id,
@@ -760,8 +937,12 @@ async function upsertDirection(direction: DirectionSeed) {
       slug: direction.slug,
       title: direction.title,
       shortDescription: direction.shortDescription,
+      heroDescription: createHeroDescription(direction),
       qualification: direction.qualification,
       department: direction.department,
+      departmentId: primaryDepartment?.id ?? null,
+      educationLevel: direction.educationLevel ?? "СПО",
+      studyForm: direction.studyForm ?? "Очная",
       studyDuration: direction.studyDuration,
       budgetSeats: direction.budgetSeats,
       paidSeats: direction.paidSeats,
@@ -780,8 +961,39 @@ async function upsertDirection(direction: DirectionSeed) {
       analyticsScore: direction.analyticsScore,
       aiScore: direction.aiScore,
       learningDifficulty: direction.learningDifficulty,
+      isPublished: true,
+      sortOrder: directions.findIndex((entry) => entry.id === direction.id) + 1,
+      status: ProgramStatus.published,
+      seoTitle: `${direction.title} — НПС`,
+      seoDescription: direction.shortDescription,
+      seoKeywords: [
+        direction.code,
+        direction.title,
+        direction.programFocus ?? "",
+      ].filter((value) => value.length > 0),
     },
   });
+
+  await prisma.directionAdmissionStat.deleteMany({
+    where: { directionId: persistedDirection.id },
+  });
+
+  const admissionStats = createAdmissionStats(direction);
+
+  if (admissionStats.length > 0) {
+    await prisma.directionAdmissionStat.createMany({
+      data: admissionStats.map((stat) => ({
+        directionId: persistedDirection.id,
+        year: stat.year,
+        budgetPlaces: stat.budgetPlaces,
+        paidPlaces: stat.paidPlaces,
+        tuitionPerYearRub: stat.tuitionPerYearRub,
+        passingScoreBudget: stat.passingScoreBudget,
+        passingScorePaid: stat.passingScorePaid,
+        comment: stat.comment,
+      })),
+    });
+  }
 
   await prisma.directionPassingScore.deleteMany({
     where: { directionId: persistedDirection.id },
@@ -803,16 +1015,149 @@ async function upsertDirection(direction: DirectionSeed) {
   });
 
   if (direction.subjects.length > 0) {
-    await prisma.directionSubject.createMany({
-      data: direction.subjects.map((subject) => ({
+    for (const subject of direction.subjects) {
+      const subjectReference = await prisma.subject.upsert({
+        where: { name: subject.title },
+        update: {
+          slug: slugify(subject.title),
+          defaultInfoUrl: subject.referenceUrl,
+        },
+        create: {
+          name: subject.title,
+          slug: slugify(subject.title),
+          defaultInfoUrl: subject.referenceUrl,
+        },
+      });
+
+      const subjectBlock = subject.subjectBlock
+        ? await prisma.subjectBlock.upsert({
+            where: { name: subject.subjectBlock },
+            update: {
+              slug: slugify(subject.subjectBlock),
+            },
+            create: {
+              name: subject.subjectBlock,
+              slug: slugify(subject.subjectBlock),
+              sortOrder: subject.sortOrder,
+            },
+          })
+        : null;
+
+      const teachingDepartment = subject.department
+        ? await prisma.department.upsert({
+            where: { name: subject.department },
+            update: {
+              shortName: subject.department,
+              slug: slugify(subject.department),
+              isPublished: true,
+            },
+            create: {
+              name: subject.department,
+              shortName: subject.department,
+              slug: slugify(subject.department),
+              isPublished: true,
+            },
+          })
+        : null;
+
+      await prisma.directionSubject.create({
+        data: {
+          directionId: persistedDirection.id,
+          subjectId: subjectReference.id,
+          blockId: subjectBlock?.id ?? null,
+          departmentId: teachingDepartment?.id ?? null,
+          title: subject.title,
+          subjectBlock: subject.subjectBlock,
+          department: subject.department,
+          hours: subject.hours,
+          referenceUrl: subject.referenceUrl,
+          sortOrder: subject.sortOrder,
+        },
+      });
+    }
+  }
+
+  await prisma.directionDocument.deleteMany({
+    where: { directionId: persistedDirection.id },
+  });
+
+  const documents = createDirectionDocuments(direction);
+
+  if (documents.length > 0) {
+    await prisma.directionDocument.createMany({
+      data: documents.map((document) => ({
         directionId: persistedDirection.id,
-        title: subject.title,
-        subjectBlock: subject.subjectBlock,
-        department: subject.department,
-        hours: subject.hours,
-        referenceUrl: subject.referenceUrl,
-        sortOrder: subject.sortOrder,
+        type: document.type,
+        title: document.title,
+        url: document.url,
+        description: document.description,
+        versionLabel: document.versionLabel,
+        publishedAt: document.publishedAt,
+        isPrimary: document.isPrimary,
       })),
+    });
+  }
+
+  await prisma.directionSectionItem.deleteMany({
+    where: {
+      section: {
+        directionId: persistedDirection.id,
+      },
+    },
+  });
+  await prisma.directionSection.deleteMany({
+    where: { directionId: persistedDirection.id },
+  });
+
+  for (const section of createDirectionSections(direction)) {
+    const createdSection = await prisma.directionSection.create({
+      data: {
+        directionId: persistedDirection.id,
+        sectionKey: section.sectionKey,
+        title: section.title,
+        body: section.body,
+        sortOrder: section.sortOrder,
+        isPublished: section.isPublished,
+      },
+    });
+
+    if (section.items.length > 0) {
+      await prisma.directionSectionItem.createMany({
+        data: section.items.map((item) => ({
+          sectionId: createdSection.id,
+          title: item.title,
+          description: item.description,
+          icon: item.icon,
+          sortOrder: item.sortOrder,
+        })),
+      });
+    }
+  }
+
+  await prisma.directionCareerRole.deleteMany({
+    where: { directionId: persistedDirection.id },
+  });
+
+  for (const [index, careerPath] of direction.careerPaths.entries()) {
+    const role = await prisma.careerRole.upsert({
+      where: { title: careerPath },
+      update: {
+        slug: slugify(careerPath),
+        isPublished: true,
+      },
+      create: {
+        title: careerPath,
+        slug: slugify(careerPath),
+        isPublished: true,
+      },
+    });
+
+    await prisma.directionCareerRole.create({
+      data: {
+        directionId: persistedDirection.id,
+        careerRoleId: role.id,
+        sortOrder: index + 1,
+      },
     });
   }
 }
@@ -862,12 +1207,24 @@ export async function main() {
   console.info("Seeded applicant-facing Prisma directions.", {
     directionCount: directions.length,
     promotionCount: directionPromotions.length,
+    admissionStatCount: directions.reduce(
+      (total, direction) => total + direction.passingScores.length,
+      0,
+    ),
     passingScoreCount: directions.reduce(
       (total, direction) => total + direction.passingScores.length,
       0,
     ),
     subjectCount: directions.reduce(
       (total, direction) => total + direction.subjects.length,
+      0,
+    ),
+    documentCount: directions.reduce(
+      (total, direction) => total + createDirectionDocuments(direction).length,
+      0,
+    ),
+    sectionCount: directions.reduce(
+      (total, direction) => total + createDirectionSections(direction).length,
       0,
     ),
   });
