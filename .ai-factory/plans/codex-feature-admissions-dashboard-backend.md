@@ -54,19 +54,19 @@ Out of scope for this branch:
 ### Phase 1: Define the dashboard contract
 
 1. [ ] Define the first admissions dashboard response contract in `src/modules/admin` or a dedicated dashboard module.
-   Files:
+       Files:
    - `src/modules/admin/**`
    - `src/shared/kernel/**` if a shared DTO type is justified
-   Deliverable:
+     Deliverable:
    - a typed response shape for summary cards, event totals, and direction breakdowns
-   Logging:
+     Logging:
    - add DEBUG logs for filter parsing and INFO logs for successful dashboard payload generation
 
 2. [ ] Decide and document which metrics are part of v1 dashboard backend.
-   Files:
+       Files:
    - `.ai-factory/plans/codex-feature-admissions-dashboard-backend.md`
    - optional code comments near the DTO/service if needed
-   Deliverable:
+     Deliverable:
    - explicit v1 metric list:
      - total events in range
      - page opens
@@ -75,86 +75,86 @@ Out of scope for this branch:
      - comparison runs
      - recommendation generated count
      - top directions by interaction volume
-   Logging:
+       Logging:
    - no runtime logging needed beyond service-level metric selection logs
 
 ### Phase 2: Build the analytics read model
 
 3. [ ] Implement a Prisma-backed dashboard repository/query layer that aggregates event data.
-   Files:
+       Files:
    - `src/modules/admin/infra/**` or `src/modules/analytics/infra/**`
    - `src/app/db.ts` only if wiring requires it
-   Deliverable:
+     Deliverable:
    - read-model queries over `Event` with support for grouped counts and top directions
-   Logging:
+     Logging:
    - DEBUG logs for incoming filters, raw aggregate counts, and direction ranking payloads
-   Dependencies:
+     Dependencies:
    - blocked by Task 1
 
 4. [ ] Add application-level orchestration for dashboard filters and defaults.
-   Files:
+       Files:
    - `src/modules/admin/application/**` or `src/modules/analytics/application/**`
-   Deliverable:
+     Deliverable:
    - service/use case that:
      - applies default date windows
      - validates query params
      - requests aggregates from the repository
      - returns a stable DTO for transport
-   Logging:
+       Logging:
    - INFO logs for dashboard request handling
    - WARN logs for invalid or clamped filters
-   Dependencies:
+     Dependencies:
    - blocked by Task 3
 
 ### Phase 3: Expose the protected admin API
 
 5. [ ] Replace the placeholder admin dashboard API response with real analytics data.
-   Files:
+       Files:
    - `app/api/admin/dashboard/route.ts`
    - module wiring files under `src/app/**` if needed
-   Deliverable:
+     Deliverable:
    - protected GET route returning the dashboard DTO instead of auth-only placeholder JSON
-   Logging:
+     Logging:
    - keep auth failures explicit
    - add INFO log for successful dashboard API responses and DEBUG log for applied filters
-   Dependencies:
+     Dependencies:
    - blocked by Task 4
 
 6. [ ] Update the admin dashboard page just enough to consume and display the new backend contract.
-   Files:
+       Files:
    - `app/admin/dashboard/page.tsx`
-   Deliverable:
+     Deliverable:
    - replace the pure placeholder body with a simple server-rendered summary view backed by the protected API/service contract
-   Logging:
+     Logging:
    - no extra client logging unless needed; prefer server-side logs in the underlying service
-   Dependencies:
+     Dependencies:
    - blocked by Task 5
 
 ### Phase 4: Verify and document
 
 7. [ ] Add integration coverage for dashboard backend aggregation and auth-protected access.
-   Files:
+       Files:
    - `tests/integration/**`
    - `tests/e2e/**` only if a small admin smoke assertion is warranted
-   Deliverable:
+     Deliverable:
    - tests for:
      - aggregate counts from seeded events
      - direction ranking
      - protected route behavior for admin auth
-   Logging:
+       Logging:
    - test fixtures should create explicit event scenarios with readable event payloads
-   Dependencies:
+     Dependencies:
    - blocked by Task 5
 
 8. [ ] Update docs for the new admin analytics backend behavior.
-   Files:
+       Files:
    - `README.md`
    - `docs/current-system-reference.md`
-   Deliverable:
+     Deliverable:
    - docs reflecting that the dashboard is no longer only a placeholder and describing what the first backend slice exposes
-   Logging:
+     Logging:
    - none
-   Dependencies:
+     Dependencies:
    - blocked by Task 6
 
 ## Commit Plan
