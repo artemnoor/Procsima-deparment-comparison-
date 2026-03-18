@@ -37,6 +37,7 @@ Current baseline includes:
 - baseline domain entities and module entry points
 - analytics event publishing path
 - internal auth skeleton for dashboard routes
+- first admissions dashboard backend slice with protected analytics summaries and top-direction rankings
 - unit, integration, and e2e coverage
 - local quality gates and CI workflow
 

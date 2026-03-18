@@ -556,14 +556,21 @@ The page shows:
 
 ### What the user sees when access is allowed
 
-This page is still a protected placeholder.
-
 It renders:
 
-- heading `Dashboard placeholder`
-- explanation that the internal dashboard contour is protected by the foundation auth skeleton
+- heading `Admissions dashboard`
+- explanation that the internal dashboard contour is protected by the foundation auth skeleton and already uses the first analytics backend slice
 - current dev user id
 - current role
+- active date window
+- summary metric cards:
+  - total tracked events
+  - page opens
+  - direction opens
+  - compare starts
+  - comparison runs
+  - recommendations generated
+- top directions by interaction volume
 - link to `/api/admin/dashboard`
 
 ### What happens when access is denied
@@ -589,22 +596,23 @@ What the user sees:
 
 ### Data source
 
-Current dashboard page uses only:
+Current dashboard page uses:
 
 - local dev auth context
 - role enforcement
+- Prisma-backed analytics aggregation over persisted `Event` rows
+- simple server-rendered summary cards and direction rankings
 
-It does not yet use:
+It still does not use:
 
-- analytics aggregation
 - charts
-- summaries
-- admissions operational widgets
+- advanced admissions operational widgets
+- promotion controls
 
 ### Current state
 
 - protected
-- still placeholder
+- first real backend slice implemented
 
 ## Health
 
@@ -678,9 +686,9 @@ Returns:
 
 ### `/api/admin/dashboard`
 
-Purpose right now:
+Purpose now:
 
-- prove that internal route protection works
+- return the first protected admissions dashboard analytics payload
 
 Returns on success:
 
@@ -688,6 +696,10 @@ Returns on success:
 - `scope: internal`
 - `userId`
 - `role`
+- `dashboard`
+  - `filters`
+  - `summary`
+  - `topDirections`
 
 Returns on failure:
 
@@ -695,9 +707,16 @@ Returns on failure:
 - `scope: internal`
 - `reason`
 
-Important note:
+Current backend output includes:
 
-- this route does not yet return real dashboard analytics
+- active date range and rolling-window metadata
+- total event counts by event type
+- top directions ranked by interaction volume
+- direction-level breakdown for:
+  - direction opens
+  - compare starts
+  - comparison runs
+  - recommendation generated
 
 ## What is in the database
 

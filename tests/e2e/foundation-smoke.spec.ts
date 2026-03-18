@@ -38,15 +38,16 @@ test.describe("foundation smoke", () => {
 
     await expect(page.getByText("NPS Choice Platform Admin")).toBeVisible();
     await expect(
-      page.getByRole("heading", { name: "Dashboard placeholder" }),
+      page.getByRole("heading", { name: "Admissions dashboard" }),
     ).toBeVisible();
     await expect(
       page.getByText(
-        "Internal dashboard contour is protected by the foundation auth skeleton.",
+        "Internal dashboard contour is protected by the foundation auth skeleton",
       ),
     ).toBeVisible();
     await expect(
       page.getByText("Current role: admissions_admin"),
     ).toBeVisible();
+    await expect(page.getByText("Total tracked events")).toBeVisible();
   });
 });
