@@ -25,9 +25,11 @@ export {
   DirectionPromotionValidationError,
 } from "./domain/direction-promotion";
 export type {
+  DirectionPromotionDirectionOption,
   DirectionPromotionListFilters,
   DirectionPromotionRepository,
   DirectionPromotionSummary,
 } from "./domain/direction-promotion";
 export { PrismaAdmissionsDashboardRepository } from "./infra/prisma-admissions-dashboard-repository";
 export { PrismaDirectionPromotionRepository } from "./infra/prisma-direction-promotion-repository";
+export { DirectionPromotionsPanel } from "./ui/direction-promotions-panel";

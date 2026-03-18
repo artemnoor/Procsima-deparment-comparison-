@@ -27,6 +27,12 @@ export type DirectionPromotionSummary = {
   isCurrentlyActive: boolean;
 };
 
+export type DirectionPromotionDirectionOption = {
+  id: string;
+  title: string;
+  slug: string;
+};
+
 export type DirectionPromotionListFilters = {
   status?: PromotionStatus | "all";
   activeOnly?: boolean;
@@ -54,6 +60,7 @@ export interface DirectionPromotionRepository {
   listPromotions(
     filters: DirectionPromotionListFilters,
   ): Promise<DirectionPromotionSummary[]>;
+  listPromotionDirectionOptions(): Promise<DirectionPromotionDirectionOption[]>;
   savePromotion(
     input: SaveDirectionPromotionInput,
   ): Promise<DirectionPromotionSummary>;

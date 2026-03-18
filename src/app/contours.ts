@@ -29,6 +29,7 @@ export const internalContour: ContourDefinition = {
   links: [
     { href: "/admin", label: "Admin home" },
     { href: "/admin/dashboard", label: "Dashboard" },
+    { href: "/admin/promotions", label: "Promotions" },
     { href: "/directions", label: "Public catalog" },
     { href: "/api/health", label: "Health" },
   ],

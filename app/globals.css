@@ -466,6 +466,75 @@ main {
   margin: 0 0 10px;
 }
 
+.toolbarRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.promotionCardHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.promotionBadgeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.promotionForm {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+}
+
+.promotionFormWide {
+  grid-column: 1 / -1;
+}
+
+.formField {
+  display: grid;
+  gap: 8px;
+}
+
+.fieldLabel {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.input {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border-strong);
+  background: #fff;
+  color: var(--text-main);
+  font: inherit;
+}
+
+.textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+
+.promotionActions {
+  display: flex;
+  align-items: flex-end;
+}
+
+.feedbackNote {
+  margin: 8px 0 0;
+  color: #0f766e;
+  font-weight: 600;
+}
+
 .detailList {
   display: grid;
   gap: 10px;

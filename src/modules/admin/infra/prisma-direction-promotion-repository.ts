@@ -3,6 +3,7 @@ import type { PrismaClient } from "@prisma/client";
 import { logWithLevel } from "@/shared/utils/logging";
 
 import {
+  type DirectionPromotionDirectionOption,
   type DirectionPromotionListFilters,
   type DirectionPromotionRepository,
   type DirectionPromotionSummary,
@@ -45,6 +46,21 @@ function mapPromotionSummary(input: {
 
 export class PrismaDirectionPromotionRepository implements DirectionPromotionRepository {
   constructor(private readonly prisma: PrismaClient) {}
+
+  async listPromotionDirectionOptions(): Promise<
+    DirectionPromotionDirectionOption[]
+  > {
+    return this.prisma.direction.findMany({
+      orderBy: {
+        title: "asc",
+      },
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+      },
+    });
+  }
 
   async listPromotions(
     filters: DirectionPromotionListFilters,

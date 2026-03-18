@@ -39,6 +39,7 @@ Current baseline includes:
 - internal auth skeleton for dashboard routes
 - first admissions dashboard backend slice with protected analytics summaries and top-direction rankings
 - first direction-promotion backend slice with protected admin APIs and promotion state separated from recommendation logic
+- internal direction-promotion screen for creating and updating promotions from the admin contour
 - unit, integration, and e2e coverage
 - local quality gates and CI workflow
 

@@ -617,6 +617,59 @@ It still does not use:
 - protected
 - first real backend slice implemented
 
+## Promotions
+
+### Route
+
+- `/admin/promotions`
+
+### Main files
+
+- `app/admin/promotions/page.tsx`
+- `src/app/admin-direction-promotions-page-data.ts`
+- `src/modules/admin/ui/direction-promotions-panel.tsx`
+
+### What the user sees when access is allowed
+
+It renders:
+
+- heading `Direction promotions`
+- explanation that editorial promotion is separated from recommendation logic
+- filter selector for:
+  - all promotions
+  - currently active promotions
+  - `draft`
+  - `active`
+  - `inactive`
+- link to `/api/admin/promotions`
+- create-or-replace promotion form with:
+  - direction selector
+  - status
+  - priority
+  - editorial note
+  - start/end window
+- editable cards for existing promotions with update forms for the same fields
+
+### What happens when access is denied
+
+The user is redirected to `/admin/forbidden`.
+
+### Data source
+
+Current promotions page uses:
+
+- local dev auth context
+- role enforcement
+- Prisma-backed promotion list through `DirectionPromotion`
+- Prisma-backed direction options from `Direction`
+- client-side calls into protected admin APIs for create/update actions
+
+### Current state
+
+- protected
+- minimal working internal management UI implemented
+- enough to operate promotion state without touching recommendation logic directly
+
 ## Health
 
 ### Routes

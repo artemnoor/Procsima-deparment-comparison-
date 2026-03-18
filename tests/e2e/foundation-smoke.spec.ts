@@ -50,4 +50,20 @@ test.describe("foundation smoke", () => {
     ).toBeVisible();
     await expect(page.getByText("Total tracked events")).toBeVisible();
   });
+
+  test("opens the internal direction promotions screen", async ({ page }) => {
+    await page.goto("/admin/promotions");
+
+    await expect(
+      page.getByRole("heading", { name: "Direction promotions" }),
+    ).toBeVisible();
+    await expect(
+      page.getByText(
+        "Editorial promotion lives separately from recommendation logic",
+      ),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("button", { name: "Save promotion" }),
+    ).toBeVisible();
+  });
 });
