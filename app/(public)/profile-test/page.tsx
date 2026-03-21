@@ -31,24 +31,24 @@ function renderStateMessage(state: "empty" | "incomplete" | "invalid") {
   switch (state) {
     case "incomplete":
       return {
-        eyebrow: "Incomplete answers",
-        title: "Finish the required questions",
+        eyebrow: "Не все ответы заполнены",
+        title: "Ответьте на обязательные вопросы",
         description:
-          "Answer every required question before we rank directions. The result should be based on the full applicant profile, not a partial guess.",
+          "Перед рекомендацией нужно ответить на все обязательные вопросы. Итог должен опираться на полный профиль, а не на случайное предположение.",
       };
     case "invalid":
       return {
-        eyebrow: "Invalid submission",
-        title: "We could not interpret one or more answers",
+        eyebrow: "Некорректная отправка",
+        title: "Не удалось интерпретировать один или несколько ответов",
         description:
-          "The questionnaire rejected at least one answer combination. Reset the form or choose only the listed options.",
+          "Анкета отклонила хотя бы одну комбинацию ответов. Сбросьте форму или выберите только допустимые варианты.",
       };
     default:
       return {
-        eyebrow: "Profile test flow",
-        title: "Answer a short guided questionnaire",
+        eyebrow: "Профтест",
+        title: "Ответьте на короткий опрос",
         description:
-          "The first result is deterministic and explainable. It does not mix recommendation logic with editorial promotion.",
+          "Рекомендация строится детерминированно и прозрачно. В ней не смешиваются алгоритм подбора и редакционное продвижение.",
       };
   }
 }
@@ -65,8 +65,9 @@ function renderQuestion(
       <p className="muted profileQuestionDescription">{question.description}</p>
       {isMultiSelect ? (
         <p className="sectionEyebrow profileQuestionMeta">
-          Select{" "}
-          {`${(question as MultiSelectProfileTestQuestion).minSelections} to ${(question as MultiSelectProfileTestQuestion).maxSelections}`}
+          Выберите от{" "}
+          {(question as MultiSelectProfileTestQuestion).minSelections} до{" "}
+          {(question as MultiSelectProfileTestQuestion).maxSelections}
         </p>
       ) : null}
       <div className="profileOptionGrid">
@@ -197,10 +198,10 @@ export default async function ProfileTestPage(props: {
             </div>
             <div className="detailActionGroup">
               <Link className="secondaryActionLink" href="/directions">
-                Browse directions first
+                Сначала посмотреть направления
               </Link>
               <Link className="secondaryActionLink" href="/profile-test">
-                Reset questionnaire
+                Сбросить анкету
               </Link>
             </div>
           </div>
@@ -208,8 +209,8 @@ export default async function ProfileTestPage(props: {
 
         {parsedSubmission.issues.length > 0 ? (
           <section className="card">
-            <div className="sectionEyebrow">Submission feedback</div>
-            <h3 className="cardTitle">What needs attention</h3>
+            <div className="sectionEyebrow">Обратная связь по анкете</div>
+            <h3 className="cardTitle">Что нужно исправить</h3>
             <ul className="detailList">
               {parsedSubmission.issues.map((issue) => (
                 <li key={`${issue.questionId}-${issue.reason}`}>
@@ -229,15 +230,16 @@ export default async function ProfileTestPage(props: {
           )}
           <section className="card profileActionBar">
             <p className="muted">
-              The MVP questionnaire is short by design. Recommendation logic is
-              deterministic and explainable, not adaptive or promotion-driven.
+              Анкета в MVP специально короткая. Логика рекомендаций
+              детерминированная и объяснимая, без адаптивного или
+              промо-смещения.
             </p>
             <div className="compareSelectionActions">
               <button className="actionButton" type="submit">
-                Show recommendations
+                Показать рекомендации
               </button>
               <Link className="secondaryActionLink" href="/compare">
-                Open compare without the test
+                Открыть сравнение без теста
               </Link>
             </div>
           </section>
@@ -246,8 +248,8 @@ export default async function ProfileTestPage(props: {
         {parsedSubmission.state === "complete" ? (
           <>
             <section className="card">
-              <div className="sectionEyebrow">Recommendation summary</div>
-              <h3 className="cardTitle">Your strongest direction pattern</h3>
+              <div className="sectionEyebrow">Сводка рекомендации</div>
+              <h3 className="cardTitle">Ваш наиболее выраженный профиль</h3>
               <p className="detailLead">{recommendationResult.summary}</p>
               <div className="compareFieldList">
                 {recommendationResult.profile.dominantAxes.map((axis) => (
@@ -260,22 +262,22 @@ export default async function ProfileTestPage(props: {
 
             <section
               className="profileRecommendationGrid"
-              aria-label="Profile test recommendations"
+              aria-label="Рекомендации профтеста"
             >
               {recommendationResult.matches.map((match) => (
                 <article className="catalogCard" key={match.directionId}>
                   <div className="catalogCardHeader">
                     <div>
                       <div className="sectionEyebrow">
-                        Recommended direction
+                        Рекомендуемое направление
                       </div>
                       <h3 className="cardTitle">{match.title}</h3>
                     </div>
                     <span className="focusBadge">{match.confidence}</span>
                   </div>
                   <p className="catalogDescription">
-                    Score: {match.score}. This recommendation is based on your
-                    submitted answers and the current direction dataset.
+                    Баллы: {match.score}. Рекомендация основана на ваших ответах
+                    и текущем наборе данных по направлениям.
                   </p>
                   <ul className="detailList">
                     {match.explanation.map((item) => (
@@ -287,13 +289,13 @@ export default async function ProfileTestPage(props: {
                       className="secondaryActionLink"
                       href={`/directions/${match.slug}`}
                     >
-                      Open direction page
+                      Открыть страницу направления
                     </Link>
                     <Link
                       className="actionLink"
                       href={compareHref ?? "/compare"}
                     >
-                      Compare recommended set
+                      Сравнить рекомендованный набор
                     </Link>
                   </div>
                 </article>
@@ -302,18 +304,15 @@ export default async function ProfileTestPage(props: {
 
             {compareHref ? (
               <section className="card">
-                <div className="sectionEyebrow">Next step</div>
-                <h3 className="cardTitle">
-                  Move directly into the comparison flow
-                </h3>
+                <div className="sectionEyebrow">Следующий шаг</div>
+                <h3 className="cardTitle">Сразу перейти к сравнению</h3>
                 <p className="muted">
-                  The compare handoff keeps the recommendation source marker so
-                  analytics can separate catalog-driven and profile-test-driven
-                  compare journeys.
+                  Переход в сравнение сохраняет источник рекомендации, чтобы
+                  аналитика различала сценарии из каталога и из профтеста.
                 </p>
                 <div className="catalogCardActions">
                   <Link className="actionLink" href={compareHref}>
-                    Compare all recommended directions
+                    Сравнить все рекомендованные направления
                   </Link>
                 </div>
               </section>

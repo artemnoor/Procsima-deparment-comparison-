@@ -26,12 +26,12 @@ export function CompareSelectionPanel(props: CompareSelectionPanelProps) {
     <section className="card compareSelectionPanel">
       <div className="compareSelectionHeader">
         <div>
-          <div className="sectionEyebrow">Comparison selection</div>
+          <div className="sectionEyebrow">Выбор для сравнения</div>
           <h3 className="cardTitle">
-            Selected directions: {selectedDirectionIds.length}
+            Выбрано направлений: {selectedDirectionIds.length}
           </h3>
           <p className="muted">
-            Pick 2 to 4 directions, then open the comparison page.
+            Выберите от 2 до 4 направлений, затем откройте страницу сравнения.
           </p>
         </div>
         <div className="compareSelectionActions">
@@ -39,14 +39,14 @@ export function CompareSelectionPanel(props: CompareSelectionPanelProps) {
             className="secondaryActionLink"
             href={buildComparisonSelectionPath(pathname, [], source)}
           >
-            Clear selection
+            Очистить выбор
           </Link>
           {comparisonIsReady ? (
             <Link
               className="actionLink"
               href={buildComparisonHref(selectedDirectionIds, source)}
             >
-              Open comparison
+              Открыть сравнение
             </Link>
           ) : null}
         </div>

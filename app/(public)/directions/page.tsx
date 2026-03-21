@@ -56,20 +56,20 @@ export default async function DirectionsPage(props: {
     <main>
       <div className="stack">
         <section className="card">
-          <div className="sectionEyebrow">Applicant flow</div>
-          <h2 className="sectionTitle">Directions catalog</h2>
+          <div className="sectionEyebrow">Каталог абитуриента</div>
+          <h2 className="sectionTitle">Направления подготовки</h2>
           <p className="muted">
-            Explore the current mock-backed set of NPS directions, compare study
-            focus, and prepare for a more detailed side-by-side decision flow.
+            Изучайте доступные направления, сравнивайте их фокус обучения и
+            собирайте набор для детального сопоставления.
           </p>
         </section>
 
         {directions.length === 0 ? (
           <section className="card">
-            <h3 className="cardTitle">No directions available yet</h3>
+            <h3 className="cardTitle">Направления пока недоступны</h3>
             <p className="muted">
-              The public catalog is connected, but the active source returned no
-              direction records.
+              Публичный каталог подключён, но активный источник данных не вернул
+              ни одной записи.
             </p>
           </section>
         ) : (
@@ -86,7 +86,7 @@ export default async function DirectionsPage(props: {
               />
             ) : null}
 
-            <section className="catalogGrid" aria-label="Directions catalog">
+            <section className="catalogGrid" aria-label="Каталог направлений">
               {directions.map((direction) => (
                 <DirectionCard
                   direction={direction}
