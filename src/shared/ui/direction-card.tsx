@@ -41,7 +41,7 @@ export function DirectionCard(props: DirectionCardProps) {
         <div>
           <div className="catalogMeta">
             <span className="chip">
-              {direction.context.code ?? "Code pending"}
+              {direction.context.code ?? "Код уточняется"}
             </span>
             {direction.context.department ? (
               <span className="chip chipMuted">
@@ -60,33 +60,33 @@ export function DirectionCard(props: DirectionCardProps) {
 
       <dl className="catalogFacts">
         <div>
-          <dt>Qualification</dt>
-          <dd>{direction.context.qualification ?? "To be confirmed"}</dd>
+          <dt>Квалификация</dt>
+          <dd>{direction.context.qualification ?? "Будет уточнено"}</dd>
         </div>
         <div>
-          <dt>Level / form</dt>
+          <dt>Уровень / форма</dt>
           <dd>
-            {direction.context.educationLevel ?? "Level pending"} /{" "}
-            {direction.context.studyForm ?? "Form pending"}
+            {direction.context.educationLevel ?? "Уровень уточняется"} /{" "}
+            {direction.context.studyForm ?? "Форма уточняется"}
           </dd>
         </div>
         <div>
-          <dt>Duration</dt>
-          <dd>{direction.context.studyDuration ?? "To be confirmed"}</dd>
+          <dt>Срок обучения</dt>
+          <dd>{direction.context.studyDuration ?? "Будет уточнено"}</dd>
         </div>
         <div>
-          <dt>Seats</dt>
+          <dt>Места</dt>
           <dd>
-            Budget {direction.context.budgetSeats ?? "—"} / Paid{" "}
+            Бюджет {direction.context.budgetSeats ?? "—"} / Платно{" "}
             {direction.context.paidSeats ?? "—"}
           </dd>
         </div>
         <div>
-          <dt>Difficulty</dt>
+          <dt>Сложность</dt>
           <dd>
             {direction.learningDifficulty
               ? `${direction.learningDifficulty}/5`
-              : "To be confirmed"}
+              : "Будет уточнено"}
           </dd>
         </div>
       </dl>
@@ -96,17 +96,17 @@ export function DirectionCard(props: DirectionCardProps) {
           className="secondaryActionLink"
           href={`/directions/${direction.slug}`}
         >
-          Open direction page
+          Открыть страницу направления
         </Link>
         {isSelected ? (
           <Link className="secondaryActionLink" href={selectionHref}>
-            Remove from compare
+            Убрать из сравнения
           </Link>
         ) : selectionIsFull ? (
-          <span className="disabledAction">Selection full</span>
+          <span className="disabledAction">Лимит выбора достигнут</span>
         ) : (
           <Link className="actionLink" href={selectionHref}>
-            Add to compare
+            Добавить к сравнению
           </Link>
         )}
       </div>

@@ -12,31 +12,31 @@ function renderComparisonState(state: string) {
   switch (state) {
     case "empty":
       return {
-        eyebrow: "No selection yet",
-        title: "Pick directions before opening comparison",
+        eyebrow: "Ничего не выбрано",
+        title: "Сначала выберите направления",
         description:
-          "Start from the catalog or a direction page and add 2 to 4 directions to build a useful side-by-side view.",
+          "Перейдите в каталог или на страницу направления и добавьте от 2 до 4 программ, чтобы открыть полезное сравнение.",
       };
     case "under-minimum":
       return {
-        eyebrow: "More directions needed",
-        title: "Comparison needs at least two directions",
+        eyebrow: "Нужно больше направлений",
+        title: "Для сравнения нужны минимум два направления",
         description:
-          "The current compare link contains only one direction. Add one or more additional directions from the catalog.",
+          "В текущей ссылке на сравнение только одно направление. Добавьте ещё хотя бы одно направление из каталога.",
       };
     case "over-limit":
       return {
-        eyebrow: "Too many directions",
-        title: "Comparison is limited to four directions",
+        eyebrow: "Слишком много направлений",
+        title: "Можно сравнивать не более четырёх направлений",
         description:
-          "Reduce the current selection to 2 to 4 directions so the differences stay readable.",
+          "Сократите выбор до 2–4 направлений, чтобы сравнение оставалось читаемым.",
       };
     default:
       return {
-        eyebrow: "Missing directions",
-        title: "Some selected directions were not found",
+        eyebrow: "Не все направления найдены",
+        title: "Часть выбранных направлений не найдена",
         description:
-          "One or more requested directions are missing in the active data source. Return to the catalog and rebuild the selection.",
+          "Одно или несколько запрошенных направлений отсутствуют в активном источнике данных. Вернитесь в каталог и соберите выбор заново.",
       };
   }
 }
@@ -123,7 +123,7 @@ export default async function ComparePage(props: {
             <p className="muted">{comparisonState.description}</p>
             <div className="catalogCardActions">
               <Link className="actionLink" href="/directions">
-                Return to directions catalog
+                Вернуться в каталог направлений
               </Link>
             </div>
           </section>
@@ -136,30 +136,29 @@ export default async function ComparePage(props: {
     <main>
       <div className="stack">
         <section className="card detailHero">
-          <div className="sectionEyebrow">Applicant comparison flow</div>
+          <div className="sectionEyebrow">Сценарий сравнения</div>
           <div className="detailHeroHeader">
             <div>
-              <h2 className="sectionTitle">Compare selected directions</h2>
+              <h2 className="sectionTitle">Сравнение выбранных направлений</h2>
               <p className="detailLead">
-                Review program fit, admissions context, study format, subject
-                focus, and the axis-based contrast across the active program
-                dataset.
+                Сопоставьте формат обучения, предметный фокус, контекст
+                поступления и ключевые различия между выбранными программами.
               </p>
             </div>
             <div className="detailActionGroup">
               <Link className="secondaryActionLink" href="/directions">
-                Add more directions
+                Добавить направления
               </Link>
             </div>
           </div>
         </section>
 
-        <section className="compareGrid" aria-label="Selected directions">
+        <section className="compareGrid" aria-label="Выбранные направления">
           {comparisonPageData.directions.map((direction) => (
             <article className="catalogCard" key={direction.id}>
               <div className="catalogMeta">
                 <span className="chip">
-                  {direction.context.code ?? "Code pending"}
+                  {direction.context.code ?? "Код уточняется"}
                 </span>
                 {direction.context.department ? (
                   <span className="chip chipMuted">
@@ -171,38 +170,34 @@ export default async function ComparePage(props: {
               <p className="catalogDescription">{direction.shortDescription}</p>
               <dl className="catalogFacts">
                 <div>
-                  <dt>Qualification</dt>
+                  <dt>Квалификация</dt>
+                  <dd>{direction.context.qualification ?? "Будет уточнено"}</dd>
+                </div>
+                <div>
+                  <dt>Уровень / форма</dt>
                   <dd>
-                    {direction.context.qualification ?? "To be confirmed"}
+                    {direction.context.educationLevel ?? "Будет уточнено"} /{" "}
+                    {direction.context.studyForm ?? "Будет уточнено"}
                   </dd>
                 </div>
                 <div>
-                  <dt>Level / form</dt>
-                  <dd>
-                    {direction.context.educationLevel ?? "To be confirmed"} /{" "}
-                    {direction.context.studyForm ?? "To be confirmed"}
-                  </dd>
+                  <dt>Срок обучения</dt>
+                  <dd>{direction.context.studyDuration ?? "Будет уточнено"}</dd>
                 </div>
                 <div>
-                  <dt>Duration</dt>
-                  <dd>
-                    {direction.context.studyDuration ?? "To be confirmed"}
-                  </dd>
-                </div>
-                <div>
-                  <dt>Tuition</dt>
+                  <dt>Стоимость</dt>
                   <dd>
                     {direction.context.tuitionPerYearRub
-                      ? `${direction.context.tuitionPerYearRub.toLocaleString("en-US")} RUB`
-                      : "To be confirmed"}
+                      ? `${direction.context.tuitionPerYearRub.toLocaleString("ru-RU")} ₽`
+                      : "Будет уточнено"}
                   </dd>
                 </div>
                 <div>
-                  <dt>Difficulty</dt>
+                  <dt>Сложность</dt>
                   <dd>
                     {direction.learningDifficulty
                       ? `${direction.learningDifficulty}/5`
-                      : "To be confirmed"}
+                      : "Будет уточнено"}
                   </dd>
                 </div>
               </dl>
@@ -211,8 +206,8 @@ export default async function ComparePage(props: {
                   <div className="subjectCard" key={subject.title}>
                     <h4 className="subsectionTitle">{subject.title}</h4>
                     <p className="muted">
-                      {subject.subjectBlock ?? "General block"} •{" "}
-                      {subject.hours} hours
+                      {subject.subjectBlock ?? "Общий блок"} • {subject.hours}{" "}
+                      часов
                     </p>
                   </div>
                 ))}
@@ -226,8 +221,8 @@ export default async function ComparePage(props: {
         </section>
 
         <section className="card">
-          <div className="sectionEyebrow">MVP comparison dimensions</div>
-          <h3 className="cardTitle">Shared criteria</h3>
+          <div className="sectionEyebrow">Критерии сравнения MVP</div>
+          <h3 className="cardTitle">Общие критерии</h3>
           <div className="compareFieldList">
             {comparisonPageData.comparison.comparedFields.map((field) => (
               <span className="chip chipMuted" key={field}>
@@ -238,9 +233,9 @@ export default async function ComparePage(props: {
         </section>
 
         <section className="card">
-          <div className="sectionEyebrow">Learning content comparison</div>
+          <div className="sectionEyebrow">Сравнение содержания обучения</div>
           <h3 className="cardTitle">
-            What changes from one direction to another
+            Что меняется от одного направления к другому
           </h3>
           <div className="compareLearningGrid">
             {comparisonPageData.directions.map((direction) => (
@@ -248,7 +243,7 @@ export default async function ComparePage(props: {
                 <h4 className="subsectionTitle">{direction.title}</h4>
                 {direction.careerRoles.length > 0 ? (
                   <p className="muted">
-                    Roles:{" "}
+                    Роли:{" "}
                     {direction.careerRoles.map((role) => role.title).join(", ")}
                   </p>
                 ) : null}
@@ -273,8 +268,8 @@ export default async function ComparePage(props: {
         </section>
 
         <section className="card">
-          <div className="sectionEyebrow">Axis comparison</div>
-          <h3 className="cardTitle">How the selected directions differ</h3>
+          <div className="sectionEyebrow">Сравнение по осям</div>
+          <h3 className="cardTitle">Чем отличаются выбранные направления</h3>
           <div className="compareMatrix">
             {comparisonPageData.comparison.differences.map((difference) => (
               <div className="compareMatrixRow" key={difference.axis}>
@@ -304,8 +299,8 @@ export default async function ComparePage(props: {
         </section>
 
         <section className="card">
-          <div className="sectionEyebrow">Admissions and documents</div>
-          <h3 className="cardTitle">What is published for each direction</h3>
+          <div className="sectionEyebrow">Поступление и документы</div>
+          <h3 className="cardTitle">Что опубликовано по каждому направлению</h3>
           <div className="compareLearningGrid">
             {comparisonPageData.directions.map((direction) => {
               const latestStat = [...direction.admissionStats].sort(
@@ -320,8 +315,8 @@ export default async function ComparePage(props: {
                   <h4 className="subsectionTitle">{direction.title}</h4>
                   <p className="muted">
                     {latestStat
-                      ? `${latestStat.year}: seats ${latestStat.budgetPlaces ?? "—"} / ${latestStat.paidPlaces ?? "—"}, passing ${latestStat.passingScoreBudget ?? "—"} / ${latestStat.passingScorePaid ?? "—"}`
-                      : "Admissions history is pending."}
+                      ? `${latestStat.year}: места ${latestStat.budgetPlaces ?? "—"} / ${latestStat.paidPlaces ?? "—"}, проходной балл ${latestStat.passingScoreBudget ?? "—"} / ${latestStat.passingScorePaid ?? "—"}`
+                      : "История приёма пока не опубликована."}
                   </p>
                   <ul className="detailList">
                     {direction.documents.length > 0 ? (
@@ -331,7 +326,7 @@ export default async function ComparePage(props: {
                         </li>
                       ))
                     ) : (
-                      <li>No documents published yet.</li>
+                      <li>Документы пока не опубликованы.</li>
                     )}
                   </ul>
                 </article>

@@ -56,17 +56,16 @@ export default async function DirectionDetailPage(props: {
       <main>
         <div className="stack">
           <section className="card">
-            <div className="sectionEyebrow">Direction not found</div>
+            <div className="sectionEyebrow">Направление не найдено</div>
             <h2 className="sectionTitle">
-              This direction is not available in the active source
+              Это направление недоступно в текущем источнике данных
             </h2>
             <p className="muted">
-              The requested slug does not exist in the current applicant-facing
-              dataset.
+              Запрошенный slug отсутствует в текущем публичном наборе данных.
             </p>
             <div className="catalogCardActions">
               <Link className="actionLink" href="/directions">
-                Back to catalog
+                Вернуться в каталог
               </Link>
             </div>
           </section>
@@ -149,7 +148,7 @@ export default async function DirectionDetailPage(props: {
 
         <section className="card detailHero">
           <div className="sectionEyebrow">
-            {direction.context.code ?? "Program"}
+            {direction.context.code ?? "Программа"}
           </div>
           <div className="detailHeroHeader">
             <div>
@@ -164,17 +163,17 @@ export default async function DirectionDetailPage(props: {
                   className="secondaryActionLink"
                   href={selectionActionHref}
                 >
-                  Remove from compare
+                  Убрать из сравнения
                 </Link>
               ) : selectionIsFull ? (
-                <span className="disabledAction">Selection full</span>
+                <span className="disabledAction">Лимит выбора достигнут</span>
               ) : (
                 <Link className="actionLink" href={selectionActionHref}>
-                  Add to compare
+                  Добавить к сравнению
                 </Link>
               )}
               <Link className="secondaryActionLink" href="/directions">
-                Back to catalog
+                Вернуться в каталог
               </Link>
             </div>
           </div>
@@ -182,46 +181,46 @@ export default async function DirectionDetailPage(props: {
 
         <section className="detailGrid">
           <article className="card">
-            <h3 className="cardTitle">Program snapshot</h3>
+            <h3 className="cardTitle">Сводка по программе</h3>
             <FactGrid
               items={[
                 {
-                  label: "Qualification",
-                  value: direction.context.qualification ?? "To be confirmed",
+                  label: "Квалификация",
+                  value: direction.context.qualification ?? "Будет уточнено",
                 },
                 {
-                  label: "Department",
-                  value: direction.context.department ?? "To be confirmed",
+                  label: "Подразделение",
+                  value: direction.context.department ?? "Будет уточнено",
                 },
                 {
-                  label: "Education level",
-                  value: direction.context.educationLevel ?? "To be confirmed",
+                  label: "Уровень образования",
+                  value: direction.context.educationLevel ?? "Будет уточнено",
                 },
                 {
-                  label: "Study form",
-                  value: direction.context.studyForm ?? "To be confirmed",
+                  label: "Форма обучения",
+                  value: direction.context.studyForm ?? "Будет уточнено",
                 },
                 {
-                  label: "Duration",
-                  value: direction.context.studyDuration ?? "To be confirmed",
+                  label: "Срок обучения",
+                  value: direction.context.studyDuration ?? "Будет уточнено",
                 },
                 {
-                  label: "Difficulty",
+                  label: "Сложность",
                   value: direction.learningDifficulty
                     ? `${direction.learningDifficulty}/5`
-                    : "To be confirmed",
+                    : "Будет уточнено",
                 },
                 {
-                  label: "Budget / paid seats",
+                  label: "Бюджет / платные места",
                   value: `${direction.context.budgetSeats ?? "—"} / ${
                     direction.context.paidSeats ?? "—"
                   }`,
                 },
                 {
-                  label: "Tuition per year",
+                  label: "Стоимость в год",
                   value: direction.context.tuitionPerYearRub
-                    ? `${direction.context.tuitionPerYearRub.toLocaleString("en-US")} RUB`
-                    : "To be confirmed",
+                    ? `${direction.context.tuitionPerYearRub.toLocaleString("ru-RU")} ₽`
+                    : "Будет уточнено",
                 },
               ]}
             />
@@ -229,16 +228,17 @@ export default async function DirectionDetailPage(props: {
 
           <article className="card">
             <LearningContentBlock learningContent={direction.learningContent} />
-            <h4 className="subsectionTitle">Target fit</h4>
+            <h4 className="subsectionTitle">Кому подходит</h4>
             <p className="muted">
-              {direction.targetFit ?? "Positioning is still being refined."}
+              {direction.targetFit ??
+                "Позиционирование направления ещё уточняется."}
             </p>
           </article>
         </section>
 
         <section className="detailGrid">
           <article className="card">
-            <h3 className="cardTitle">Key differences</h3>
+            <h3 className="cardTitle">Ключевые отличия</h3>
             <ul className="detailList">
               {direction.keyDifferences.map((difference) => (
                 <li key={difference}>{difference}</li>
@@ -247,7 +247,7 @@ export default async function DirectionDetailPage(props: {
           </article>
 
           <article className="card">
-            <h3 className="cardTitle">Career outcomes</h3>
+            <h3 className="cardTitle">Карьерные траектории</h3>
             {direction.careerRoles.length > 0 ? (
               <ul className="detailList">
                 {direction.careerRoles.map((careerRole) => (
@@ -290,7 +290,7 @@ export default async function DirectionDetailPage(props: {
 
         <section className="detailGrid">
           <article className="card">
-            <h3 className="cardTitle">Subject highlights</h3>
+            <h3 className="cardTitle">Ключевые предметы</h3>
             <div className="subjectStack">
               {direction.subjects.map((subject) => (
                 <div className="subjectCard" key={subject.title}>
@@ -305,25 +305,25 @@ export default async function DirectionDetailPage(props: {
                     ) : null}
                   </div>
                   <h4 className="subsectionTitle">{subject.title}</h4>
-                  <p className="muted">{subject.hours} academic hours</p>
+                  <p className="muted">{subject.hours} академических часов</p>
                 </div>
               ))}
             </div>
           </article>
 
           <article className="card">
-            <h3 className="cardTitle">Admissions by year</h3>
+            <h3 className="cardTitle">Поступление по годам</h3>
             <div className="scoreHistory">
               {direction.admissionStats.length > 0
                 ? direction.admissionStats.map((stat) => (
                     <div className="scoreHistoryRow" key={stat.year}>
                       <span>{stat.year}</span>
                       <span>
-                        Seats: {stat.budgetPlaces ?? "—"} /{" "}
+                        Места: {stat.budgetPlaces ?? "—"} /{" "}
                         {stat.paidPlaces ?? "—"}
                       </span>
                       <span>
-                        Passing: {stat.passingScoreBudget ?? "—"} /{" "}
+                        Проходной балл: {stat.passingScoreBudget ?? "—"} /{" "}
                         {stat.passingScorePaid ?? "—"}
                       </span>
                     </div>
@@ -331,8 +331,8 @@ export default async function DirectionDetailPage(props: {
                 : direction.passingScores.map((score) => (
                     <div className="scoreHistoryRow" key={score.year}>
                       <span>{score.year}</span>
-                      <span>Budget: {score.budget ?? "—"}</span>
-                      <span>Paid: {score.paid ?? "—"}</span>
+                      <span>Бюджет: {score.budget ?? "—"}</span>
+                      <span>Платно: {score.paid ?? "—"}</span>
                     </div>
                   ))}
             </div>
@@ -352,7 +352,7 @@ export default async function DirectionDetailPage(props: {
                   className="secondaryActionLink"
                   href={direction.programDescriptionUrl}
                 >
-                  Program description
+                  Программа description
                 </Link>
               ) : null}
               {direction.curriculumUrl ? (
